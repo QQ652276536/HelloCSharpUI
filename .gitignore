@@ -1,5 +1,9 @@
-bin/:
+#过滤数据库文件、sln解决方案文件、配置文件
+*.mdb
+*.ldb
+*.sln
 
-.DS_Store
-
-*.obj
+#过滤文件夹Debug,Release,obj
+Debug/
+Release/
+obj/
