@@ -1,0 +1,8 @@
+D:\WorkSpace\Code\HelloWordUI\bin\Debug\HelloWordUI.exe.config
+D:\WorkSpace\Code\HelloWordUI\bin\Debug\HelloWordUI.exe
+D:\WorkSpace\Code\HelloWordUI\bin\Debug\HelloWordUI.pdb
+D:\WorkSpace\Code\HelloWordUI\obj\Debug\Login.Login_1.resources
+D:\WorkSpace\Code\HelloWordUI\obj\Debug\Login.Properties.Resources.resources
+D:\WorkSpace\Code\HelloWordUI\obj\Debug\HelloWordUI.csproj.GenerateResource.Cache
+D:\WorkSpace\Code\HelloWordUI\obj\Debug\HelloWordUI.exe
+D:\WorkSpace\Code\HelloWordUI\obj\Debug\HelloWordUI.pdb

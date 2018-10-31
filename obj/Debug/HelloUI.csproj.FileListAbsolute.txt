@@ -1,0 +1,10 @@
+D:\WorkSpace\Code\HelloUI\bin\Debug\HelloWordUI.exe.config
+D:\WorkSpace\Code\HelloUI\obj\Debug\HelloWordUI.exe
+D:\WorkSpace\Code\HelloUI\obj\Debug\HelloWordUI.pdb
+D:\WorkSpace\Code\HelloUI\bin\Debug\HelloWordUI.exe
+D:\WorkSpace\Code\HelloUI\bin\Debug\HelloWordUI.pdb
+D:\WorkSpace\Code\HelloUI\obj\Debug\HelloUI.csprojResolveAssemblyReference.cache
+D:\WorkSpace\Code\HelloUI\obj\Debug\Login.Properties.Resources.resources
+D:\WorkSpace\Code\HelloUI\obj\Debug\HelloUI.csproj.GenerateResource.Cache
+D:\WorkSpace\Code\HelloUI\obj\Debug\Register.RegisterForm.resources
+D:\WorkSpace\Code\HelloUI\obj\Debug\Login.LoginForm.resources
