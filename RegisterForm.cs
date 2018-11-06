@@ -22,6 +22,7 @@ namespace Register
         bool _userPasswordFlag = false;
         bool _chkReadFlag = false;
         bool _smsFlag = false;
+        int _nowPage = 0;
         public RegisterForm()
         {
             InitializeComponent();
@@ -329,6 +330,32 @@ namespace Register
         private void setVerifyReadChecked()
         {
             verifyReadChecked();
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+            _nowPage = 0;
+            changeNowPage();
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+            _nowPage = 1;
+            changeNowPage();
+        }
+
+        private void changeNowPage()
+        {
+            if (_nowPage == 0)
+            {
+                panel2.Visible = true;
+                panel3.Visible = false;
+            }
+            else if (_nowPage == 1)
+            {
+                panel2.Visible = false;
+                panel3.Visible = true;
+            }
         }
     }
 }
