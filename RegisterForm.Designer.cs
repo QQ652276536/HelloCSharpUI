@@ -36,6 +36,7 @@ namespace Register
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -53,7 +54,6 @@ namespace Register
             this.label4 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label8 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pictureBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -114,7 +114,6 @@ namespace Register
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
-            this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.textBox1);
             this.panel2.Controls.Add(this.label2);
@@ -136,7 +135,14 @@ namespace Register
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(780, 344);
             this.panel2.TabIndex = 1;
-            this.panel2.Visible = false;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.Location = new System.Drawing.Point(0, 66);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(780, 344);
+            this.panel3.TabIndex = 0;
             // 
             // label1
             // 
@@ -362,15 +368,6 @@ namespace Register
             this.label8.Text = "短信激活码错误";
             this.label8.Visible = false;
             // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.Transparent;
-            this.panel3.Location = new System.Drawing.Point(0, 66);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(780, 344);
-            this.panel3.TabIndex = 1;
-            this.panel3.Visible = true;
-            // 
             // RegisterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -386,10 +383,7 @@ namespace Register
             this.pictureBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panel2.PerformLayout();
-            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }

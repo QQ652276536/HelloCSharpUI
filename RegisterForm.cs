@@ -348,13 +348,13 @@ namespace Register
         {
             if (_nowPage == 0)
             {
-                panel2.Visible = true;
-                panel3.Visible = false;
+                panel2.Show();
+                panel3.Hide();
             }
             else if (_nowPage == 1)
             {
-                panel2.Visible = false;
-                panel3.Visible = true;
+                panel3.Show();
+                panel2.Hide();
             }
         }
     }
