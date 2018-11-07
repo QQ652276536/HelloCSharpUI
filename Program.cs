@@ -20,7 +20,9 @@ namespace OnlyEatNotWash
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new LoginForm());
             //Application.Run(new RegisterForm());
-            Application.Run(new A());
+            //Application.Run(new A());
+            Connection conn = new Connection();
+            conn.StartConnection();
         }
     }
 }
