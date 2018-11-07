@@ -274,6 +274,7 @@ namespace Login
             this.textBox3.Location = new System.Drawing.Point(90, 140);
             this.textBox3.MaxLength = 14;
             this.textBox3.Name = "textBox3";
+            this.textBox3.PasswordChar = '●';
             this.textBox3.Size = new System.Drawing.Size(200, 29);
             this.textBox3.TabIndex = 3;
             this.textBox3.Click += new System.EventHandler(this.textBox3_Click);

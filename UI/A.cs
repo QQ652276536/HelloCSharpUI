@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -71,12 +72,14 @@ namespace Login
 
         private void button4_MouseDown(object sender, MouseEventArgs e)
         {
-
+            this.button4.BackgroundImage = Image.FromFile("../../Image/眼睛_显示_o.png");
+            this.textBox3.PasswordChar = new char();
         }
 
         private void button4_MouseUp(object sender, MouseEventArgs e)
         {
-
+            this.button4.BackgroundImage = Image.FromFile("../../Image/眼睛_隐藏_o.png");
+            this.textBox3.PasswordChar = '●';
         }
 
         private void textBox1_Click(object sender, EventArgs e)

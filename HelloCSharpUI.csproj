@@ -106,6 +106,42 @@
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Image\Logo1.png" />
+    <Content Include="Image\Logo10.png" />
+    <Content Include="Image\Logo2.png" />
+    <Content Include="Image\Logo3.png" />
+    <Content Include="Image\Logo4.png" />
+    <Content Include="Image\Logo5.png" />
+    <Content Include="Image\Logo6.png" />
+    <Content Include="Image\Logo7.png" />
+    <Content Include="Image\Logo8.png" />
+    <Content Include="Image\Logo9.png" />
+    <Content Include="Image\LOL1.png" />
+    <Content Include="Image\LOL10.png" />
+    <Content Include="Image\LOL11.png" />
+    <Content Include="Image\LOL12.png" />
+    <Content Include="Image\LOL13.png" />
+    <Content Include="Image\LOL14.png" />
+    <Content Include="Image\LOL15.png" />
+    <Content Include="Image\LOL16.png" />
+    <Content Include="Image\LOL17.png" />
+    <Content Include="Image\LOL18.png" />
+    <Content Include="Image\LOL2.png" />
+    <Content Include="Image\LOL3.png" />
+    <Content Include="Image\LOL4.png" />
+    <Content Include="Image\LOL5.png" />
+    <Content Include="Image\LOL6.png" />
+    <Content Include="Image\LOL7.png" />
+    <Content Include="Image\LOL8.png" />
+    <Content Include="Image\LOL9.png" />
+    <Content Include="Image\Snipaste1.png" />
+    <Content Include="Image\Snipaste2.png" />
+    <Content Include="Image\Snipaste3.png" />
+    <Content Include="Image\桌面壁纸01.jpg" />
+    <Content Include="Image\眼睛_显示_o.png" />
+    <Content Include="Image\眼睛_隐藏_o.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
