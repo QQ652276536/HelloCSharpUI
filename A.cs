@@ -57,10 +57,10 @@ namespace Login
             ////注册
             //else if (_nowPage == 1)
             //{
-                setVerifyUserNameColor();
-                setVerifyUserPhoneColor();
-                setVerifyUserPassword();
-                setVerifySMS();
+                setVerifyUserNameColor(0);
+                setVerifyUserPhoneColor(0);
+                setVerifyUserPassword(0);
+                setVerifySMS(0);
                 setVerifyReadChecked();
                 if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
                 {
@@ -69,19 +69,34 @@ namespace Login
             //}
         }
 
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            setVerifyUserNameColor(1);
+        }
+
+        private void textBox2_Click(object sender, EventArgs e)
+        {
+            setVerifyUserPhoneColor(1);
+        }
+
+        private void textBox3_Click(object sender, EventArgs e)
+        {
+            setVerifyUserPassword(1);
+        }
+
         private void textBox1_Leave(object sender, EventArgs e)
         {
-            setVerifyUserNameColor();
+            setVerifyUserNameColor(0);
         }
 
         private void textBox2_Leave(object sender, EventArgs e)
         {
-            setVerifyUserPhoneColor();
+            setVerifyUserPhoneColor(0);
         }
 
         private void textBox3_Leave(object sender, EventArgs e)
         {
-            setVerifyUserPassword();
+            setVerifyUserPassword(0);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -155,10 +170,13 @@ namespace Login
         /// <summary>
         /// 用户名
         /// </summary>
-        private void setVerifyUserNameColor()
+        private void setVerifyUserNameColor(int result)
         {
             _userName = textBox1.Text;
-            int result = verifyUserName(_userName);
+            if (result == 0)
+            {
+                result = verifyUserName(_userName);
+            }
             switch (result)
             {
                 case -1:
@@ -208,10 +226,13 @@ namespace Login
         /// <summary>
         /// 手机号
         /// </summary>
-        private void setVerifyUserPhoneColor()
+        private void setVerifyUserPhoneColor(int result)
         {
             _userPhone = textBox2.Text;
-            int result = verifyUserPhone(_userPhone);
+            if (result == 0)
+            {
+                result = verifyUserPhone(_userPhone);
+            }
             switch (result)
             {
                 case -1:
@@ -253,10 +274,13 @@ namespace Login
         /// <summary>
         /// 密码
         /// </summary>
-        private void setVerifyUserPassword()
+        private void setVerifyUserPassword(int result)
         {
             _userPassword = textBox3.Text;
-            int result = verifyUserPassword(_userPassword);
+            if (result == 0)
+            {
+                result = verifyUserPassword(_userPassword);
+            }
             switch (result)
             {
                 case -1:
@@ -299,10 +323,13 @@ namespace Login
         /// <summary>
         /// 短信验证码
         /// </summary>
-        private void setVerifySMS()
+        private void setVerifySMS(int result)
         {
             _verifyCode = textBox4.Text;
-            int result = verifySMS(_verifyCode);
+            if(result == 0)
+            {
+                result = verifySMS(_verifyCode);
+            }
             switch (result)
             {
                 case -1:
@@ -363,6 +390,5 @@ namespace Login
                 panel2.Hide();
             }
         }
-
     }
 }
