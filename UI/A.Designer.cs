@@ -48,11 +48,13 @@ namespace Login
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
+            this.textBox3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -247,8 +249,8 @@ namespace Login
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(200, 29);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
             this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
+            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
             // 
             // textBox2
             // 
@@ -260,12 +262,13 @@ namespace Login
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(200, 29);
             this.textBox2.TabIndex = 2;
-            this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
             this.textBox2.Click += new System.EventHandler(this.textBox2_Click);
+            this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
             // 
             // textBox3
             // 
             this.textBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox3.Controls.Add(this.button4);
             this.textBox3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.textBox3.Location = new System.Drawing.Point(90, 140);
@@ -273,8 +276,22 @@ namespace Login
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(200, 29);
             this.textBox3.TabIndex = 3;
-            this.textBox3.Leave += new System.EventHandler(this.textBox3_Leave);
             this.textBox3.Click += new System.EventHandler(this.textBox3_Click);
+            this.textBox3.Leave += new System.EventHandler(this.textBox3_Leave);
+            // 
+            // button4
+            // 
+            this.button4.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button4.BackgroundImage")));
+            this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Location = new System.Drawing.Point(158, 3);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(30, 20);
+            this.button4.TabIndex = 15;
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button4_MouseDown);
+            this.button4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button4_MouseUp);
             // 
             // panel3
             // 
@@ -344,6 +361,7 @@ namespace Login
             this.Name = "A";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.textBox3.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -372,5 +390,6 @@ namespace Login
         private Label label5;
         private Button button3;
         private Button button2;
+        private Button button4;
     }
 }

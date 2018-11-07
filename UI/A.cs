@@ -69,6 +69,16 @@ namespace Login
             //}
         }
 
+        private void button4_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void button4_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
         private void textBox1_Click(object sender, EventArgs e)
         {
             setVerifyUserNameColor(1);
@@ -390,5 +400,6 @@ namespace Login
                 panel2.Hide();
             }
         }
+
     }
 }
