@@ -59,5 +59,15 @@ namespace Login.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap 桌面壁纸01 {
+            get {
+                object obj = ResourceManager.GetObject("桌面壁纸01", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
