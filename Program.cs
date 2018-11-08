@@ -22,7 +22,6 @@ namespace OnlyEatNotWash
             //Application.Run(new RegisterForm());
             //Application.Run(new A());
             Connection conn = new Connection();
-            conn.StartConnection();
         }
     }
 }
