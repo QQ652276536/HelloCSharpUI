@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MySql.Data.MySqlClient;
 using MyLog;
 
@@ -24,12 +21,14 @@ namespace OnlyEatNotWash
                 _connection = new MySqlConnection(_URL);
                 _connection.Open();
                 Logger.Instance.WriteLog("Connection is open...");
-                //String sqlStr = String.Format(@"insert into test1(id,name) values ('{0}','{1}')", id, name);
-                //MySqlCommand command = new MySqlCommand(sqlStr, _connection);
-                //if (command.ExecuteNonQuery() > 0)
-                //{
-                //    Console.WriteLine("数据插入成功!");
-                //}
+                int id = 111;
+                String name = "AAA";
+                String sqlStr = String.Format(@"insert into test1(id,name) values ('{0}','{1}')", id, name);
+                MySqlCommand command = new MySqlCommand(sqlStr, _connection);
+                if (command.ExecuteNonQuery() > 0)
+                {
+                    Console.WriteLine("数据插入成功!");
+                }
             }
             catch (MySqlException e)
             {

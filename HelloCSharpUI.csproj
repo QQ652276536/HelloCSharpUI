@@ -54,9 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection.cs" />
+    <Compile Include="FileUtils.cs" />
+    <Compile Include="MySqlUtil.cs" />
     <Compile Include="Log\Logger.cs" />
-    <Compile Include="Register.cs" />
+    <Compile Include="HttpPost.cs" />
     <Compile Include="UI\A.cs">
       <SubType>Form</SubType>
     </Compile>
