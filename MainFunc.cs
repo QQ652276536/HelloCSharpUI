@@ -3,25 +3,16 @@ using System.Windows.Forms;
 
 namespace OnlyEatNotWash
 {
-    static class Program
+    class MainFunc
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        public void Test()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new LoginForm());
-            //Application.Run(new RegisterForm());
-            //Application.Run(new A());
-
-            //注意此处的测试内容需和服务端保持一致  否则无法判断是否成功
+            FileUtils.IP = "127.0.0.1";
+            FileUtils.Port = 60000;
             if (FileUtils.TestConnection("test message"))
             {
                 int result = FileUtils.StartSend("D://WorkSpace//Image//Photo//QQ头像.JPG", "QQ头像.JPG");
-                if (result == 0)
+                if (result == 1)
                 {
                     MessageBox.Show("文件发送成功！");
                 }
@@ -50,7 +41,21 @@ namespace OnlyEatNotWash
             {
                 MessageBox.Show("无法连接服务器！");
             }
-
         }
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new LoginForm());
+            //Application.Run(new RegisterForm());
+            //Application.Run(new A());
+            new MainFunc().Test();
+        }
+
     }
 }

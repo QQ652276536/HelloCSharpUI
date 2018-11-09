@@ -76,7 +76,7 @@
     <Compile Include="UI\RegisterForm.Designer.cs">
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="MainFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="UI\A.resx">
       <DependentUpon>A.cs</DependentUpon>
