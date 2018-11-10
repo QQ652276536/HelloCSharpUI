@@ -25,6 +25,21 @@ namespace OnlyEatNotWash
 
         public static String fileContent = "";
 
+        public static void Send(String str)
+        {
+            try
+            {
+                TcpClient tcpClient = new TcpClient(IP, Port);
+                NetworkStream netWorkStream = tcpClient.GetStream();
+                byte[] contents = Encoding.UTF8.GetBytes(str);
+                netWorkStream.Write(contents, 0, contents.Length);
+                tcpClient.Close();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
         /// <summary>
         /// 发送文件
         /// </summary>
@@ -43,36 +58,39 @@ namespace OnlyEatNotWash
             BinaryReader binaryReader = null;
             try
             {
-                FileInfo file = new FileInfo(path);
-                fileStream = file.OpenRead();
-                byte[] fileContents = new byte[file.Length];
-                fileStream.Read(fileContents,0,Convert.ToInt32(file.Length));
-                fileContent = Convert.ToBase64String(fileContents);
+                //FileInfo file = new FileInfo(path);
+                //fileStream = file.OpenRead();
+                //byte[] fileContents = new byte[file.Length];
+                //fileStream.Read(fileContents, 0, Convert.ToInt32(file.Length));
+                //fileContent = Convert.ToBase64String(fileContents);
 
-                //TcpClient client = new TcpClient(IP, Port);
-                //netWorkStream = client.GetStream();
-                //binaryWriter = new BinaryWriter(netWorkStream);
-                ////获取文件名的字节
-                //byte[] fileNameBytes = Encoding.UTF8.GetBytes(fileName);
-                ////拷贝文件名字节
-                //byte[] fileNameBytesArray = new byte[1024];
-                //Array.Copy(fileNameBytes, fileNameBytesArray, fileNameBytes.Length);
-                ////写入流
-                //binaryWriter.Write(fileNameBytesArray, 0, fileNameBytesArray.Length);
-                //binaryWriter.Flush();
-                ////获取文件内容
-                //fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                ////写入流
-                //binaryReader = new BinaryReader(fileStream);
-                ////文件内容的字节
-                //byte[] fileContentArray = new byte[1024];
-                //int count = 0;
-                //while ((count = fileStream.Read(fileContentArray, 0, 1024)) > 0)
-                //{
-                //    binaryWriter.Write(fileContentArray, 0, count);
-                //    binaryWriter.Flush();
-                //    fileContentArray = new byte[1024];
-                //}
+                TcpClient client = new TcpClient(IP, Port);
+                netWorkStream = client.GetStream();
+                binaryWriter = new BinaryWriter(netWorkStream);
+                //TODO:随便写条信息过去
+                binaryWriter.Write("中华人民共和国");
+                binaryWriter.Flush();
+                //获取文件名的字节
+                byte[] fileNameBytes = Encoding.UTF8.GetBytes(fileName);
+                //拷贝文件名字节
+                byte[] fileNameBytesArray = new byte[1024];
+                Array.Copy(fileNameBytes, fileNameBytesArray, fileNameBytes.Length);
+                //写入流
+                binaryWriter.Write(fileNameBytesArray, 0, fileNameBytesArray.Length);
+                binaryWriter.Flush();
+                //获取文件内容
+                fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                //写入流
+                binaryReader = new BinaryReader(fileStream);
+                //文件内容的字节
+                byte[] fileContentArray = new byte[1024];
+                int count = 0;
+                while ((count = fileStream.Read(fileContentArray, 0, 1024)) > 0)
+                {
+                    binaryWriter.Write(fileContentArray, 0, count);
+                    binaryWriter.Flush();
+                    fileContentArray = new byte[1024];
+                }
             }
             catch (SocketException se)
             {
