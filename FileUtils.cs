@@ -69,7 +69,6 @@ namespace OnlyEatNotWash
                 binaryWriter = new BinaryWriter(netWorkStream);
                 //TODO:随便写条信息过去
                 binaryWriter.Write("中华人民共和国");
-                binaryWriter.Flush();
                 //获取文件名的字节
                 byte[] fileNameBytes = Encoding.UTF8.GetBytes(fileName);
                 //拷贝文件名字节
@@ -77,7 +76,6 @@ namespace OnlyEatNotWash
                 Array.Copy(fileNameBytes, fileNameBytesArray, fileNameBytes.Length);
                 //写入流
                 binaryWriter.Write(fileNameBytesArray, 0, fileNameBytesArray.Length);
-                binaryWriter.Flush();
                 //获取文件内容
                 fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 //写入流
@@ -88,9 +86,9 @@ namespace OnlyEatNotWash
                 while ((count = fileStream.Read(fileContentArray, 0, 1024)) > 0)
                 {
                     binaryWriter.Write(fileContentArray, 0, count);
-                    binaryWriter.Flush();
                     fileContentArray = new byte[1024];
                 }
+                binaryWriter.Flush();
             }
             catch (SocketException se)
             {
@@ -137,6 +135,7 @@ namespace OnlyEatNotWash
                 binaryWriter = new BinaryWriter(netWorkStream);
                 byte[] byteArray = Encoding.UTF8.GetBytes(str);
                 binaryWriter.Write(byteArray, 0, byteArray.Length);
+                binaryWriter.Flush();
                 return true;
             }
             catch (Exception e)

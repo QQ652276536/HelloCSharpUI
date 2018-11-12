@@ -4,12 +4,12 @@ using MyLog;
 
 namespace OnlyEatNotWash
 {
-    class Connection
+    class MySqlUtil
     {
         public static String _URL = "server=101.132.102.203;user=root;database=test;port=3306;password=root;";
         public MySqlConnection _connection = null;
 
-        public Connection()
+        public MySqlUtil()
         {
             StartConnection();
         }

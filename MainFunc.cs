@@ -9,8 +9,9 @@ namespace OnlyEatNotWash
         {
             FileUtils.IP = "127.0.0.1";
             FileUtils.Port = 60000;
-            if (FileUtils.TestConnection("test message"))
+            if (FileUtils.TestConnection("test message◎username&A◎password&123"))
             {
+                return;
                 int result = FileUtils.StartSend("D://WorkSpace//Image//Photo//QQ头像.JPG", "QQ头像.JPG");
                 if (result == 1)
                     MessageBox.Show("文件发送成功！");
@@ -44,7 +45,8 @@ namespace OnlyEatNotWash
             //Application.Run(new LoginForm());
             //Application.Run(new RegisterForm());
             //Application.Run(new A());
-            new MainFunc().Test();
+            //new MainFunc().Test();
+            MySqlUtil mySqlUtil = new MySqlUtil();
         }
 
     }
