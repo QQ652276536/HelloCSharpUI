@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Login
+namespace OnlyEatNotWash
 {
     partial class A
     {

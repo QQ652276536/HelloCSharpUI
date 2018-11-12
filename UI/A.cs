@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Login
+namespace OnlyEatNotWash
 {
     public partial class A : Form
     {

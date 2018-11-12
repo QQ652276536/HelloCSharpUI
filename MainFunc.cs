@@ -47,6 +47,7 @@ namespace OnlyEatNotWash
             //Application.Run(new A());
             //new MainFunc().Test();
             //MySqlUtil mySqlUtil = new MySqlUtil();
+            EmailWindow window = new EmailWindow();
         }
 
     }

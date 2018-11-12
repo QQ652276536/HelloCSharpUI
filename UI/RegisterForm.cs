@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Register
+namespace OnlyEatNotWash
 {
     public partial class RegisterForm : Form
     {

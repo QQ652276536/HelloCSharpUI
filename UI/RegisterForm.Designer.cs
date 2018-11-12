@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Register
+namespace OnlyEatNotWash
 {
     partial class RegisterForm
     {
