@@ -46,7 +46,7 @@ namespace OnlyEatNotWash
             //Application.Run(new RegisterForm());
             //Application.Run(new A());
             //new MainFunc().Test();
-            MySqlUtil mySqlUtil = new MySqlUtil();
+            //MySqlUtil mySqlUtil = new MySqlUtil();
         }
 
     }
