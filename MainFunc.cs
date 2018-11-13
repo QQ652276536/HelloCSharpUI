@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnlyEatNotWash.UI;
+using System;
 using System.Windows.Forms;
 
 namespace OnlyEatNotWash
@@ -13,9 +14,8 @@ namespace OnlyEatNotWash
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new LoginForm());
             //Application.Run(new RegisterForm());
-            //Application.Run(new A());
+            Application.Run(new A());
             //new MainFunc().Test();
             //MySqlUtil mySqlUtil = new MySqlUtil();
             //EmailWindow window = new EmailWindow();

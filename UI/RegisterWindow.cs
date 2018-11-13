@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OnlyEatNotWash
 {
-    public partial class RegisterForm : Form
+    public partial class RegisterWindow : Form
     {
         String _userName = "";
         String _userPhone = "";
@@ -23,7 +18,8 @@ namespace OnlyEatNotWash
         bool _chkReadFlag = false;
         bool _smsFlag = false;
         int _nowPage = 0;
-        public RegisterForm()
+
+        public RegisterWindow()
         {
             InitializeComponent();
         }
@@ -34,75 +30,96 @@ namespace OnlyEatNotWash
 
         private void button1_Click(object sender, EventArgs e)
         {
-            setVerifyUserNameColor();
-            setVerifyUserPhoneColor();
-            setVerifyUserPassword();
-            setVerifySMS();
-            setVerifyReadChecked();
-            if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
-            {
-                //TODO:注册
-            }
+            //TODO:发起验证码请求
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-        }
-
-        private void textBox1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox2_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox3_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox1_Leave(object sender, EventArgs e)
-        {
-            setVerifyUserNameColor();
-        }
-
-        private void textBox2_Leave(object sender, EventArgs e)
-        {
-            setVerifyUserPhoneColor();
-        }
-
-        private void textBox3_Leave(object sender, EventArgs e)
-        {
-            setVerifyUserPassword();
+            ////登录
+            //if (_nowPage == 0)
+            //{
+            //}
+            ////切换至登录页面
+            //else if (_nowPage == 1)
+            //{
+            //    changeNowPage();
+            //    _nowPage = 0;
+            //}
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            ////切换至注册页面
+            //if (_nowPage == 0)
+            //{
+            //    changeNowPage();
+            //    _nowPage = 1;
+            //}
+            ////注册
+            //else if (_nowPage == 1)
+            //{
+                setVerifyUserNameColor(0);
+                setVerifyUserPhoneColor(0);
+                setVerifyUserPassword(0);
+                setVerifySMS(0);
+                setVerifyReadChecked();
+                if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
+                {
+                    //TODO:注册
+                }
+            //}
+        }
+
+        private void button4_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.button4.BackgroundImage = Image.FromFile("../../Image/眼睛_显示_o.png");
+            this.textBox3.PasswordChar = new char();
+        }
+
+        private void button4_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.button4.BackgroundImage = Image.FromFile("../../Image/眼睛_隐藏_o.png");
+            this.textBox3.PasswordChar = '●';
+        }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            setVerifyUserNameColor(1);
+        }
+
+        private void textBox2_Click(object sender, EventArgs e)
+        {
+            setVerifyUserPhoneColor(1);
+        }
+
+        private void textBox3_Click(object sender, EventArgs e)
+        {
+            setVerifyUserPassword(1);
+        }
+
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            setVerifyUserNameColor(0);
+        }
+
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            setVerifyUserPhoneColor(0);
+        }
+
+        private void textBox3_Leave(object sender, EventArgs e)
+        {
+            setVerifyUserPassword(0);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            setVerifyReadChecked();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("iexplore.exe", "http:www.baidu.com");
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
         }
 
         /// <summary>
@@ -163,31 +180,37 @@ namespace OnlyEatNotWash
             return 1;
         }
 
-        private void setVerifyUserNameColor()
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        private void setVerifyUserNameColor(int result)
         {
             _userName = textBox1.Text;
-            int result = verifyUserName(_userName);
+            if (result == 0)
+            {
+                result = verifyUserName(_userName);
+            }
             switch (result)
             {
                 case -1:
-                    label4.Text = "请您输入用户名";
-                    label4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.Text = "请您输入用户名";
+                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
-                    label4.Text = "用户名不能超过7个汉字或14个字符";
-                    label4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.Text = "用户名不能超过7个汉字或14个字符";
+                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case -3:
-                    label4.Text = "此用户名太受欢迎,请更换一个";
-                    label4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.Text = "此用户名太受欢迎,请更换一个";
+                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case -4:
-                    label4.Text = "用户名仅支持中英文、数字和下划线、且不能为纯数字";
-                    label4.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.Text = "用户名仅支持中英文、数字和下划线、且不能为纯数字";
+                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case 1:
-                    this.label4.Text = "设置后不可更改\r\n中英文均可，最长14个英文或7个汉字";
-                    label4.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                    this.label5.Text = "设置后不可更改\r\n中英文均可，最长14个英文或7个汉字";
+                    label5.ForeColor = System.Drawing.SystemColors.AppWorkspace;
                     break;
             }
             label4.Invalidate();
@@ -213,23 +236,29 @@ namespace OnlyEatNotWash
             return 1;
         }
 
-        private void setVerifyUserPhoneColor()
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        private void setVerifyUserPhoneColor(int result)
         {
             _userPhone = textBox2.Text;
-            int result = verifyUserPhone(_userPhone);
+            if (result == 0)
+            {
+                result = verifyUserPhone(_userPhone);
+            }
             switch (result)
             {
                 case -1:
-                    label5.Text = "请您输入手机号";
-                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label6.Text = "请您输入手机号";
+                    label6.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
-                    label5.Text = "手机号码格式不正确";
-                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label6.Text = "手机号码格式不正确";
+                    label6.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case 1:
-                    label5.Text = "请输入中国大陆手机号，其他用户不可见";
-                    label5.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                    label6.Text = "请输入中国大陆手机号，其他用户不可见";
+                    label6.ForeColor = System.Drawing.SystemColors.AppWorkspace;
                     break;
             }
             label5.Invalidate();
@@ -255,23 +284,29 @@ namespace OnlyEatNotWash
             return 1;
         }
 
-        private void setVerifyUserPassword()
+        /// <summary>
+        /// 密码
+        /// </summary>
+        private void setVerifyUserPassword(int result)
         {
             _userPassword = textBox3.Text;
-            int result = verifyUserPassword(_userPassword);
+            if (result == 0)
+            {
+                result = verifyUserPassword(_userPassword);
+            }
             switch (result)
             {
                 case -1:
-                    label6.Text = "请输入密码";
-                    label6.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label7.Text = "请输入密码";
+                    label7.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
-                    label6.Text = "长度为6~14个字符\r\n支持字数、大小写字母和标点符号\r\n不允许有空格";
-                    label6.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label7.Text = "长度为6~14个字符\r\n支持字数、大小写字母和标点符号\r\n不允许有空格";
+                    label7.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
                     break;
                 case 1:
-                    label6.Text = "长度为6~14个字符\r\n支持字数、大小写字母和标点符号\r\n不允许有空格";
-                    label6.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                    label7.Text = "长度为6~14个字符\r\n支持字数、大小写字母和标点符号\r\n不允许有空格";
+                    label7.ForeColor = System.Drawing.SystemColors.AppWorkspace;
                     break;
             }
             label6.Invalidate();
@@ -298,10 +333,16 @@ namespace OnlyEatNotWash
             return 1;
         }
 
-        private void setVerifySMS()
+        /// <summary>
+        /// 短信验证码
+        /// </summary>
+        private void setVerifySMS(int result)
         {
             _verifyCode = textBox4.Text;
-            int result = verifySMS(_verifyCode);
+            if(result == 0)
+            {
+                result = verifySMS(_verifyCode);
+            }
             switch (result)
             {
                 case -1:
@@ -318,44 +359,50 @@ namespace OnlyEatNotWash
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private bool verifyReadChecked()
         {
             if (checkBox1.Checked)
             {
                 _chkReadFlag = true;
             }
+            else
+            {
+                _chkReadFlag = false;
+            }
             return _chkReadFlag;
         }
 
+        /// <summary>
+        /// 协议
+        /// </summary>
         private void setVerifyReadChecked()
         {
-            verifyReadChecked();
+            if (verifyReadChecked())
+            {
+            }
+            else
+            {
+            }
         }
 
-        private void label9_Click(object sender, EventArgs e)
-        {
-            _nowPage = 0;
-            changeNowPage();
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-            _nowPage = 1;
-            changeNowPage();
-        }
-
+        /// <summary>
+        /// 切换登录、注册页面
+        /// </summary>
         private void changeNowPage()
         {
             if (_nowPage == 0)
             {
                 panel2.Show();
-                panel3.Hide();
             }
             else if (_nowPage == 1)
             {
-                panel3.Show();
                 panel2.Hide();
             }
         }
+
     }
 }
