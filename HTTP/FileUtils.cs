@@ -58,12 +58,6 @@ namespace OnlyEatNotWash
             BinaryReader binaryReader = null;
             try
             {
-                //FileInfo file = new FileInfo(path);
-                //fileStream = file.OpenRead();
-                //byte[] fileContents = new byte[file.Length];
-                //fileStream.Read(fileContents, 0, Convert.ToInt32(file.Length));
-                //fileContent = Convert.ToBase64String(fileContents);
-
                 TcpClient client = new TcpClient(IP, Port);
                 netWorkStream = client.GetStream();
                 binaryWriter = new BinaryWriter(netWorkStream);

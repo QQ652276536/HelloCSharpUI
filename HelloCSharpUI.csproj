@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OnlyEatNotWash</RootNamespace>
     <AssemblyName>HelloWordUI</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -64,12 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmailWindow.cs" />
-    <Compile Include="ExportService.cs" />
-    <Compile Include="FileUtils.cs" />
-    <Compile Include="MySqlUtil.cs" />
+    <Compile Include="Excel\EmailWindow.cs" />
+    <Compile Include="Excel\ExportService.cs" />
+    <Compile Include="HTTP\FileUtils.cs" />
+    <Compile Include="MySQL\MySqlUtil.cs" />
     <Compile Include="Log\Logger.cs" />
-    <Compile Include="HttpPost.cs" />
+    <Compile Include="HTTP\HttpPost.cs" />
     <Compile Include="NPOI\xlsx\OOXML\POIXMLDocument.cs" />
     <Compile Include="NPOI\xlsx\OOXML\POIXMLDocumentPart.cs" />
     <Compile Include="NPOI\xlsx\OOXML\POIXmlException.cs" />
@@ -1499,7 +1499,8 @@
     <Compile Include="NPOI\xls\Util\SystemOutLogger.cs" />
     <Compile Include="NPOI\xls\Util\TempFile.cs" />
     <Compile Include="NPOI\xls\Util\ULongField.cs" />
-    <Compile Include="ResolutionStaticHtml.cs" />
+    <Compile Include="Excel\ResolutionStaticHtml.cs" />
+    <Compile Include="Test\DelegateA.cs" />
     <Compile Include="UI\A.cs">
       <SubType>Form</SubType>
     </Compile>
