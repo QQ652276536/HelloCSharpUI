@@ -1,5 +1,6 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
+using HelloCSharp.Log;
 
 namespace HelloCSharp.MySQL
 {

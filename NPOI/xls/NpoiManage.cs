@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 using HorizontalAlignment = NPOI.SS.UserModel.HorizontalAlignment;
 
 
-namespace GaiaGenerateSQL
+namespace HelloCSharp
 {
     /// <summary>
     /// 数据应用类型
