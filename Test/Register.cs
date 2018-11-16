@@ -17,7 +17,7 @@ namespace HelloCSharp.Test
 
         public Register(Dictionary<String, String> dictionary)
         {
-            HttpWebResponse response = HttpPostUtil.HttpPost("", dictionary);
+            HttpWebResponse response = HttpPostUtil.HttpPost("http://localhost:8080/HelloJavaServer/Register", dictionary);
             String responseStr = HttpPostUtil.GetResponseStr(response);
             MessageBox.Show(responseStr);
         }

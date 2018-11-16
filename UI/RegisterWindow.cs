@@ -65,22 +65,20 @@ namespace HelloCSharp.UI
             setVerifyUserPassword(0);
             setVerifySMS(0);
             setVerifyReadChecked();
-            if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
+            //if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
             {
-                Register register = new Register();
+                Register register = new Register(getRegisterParam());
             }
             //}
         }
 
-        private Dictionary<String, String> getParam()
+        private Dictionary<String, String> getRegisterParam()
         {
             Dictionary<String, String> dictionary = new Dictionary<string, string>();
-            dictionary.Add("","");
-            dictionary.Add("", "");
-            dictionary.Add("", "");
-            dictionary.Add("", "");
-            dictionary.Add("", "");
-            return null;
+            dictionary.Add("userName",this.textBox1.Text);
+            dictionary.Add("userPhone", this.textBox2.Text);
+            dictionary.Add("userPassword", this.textBox3.Text);
+            return dictionary;
         }
 
         private void button4_MouseDown(object sender, MouseEventArgs e)

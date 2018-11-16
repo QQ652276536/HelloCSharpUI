@@ -67,6 +67,12 @@
     <Compile Include="Excel\EmailWindow.cs" />
     <Compile Include="Excel\ExportService.cs" />
     <Compile Include="Test\Register.cs" />
+    <Compile Include="UI\FileB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FileB.Designer.cs">
+      <DependentUpon>FileB.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FileA.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1514,6 +1520,9 @@
     </Compile>
     <Compile Include="MainFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UI\FileB.resx">
+      <DependentUpon>FileB.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FileA.resx">
       <DependentUpon>FileA.cs</DependentUpon>
     </EmbeddedResource>
