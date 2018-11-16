@@ -7,8 +7,8 @@
     <ProjectGuid>{D1EFABD9-87AE-4019-BA25-E21A0B1A49D8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OnlyEatNotWash</RootNamespace>
-    <AssemblyName>HelloWordUI</AssemblyName>
+    <RootNamespace>HelloCSharp</RootNamespace>
+    <AssemblyName>HelloCSharpUI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -66,10 +66,16 @@
   <ItemGroup>
     <Compile Include="Excel\EmailWindow.cs" />
     <Compile Include="Excel\ExportService.cs" />
-    <Compile Include="HTTP\FileUtils.cs" />
+    <Compile Include="Test\Register.cs" />
+    <Compile Include="UI\FileA.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FileA.Designer.cs">
+      <DependentUpon>FileA.cs</DependentUpon>
+    </Compile>
     <Compile Include="MySQL\MySqlUtil.cs" />
     <Compile Include="Log\Logger.cs" />
-    <Compile Include="HTTP\HttpPost.cs" />
+    <Compile Include="HTTP\HttpPostUtil.cs" />
     <Compile Include="NPOI\xlsx\OOXML\POIXMLDocument.cs" />
     <Compile Include="NPOI\xlsx\OOXML\POIXMLDocumentPart.cs" />
     <Compile Include="NPOI\xlsx\OOXML\POIXmlException.cs" />
@@ -1500,19 +1506,6 @@
     <Compile Include="NPOI\xls\Util\TempFile.cs" />
     <Compile Include="NPOI\xls\Util\ULongField.cs" />
     <Compile Include="Excel\ResolutionStaticHtml.cs" />
-    <Compile Include="Test\DelegateA.cs" />
-    <Compile Include="UI\A.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\A.Designer.cs">
-      <DependentUpon>A.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\B.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\B.Designer.cs">
-      <DependentUpon>B.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\RegisterWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1521,11 +1514,8 @@
     </Compile>
     <Compile Include="MainFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="UI\A.resx">
-      <DependentUpon>A.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\B.resx">
-      <DependentUpon>B.cs</DependentUpon>
+    <EmbeddedResource Include="UI\FileA.resx">
+      <DependentUpon>FileA.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\RegisterWindow.resx">
       <DependentUpon>RegisterWindow.cs</DependentUpon>

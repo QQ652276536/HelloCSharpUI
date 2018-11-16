@@ -1,7 +1,7 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp.MySQL
 {
     class MySqlUtil
     {

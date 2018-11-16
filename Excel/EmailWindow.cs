@@ -8,7 +8,7 @@ using System.IO;
 using System.Data;
 using GaiaGenerateSQL;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp.Excel
 {
     /// <summary>
     /// 上级指示窗体

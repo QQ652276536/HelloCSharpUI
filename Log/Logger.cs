@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp.Log
 {
     public enum LogType
     {

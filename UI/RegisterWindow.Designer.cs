@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp.UI
 {
     partial class RegisterWindow
     {

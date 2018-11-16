@@ -4,11 +4,11 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp.HTTP
 {
-    class Register
+    class HttpPostUtil
     {
-        public HttpWebResponse HttpPost(String url, IDictionary<String,String> parameters)
+        public static HttpWebResponse HttpPost(String url, IDictionary<String, String> parameters)
         {
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "POST";
@@ -39,11 +39,11 @@ namespace OnlyEatNotWash
             return request.GetResponse() as HttpWebResponse;
         }
 
-        public String GetResponseStr(HttpWebResponse response)
+        public static String GetResponseStr(HttpWebResponse response)
         {
             using (Stream stream = response.GetResponseStream())
             {
-                StreamReader reader = new StreamReader(stream,Encoding.UTF8);
+                StreamReader reader = new StreamReader(stream, Encoding.UTF8);
                 return reader.ReadToEnd();
             }
         }

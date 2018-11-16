@@ -1,8 +1,8 @@
-﻿using OnlyEatNotWash.UI;
+﻿using HelloCSharp.UI;
 using System;
 using System.Windows.Forms;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp
 {
     class MainFunc
     {
@@ -14,11 +14,9 @@ namespace OnlyEatNotWash
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new RegisterForm());
-            Application.Run(new A());
-            //new MainFunc().Test();
             //MySqlUtil mySqlUtil = new MySqlUtil();
             //EmailWindow window = new EmailWindow();
+            Application.Run(new RegisterWindow());
         }
 
     }

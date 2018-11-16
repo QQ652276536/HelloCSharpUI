@@ -1,10 +1,12 @@
-﻿using System;
+﻿using HelloCSharp.Test;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace OnlyEatNotWash
+namespace HelloCSharp.UI
 {
     public partial class RegisterWindow : Form
     {
@@ -58,16 +60,27 @@ namespace OnlyEatNotWash
             ////注册
             //else if (_nowPage == 1)
             //{
-                setVerifyUserNameColor(0);
-                setVerifyUserPhoneColor(0);
-                setVerifyUserPassword(0);
-                setVerifySMS(0);
-                setVerifyReadChecked();
-                if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
-                {
-                    //TODO:注册
-                }
+            setVerifyUserNameColor(0);
+            setVerifyUserPhoneColor(0);
+            setVerifyUserPassword(0);
+            setVerifySMS(0);
+            setVerifyReadChecked();
+            if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
+            {
+                Register register = new Register();
+            }
             //}
+        }
+
+        private Dictionary<String, String> getParam()
+        {
+            Dictionary<String, String> dictionary = new Dictionary<string, string>();
+            dictionary.Add("","");
+            dictionary.Add("", "");
+            dictionary.Add("", "");
+            dictionary.Add("", "");
+            dictionary.Add("", "");
+            return null;
         }
 
         private void button4_MouseDown(object sender, MouseEventArgs e)
@@ -339,7 +352,7 @@ namespace OnlyEatNotWash
         private void setVerifySMS(int result)
         {
             _verifyCode = textBox4.Text;
-            if(result == 0)
+            if (result == 0)
             {
                 result = verifySMS(_verifyCode);
             }
