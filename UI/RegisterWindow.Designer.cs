@@ -349,7 +349,7 @@ namespace HelloCSharp.UI
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // A
+            // 
             // 
             this.AutoScaleDimensions = new SizeF(6F, 12F);
             this.AutoScaleMode = AutoScaleMode.Font;
@@ -362,7 +362,7 @@ namespace HelloCSharp.UI
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "A";
+            this.Name = "RegisterWindow";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.textBox3.ResumeLayout(false);

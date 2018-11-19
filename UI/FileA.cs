@@ -100,7 +100,7 @@ namespace HelloCSharp.UI
                                 stringBuilder.Insert(5, ":00");
                                 lineStr = dateStr2 + "," + stringBuilder.ToString() + "," + contentArray[2] + "," + contentArray[3] + ","
                                         + contentArray[4] + "," + contentArray[5] + "," + contentArray[6] + "," + contentArray[7] + ","
-                                        + contentArray[8];
+                                        + contentArray[8] + ",0,0";
                             }
                             streamWriter.WriteLine(lineStr);
                             streamWriter.Flush();

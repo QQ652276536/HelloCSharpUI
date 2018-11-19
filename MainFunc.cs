@@ -17,7 +17,8 @@ namespace HelloCSharp
             //MySqlUtil mySqlUtil = new MySqlUtil();
             //EmailWindow window = new EmailWindow();
             //Application.Run(new RegisterWindow());
-            Application.Run(new FileB());
+            Application.Run(new MainForm());
+            //Application.Run(new FileB());
         }
 
     }

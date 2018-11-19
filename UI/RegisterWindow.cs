@@ -205,23 +205,23 @@ namespace HelloCSharp.UI
             {
                 case -1:
                     label5.Text = "请您输入用户名";
-                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
                     label5.Text = "用户名不能超过7个汉字或14个字符";
-                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case -3:
                     label5.Text = "此用户名太受欢迎,请更换一个";
-                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case -4:
                     label5.Text = "用户名仅支持中英文、数字和下划线、且不能为纯数字";
-                    label5.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label5.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case 1:
                     this.label5.Text = "设置后不可更改\r\n中英文均可，最长14个英文或7个汉字";
-                    label5.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                    label5.ForeColor = SystemColors.AppWorkspace;
                     break;
             }
             label4.Invalidate();
@@ -261,15 +261,15 @@ namespace HelloCSharp.UI
             {
                 case -1:
                     label6.Text = "请您输入手机号";
-                    label6.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label6.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
                     label6.Text = "手机号码格式不正确";
-                    label6.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label6.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case 1:
                     label6.Text = "请输入中国大陆手机号，其他用户不可见";
-                    label6.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                    label6.ForeColor = SystemColors.AppWorkspace;
                     break;
             }
             label5.Invalidate();
@@ -309,15 +309,15 @@ namespace HelloCSharp.UI
             {
                 case -1:
                     label7.Text = "请输入密码";
-                    label7.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label7.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
                     label7.Text = "长度为6~14个字符\r\n支持字数、大小写字母和标点符号\r\n不允许有空格";
-                    label7.ForeColor = System.Drawing.Color.FromArgb(255, 0, 0);
+                    label7.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case 1:
                     label7.Text = "长度为6~14个字符\r\n支持字数、大小写字母和标点符号\r\n不允许有空格";
-                    label7.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                    label7.ForeColor = SystemColors.AppWorkspace;
                     break;
             }
             label6.Invalidate();

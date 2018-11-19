@@ -1512,6 +1512,12 @@
     <Compile Include="NPOI\xls\Util\TempFile.cs" />
     <Compile Include="NPOI\xls\Util\ULongField.cs" />
     <Compile Include="Excel\ResolutionStaticHtml.cs" />
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\RegisterWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1525,6 +1531,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FileA.resx">
       <DependentUpon>FileA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\RegisterWindow.resx">
       <DependentUpon>RegisterWindow.cs</DependentUpon>
@@ -1561,6 +1570,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Image\GameBack1.png" />
     <Content Include="Image\Logo1.png" />
     <Content Include="Image\Logo10.png" />
     <Content Include="Image\Logo2.png" />
