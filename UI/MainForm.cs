@@ -20,29 +20,50 @@ namespace HelloCSharp.UI
 
         private void PanelsRegisterEvents()
         {
-            foreach (Control tempControl in flowLayoutPanel1.Controls)
+            foreach (Control panControl in flowLayoutPanel1.Controls)
             {
-                tempControl.MouseHover += new EventHandler(panel_MouseHover);
-                tempControl.MouseLeave += new EventHandler(panel_MouseLeave);
-                tempControl.Click += new EventHandler(panel_Click);
+                panControl.MouseHover += new EventHandler(panel_MouseHover);
+                panControl.MouseLeave += new EventHandler(panel_MouseLeave);
+                panControl.Click += new EventHandler(panel_Click);
+                foreach (Control labControl in panControl.Controls)
+                {
+                    labControl.MouseHover += new EventHandler(panel_MouseHover);
+                    labControl.MouseLeave += new EventHandler(panel_MouseLeave);
+                    labControl.Click += new EventHandler(panel_Click);
+                }
             }
         }
-
+        
         private void panel_MouseHover(object sender, EventArgs e)
         {
-            Control panel = sender as Control;
-            panel.BackColor = Color.FromArgb(50,255,144,0);
+            Control control = sender as Control;
+            Type type = control.GetType();
+            if (type.Name.Equals("Label"))
+            {
+                control.Parent.BackColor = Color.FromArgb(50, 255, 144, 0);
+            }
+            else
+            {
+                control.BackColor = Color.FromArgb(50, 255, 144, 0);
+            }
         }
 
         private void panel_MouseLeave(object sender, EventArgs e)
         {
-            Control panel = sender as Control;
-            panel.BackColor = Color.Transparent;
+            Control control = sender as Control;
+            control.BackColor = Color.Transparent;
         }
 
         private void panel_Click(object sender, EventArgs e)
         {
-            String panelName = ((Control)sender).Name;
+            Control control = sender as Control;
+            String panelName = control.Name;
+            String typeName = control.GetType().Name;
+            if (typeName.Equals("Label"))
+            {
+                panelName = control.Parent.Name;
+            }
+            Console.WriteLine("-------------------------");
             switch (panelName)
             {
                 case "panFileA":
