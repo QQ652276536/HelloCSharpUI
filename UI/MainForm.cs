@@ -28,18 +28,18 @@ namespace HelloCSharp.UI
                 foreach (Control labControl in panControl.Controls)
                 {
                     labControl.MouseHover += new EventHandler(panel_MouseHover);
-                    labControl.MouseLeave += new EventHandler(panel_MouseLeave);
                     labControl.Click += new EventHandler(panel_Click);
                 }
             }
         }
-        
+
         private void panel_MouseHover(object sender, EventArgs e)
         {
             Control control = sender as Control;
             Type type = control.GetType();
             if (type.Name.Equals("Label"))
             {
+                control.BackColor = Color.Transparent;//屏蔽Label的背景色
                 control.Parent.BackColor = Color.FromArgb(50, 255, 144, 0);
             }
             else
@@ -50,8 +50,8 @@ namespace HelloCSharp.UI
 
         private void panel_MouseLeave(object sender, EventArgs e)
         {
-            Control control = sender as Control;
-            control.BackColor = Color.Transparent;
+            Panel panel = sender as Panel;
+            panel.BackColor = Color.Transparent;
         }
 
         private void panel_Click(object sender, EventArgs e)
@@ -62,8 +62,8 @@ namespace HelloCSharp.UI
             if (typeName.Equals("Label"))
             {
                 panelName = control.Parent.Name;
+                Console.WriteLine("-------------------------");
             }
-            Console.WriteLine("-------------------------");
             switch (panelName)
             {
                 case "panFileA":
