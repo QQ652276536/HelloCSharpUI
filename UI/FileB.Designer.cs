@@ -117,6 +117,7 @@
             this.Controls.Add(this.button1);
             this.Name = "FileB";
             this.Text = "FileB";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FileB_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

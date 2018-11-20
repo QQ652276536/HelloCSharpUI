@@ -62,13 +62,17 @@ namespace HelloCSharp.UI
             if (typeName.Equals("Label"))
             {
                 panelName = control.Parent.Name;
-                Console.WriteLine("-------------------------");
+                Console.WriteLine("啊~");
             }
             switch (panelName)
             {
                 case "panFileA":
+                    FileA fileA = new FileA();
+                    fileA.ShowDialog();
                     break;
                 case "panFileB":
+                    FileB fileB = new FileB();
+                    fileB.ShowDialog();
                     break;
                 case "panFileC":
                     break;

@@ -14,9 +14,13 @@ namespace HelloCSharp.UI
 {
     public partial class FileA : Form
     {
+        private delegate void TextDele();
+        private List<Thread> _threadList;
+
         public FileA()
         {
             InitializeComponent();
+            _threadList = new List<Thread>();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -44,10 +48,24 @@ namespace HelloCSharp.UI
                 MessageBox.Show("请选择源路径！");
                 return;
             }
-            CreateFile();
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            textBox1.Text = "执行中……";
+            textBox1.Select(textBox1.Text.Length, 0);
+            textBox1.ScrollToCaret();
+            Thread thread = new Thread(new ThreadStart(CreateFileA));
+            _threadList.Add(thread);
+            thread.Start();
         }
 
-        private void CreateFile()
+        private void CreateFileA()
+        {
+            TextDele textDele = new TextDele(CreateFileB);
+            this.BeginInvoke(textDele);
+        }
+
+        private void CreateFileB()
         {
             textBox1.Text = "";
             String inputPath = label1.Text;
@@ -108,7 +126,12 @@ namespace HelloCSharp.UI
                         lineIndex++;
                     }
                 }
+                button1.Enabled = true;
+                button2.Enabled = true;
+                button3.Enabled = true;
                 textBox1.Text += "完成!";
+                textBox1.Select(textBox1.Text.Length, 0);
+                textBox1.ScrollToCaret();
             }
             catch
             {
@@ -150,6 +173,14 @@ namespace HelloCSharp.UI
                     streamReader.Close();
             }
             return lineCount;
+        }
+
+        private void FileA_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (Thread tempTrhead in _threadList)
+            {
+                tempTrhead.Abort();
+            }
         }
     }
 }

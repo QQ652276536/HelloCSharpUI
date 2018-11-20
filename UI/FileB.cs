@@ -15,9 +15,13 @@ namespace HelloCSharp.UI
 {
     public partial class FileB : Form
     {
+        private delegate void TextDele();
+        private List<Thread> _threadList;
+
         public FileB()
         {
             InitializeComponent();
+            _threadList = new List<Thread>();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,10 +49,24 @@ namespace HelloCSharp.UI
                 MessageBox.Show("请选择源路径！");
                 return;
             }
-            CreateFile();
+            textBox1.Text = "执行中……";
+            textBox1.Select(textBox1.Text.Length, 0);
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            Thread thread = new Thread(new ThreadStart(CreateFileA));
+            thread.Name = "thread_1";
+            _threadList.Add(thread);
+            thread.Start();
         }
 
-        private void CreateFile()
+        private void CreateFileA()
+        {
+            TextDele txtDele = new TextDele(CreateFileB);
+            this.BeginInvoke(txtDele);
+        }
+
+        private void CreateFileB()
         {
             textBox1.Text = "";
             String inputPath = label1.Text;
@@ -61,7 +79,8 @@ namespace HelloCSharp.UI
                 for (int i = 0; i < fileInfoArray.Length; i++)
                 {
                     String tempPath = fileInfoArray[i].FullName;
-                    textBox1.Text += tempPath + "\r\n";
+                    tempPath += "\r\n";
+                    textBox1.Text += tempPath;
                     String tempNameA = fileInfoArray[i].Name;
                     if (regex.IsMatch(tempNameA))
                     {
@@ -73,14 +92,23 @@ namespace HelloCSharp.UI
                     fileInfoArray[i].MoveTo(tempPathA);
                 }
                 textBox1.Text += "完成!";
+                textBox1.Select(textBox1.Text.Length, 0);
+                textBox1.ScrollToCaret();
+                button1.Enabled = true;
+                button2.Enabled = true;
+                button3.Enabled = true;
             }
             catch
             {
             }
-            finally
+        }
+
+        private void FileB_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (Thread tempTrhaed in _threadList)
             {
+                tempTrhaed.Abort();
             }
-               
         }
     }
 }

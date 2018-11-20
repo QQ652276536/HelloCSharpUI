@@ -104,7 +104,7 @@
             this.textBox1.Size = new System.Drawing.Size(291, 92);
             this.textBox1.TabIndex = 5;
             // 
-            // Form1
+            // FileA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -115,8 +115,9 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "FileA";
             this.Text = "FileA";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FileA_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
