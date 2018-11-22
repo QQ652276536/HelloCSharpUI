@@ -16,8 +16,8 @@ namespace HelloCSharp
             Application.SetCompatibleTextRenderingDefault(false);
             //MySqlUtil mySqlUtil = new MySqlUtil();
             //EmailWindow window = new EmailWindow();
-            //Application.Run(new RegisterWindow());
-            Application.Run(new MainForm());
+            Application.Run(new RegisterWindow());
+            //Application.Run(new MainForm());
             //Application.Run(new FileB());
         }
 

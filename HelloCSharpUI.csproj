@@ -53,6 +53,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Excel\EmailWindow.cs" />
     <Compile Include="Excel\ExportService.cs" />
+    <Compile Include="Test\EntityClass.cs" />
     <Compile Include="Test\Register.cs" />
     <Compile Include="UI\FileB.cs">
       <SubType>Form</SubType>

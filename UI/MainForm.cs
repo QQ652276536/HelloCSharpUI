@@ -68,11 +68,11 @@ namespace HelloCSharp.UI
             {
                 case "panFileA":
                     FileA fileA = new FileA();
-                    this.StartPosition = FormStartPosition.CenterParent;
+                    this.StartPosition = FormStartPosition.CenterScreen;
                     fileA.ShowDialog();
                     break;
                 case "panFileB":
-                    this.StartPosition = FormStartPosition.CenterParent;
+                    this.StartPosition = FormStartPosition.CenterScreen;
                     FileB fileB = new FileB();
                     fileB.ShowDialog();
                     break;

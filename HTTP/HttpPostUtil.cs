@@ -9,17 +9,45 @@ namespace HelloCSharp.HTTP
 {
     class HttpPostUtil
     {
+        public static HttpWebResponse HttpPost(String url, String parameters)
+        {
+            if (parameters == null || parameters.Trim().Equals(""))
+            {
+                return null;
+            }
+            try
+            {
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                request.Method = "POST";
+                request.Timeout = 2000;
+                request.ContentType = "application/json;charset=UTF-8";
+                byte[] data = Encoding.UTF8.GetBytes(parameters);
+                request.ContentLength = data.Length;
+                using (Stream stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                    stream.Close();
+                }
+                return request.GetResponse() as HttpWebResponse;
+            }
+            catch (WebException e)
+            {
+                Logger.Instance.WriteException(e);
+                return null;
+            }
+        }
+
         public static HttpWebResponse HttpPost(String url, IDictionary<String, String> parameters)
         {
+            if (parameters == null || parameters.Count == 0)
+            {
+                return null;
+            }
             try
             {
                 HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
-                if (parameters == null || parameters.Count == 0)
-                {
-                    return null;
-                }
                 StringBuilder builder = new StringBuilder();
                 bool appendFlag = false;
                 foreach (String key in parameters.Keys)
@@ -38,6 +66,7 @@ namespace HelloCSharp.HTTP
                 using (Stream stream = request.GetRequestStream())
                 {
                     stream.Write(bytes, 0, bytes.Length);
+                    stream.Close();
                 }
                 return request.GetResponse() as HttpWebResponse;
             }

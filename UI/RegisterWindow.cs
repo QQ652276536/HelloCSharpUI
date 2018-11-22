@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace HelloCSharp.UI
@@ -75,10 +76,23 @@ namespace HelloCSharp.UI
         private Dictionary<String, String> getRegisterParam()
         {
             Dictionary<String, String> dictionary = new Dictionary<string, string>();
-            dictionary.Add("userName",this.textBox1.Text);
+            dictionary.Add("userName", this.textBox1.Text);
             dictionary.Add("userPhone", this.textBox2.Text);
-            dictionary.Add("userPassword", this.textBox3.Text);
+            dictionary.Add("userPwd", this.textBox3.Text);
             return dictionary;
+        }
+
+        private String getRegisterParam(String param)
+        {
+            UserMessage userMessage = new UserMessage();
+            userMessage._id = "";
+            userMessage._userName = textBox1.Text;
+            userMessage._userPhone = textBox2.Text;
+            userMessage._userPwd = textBox3.Text;
+            userMessage._verifyCode = "";
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            String strJson = serializer.Serialize(userMessage);
+            return strJson;
         }
 
         private void button4_MouseDown(object sender, MouseEventArgs e)
