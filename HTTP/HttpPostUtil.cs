@@ -19,8 +19,8 @@ namespace HelloCSharp.HTTP
             {
                 HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
                 request.Method = "POST";
-                request.Timeout = 2000;
-                request.ContentType = "application/json;charset=UTF-8";
+                request.Timeout = 3000;
+                request.ContentType = "application/json";
                 byte[] data = Encoding.UTF8.GetBytes(parameters);
                 request.ContentLength = data.Length;
                 using (Stream stream = request.GetRequestStream())

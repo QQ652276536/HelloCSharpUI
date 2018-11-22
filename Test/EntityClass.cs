@@ -10,7 +10,7 @@ namespace HelloCSharp.Test
     {
     }
 
-    public class UserMessage
+    public class UserInfo
     {
         #region
         public String _id;

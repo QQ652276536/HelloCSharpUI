@@ -11,13 +11,21 @@ namespace HelloCSharp.Test
 {
     class Register
     {
+        public const String URL = "http://localhost:8080/HelloJavaServer/Register";
         public Register()
         {
         }
 
+        public Register(String param)
+        {
+            HttpWebResponse response = HttpPostUtil.HttpPost(URL,param);
+            String responseStr = HttpPostUtil.GetResponseStr(response);
+            MessageBox.Show(responseStr);
+        }
+
         public Register(Dictionary<String, String> dictionary)
         {
-            HttpWebResponse response = HttpPostUtil.HttpPost("http://localhost:8080/HelloJavaServer/Register", dictionary);
+            HttpWebResponse response = HttpPostUtil.HttpPost(URL, dictionary);
             String responseStr = HttpPostUtil.GetResponseStr(response);
             MessageBox.Show(responseStr);
         }

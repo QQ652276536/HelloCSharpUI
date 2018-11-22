@@ -68,12 +68,12 @@ namespace HelloCSharp.UI
             setVerifyReadChecked();
             //if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
             {
-                Register register = new Register(getRegisterParam());
+                Register register = new Register(GetRegisterParam("json"));
             }
             //}
         }
 
-        private Dictionary<String, String> getRegisterParam()
+        private Dictionary<String, String> GetRegisterParam()
         {
             Dictionary<String, String> dictionary = new Dictionary<string, string>();
             dictionary.Add("userName", this.textBox1.Text);
@@ -82,17 +82,23 @@ namespace HelloCSharp.UI
             return dictionary;
         }
 
-        private String getRegisterParam(String param)
+        private String GetRegisterParam(String param)
         {
-            UserMessage userMessage = new UserMessage();
-            userMessage._id = "";
-            userMessage._userName = textBox1.Text;
-            userMessage._userPhone = textBox2.Text;
-            userMessage._userPwd = textBox3.Text;
-            userMessage._verifyCode = "";
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            String strJson = serializer.Serialize(userMessage);
-            return strJson;
+            switch (param)
+            {
+                case "json":
+                    UserInfo userInfo = new UserInfo();
+                    userInfo._id = "";
+                    userInfo._userName = textBox1.Text;
+                    userInfo._userPhone = textBox2.Text;
+                    userInfo._userPwd = textBox3.Text;
+                    userInfo._verifyCode = "";
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    String strJson = serializer.Serialize(userInfo);
+                    return strJson;
+                default:
+                    return null;
+            }
         }
 
         private void button4_MouseDown(object sender, MouseEventArgs e)
