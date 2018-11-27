@@ -1,4 +1,4 @@
-﻿using HelloCSharp.Test;
+﻿using HelloCSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,14 +13,16 @@ namespace HelloCSharp.UI
     {
         String _userName = "";
         String _userPhone = "";
-        String _userPassword = "";
+        String _userPwd = "";
         String _verifyCode = "";
-        bool _userNameFlag = false;
-        bool _userPhoneFlag = false;
-        bool _userPasswordFlag = false;
-        bool _chkReadFlag = false;
-        bool _smsFlag = false;
+        bool _userNameFlag = true;
+        bool _userPhoneFlag = true;
+        bool _userPasswordFlag = true;
+        bool _chkReadFlag = true;
+        bool _smsFlag = true;
+        bool _smsBtnClickFlag = true;
         int _nowPage = 0;
+        int smsTime = 0;
 
         public RegisterWindow()
         {
@@ -31,9 +33,69 @@ namespace HelloCSharp.UI
         {
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            smsTime--;
+            if (smsTime == 0)
+            {
+                timer1.Stop();
+                _smsBtnClickFlag = true;
+            }
+            else
+            {
+                _smsBtnClickFlag = false;
+            }
+            ChangeSmsBtnState();
+
+        }
+
+        /// <summary>
+        /// 改变短信验证按钮状态
+        /// </summary>
+        private void ChangeSmsBtnState()
+        {
+            if (_smsBtnClickFlag)
+            {
+                this.button1.Text = "获取短信验证";
+                this.button1.Enabled = true;
+                this.button1.BackColor = System.Drawing.Color.Transparent;
+                this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            }
+            else
+            {
+                this.button1.Enabled = false;
+                this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))));
+                this.button1.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                this.button1.Text = smsTime.ToString() + "秒后重新获取";
+            }
+        }
+
+        /// <summary>
+        /// 获取短信验证码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            //TODO:发起验证码请求
+            //间隔时间，秒
+            smsTime = 9;
+            //更改验证码按钮状态
+            _smsBtnClickFlag = false;
+            ChangeSmsBtnState();
+            //启动定时
+            timer1.Enabled = true;
+            timer1.Start();
+            //获取验证码
+            GetSms getSMS = new GetSms(_userPhone);
+            String sendSms = getSMS._code;
+            //TODO:验证手机号是否已存在，如果已存在先提示他手机号已存在可直接登录，他点确认后跳转至登录页面
+            if (sendSms.Equals("1"))
+            {
+            }
+            else if (!sendSms.Equals("-1") && sendSms != null && !sendSms.Equals(""))
+            {
+                Console.WriteLine("收到验证码：" + sendSms);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -60,25 +122,26 @@ namespace HelloCSharp.UI
             //}
             ////注册
             //else if (_nowPage == 1)
-            //{
-            setVerifyUserNameColor(0);
-            setVerifyUserPhoneColor(0);
-            setVerifyUserPassword(0);
-            setVerifySMS(0);
-            setVerifyReadChecked();
-            //if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
             {
-                Register register = new Register(GetRegisterParam("json"));
+                setVerifyUserNameColor(0);
+                setVerifyUserPhoneColor(0);
+                setVerifyUserPassword(0);
+                setVerifySMS(0);
+                setVerifyReadChecked();
+                if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
+                {
+                    Register register = new Register(GetRegisterParam("json"));
+                }
             }
-            //}
         }
 
         private Dictionary<String, String> GetRegisterParam()
         {
             Dictionary<String, String> dictionary = new Dictionary<string, string>();
-            dictionary.Add("userName", this.textBox1.Text);
-            dictionary.Add("userPhone", this.textBox2.Text);
-            dictionary.Add("userPwd", this.textBox3.Text);
+            dictionary.Add("userName", _userName);
+            dictionary.Add("userPhone", _userPhone);
+            dictionary.Add("userPwd", _userPwd);
+            dictionary.Add("verifyCode", _verifyCode);
             return dictionary;
         }
 
@@ -88,11 +151,10 @@ namespace HelloCSharp.UI
             {
                 case "json":
                     UserInfo userInfo = new UserInfo();
-                    userInfo._id = "";
-                    userInfo._userName = textBox1.Text;
-                    userInfo._userPhone = textBox2.Text;
-                    userInfo._userPwd = textBox3.Text;
-                    userInfo._verifyCode = "";
+                    userInfo._userName = _userName;
+                    userInfo._userPhone = _userPhone;
+                    userInfo._userPwd = _userPwd;
+                    userInfo._verifyCode = Convert.ToInt32(_verifyCode);
                     JavaScriptSerializer serializer = new JavaScriptSerializer();
                     String strJson = serializer.Serialize(userInfo);
                     return strJson;
@@ -320,10 +382,10 @@ namespace HelloCSharp.UI
         /// </summary>
         private void setVerifyUserPassword(int result)
         {
-            _userPassword = textBox3.Text;
+            _userPwd = textBox3.Text;
             if (result == 0)
             {
-                result = verifyUserPassword(_userPassword);
+                result = verifyUserPassword(_userPwd);
             }
             switch (result)
             {

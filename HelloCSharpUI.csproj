@@ -67,8 +67,9 @@
   <ItemGroup>
     <Compile Include="Excel\EmailWindow.cs" />
     <Compile Include="Excel\ExportService.cs" />
-    <Compile Include="Test\EntityClass.cs" />
-    <Compile Include="Test\Register.cs" />
+    <Compile Include="EntityClass.cs" />
+    <Compile Include="GetSms.cs" />
+    <Compile Include="Register.cs" />
     <Compile Include="UI\FileB.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1570,6 +1571,7 @@
   <ItemGroup>
     <Folder Include="NPOI\xls\HSSF\Dev\" />
     <Folder Include="Resources\" />
+    <Folder Include="Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Image\GameBack1.png" />

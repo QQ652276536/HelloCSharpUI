@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HelloCSharp.Test
+namespace HelloCSharp
 {
     public class EntityClass
     {
@@ -13,11 +13,14 @@ namespace HelloCSharp.Test
     public class UserInfo
     {
         #region
-        public String _id;
+        public int _id;
+        public int _deleteFlag;
         public String _userName;
         public String _userPwd;
         public String _userPhone;
-        public String _verifyCode;
+        public int _verifyCode;
+        public String _registerTime;
+        public int _rank;
         #endregion
     }
 }
