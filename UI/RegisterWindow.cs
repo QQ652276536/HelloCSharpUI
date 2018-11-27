@@ -100,28 +100,27 @@ namespace HelloCSharp.UI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ////登录
-            //if (_nowPage == 0)
-            //{
-            //}
-            ////切换至登录页面
-            //else if (_nowPage == 1)
-            //{
-            //    changeNowPage();
-            //    _nowPage = 0;
-            //}
+            //当前在登录页面，点击登录则是登录
+            if (_nowPage == 0)
+            {
+                //TODO:登录
+            }
+            //当前在注册页面，点击登录则是转到登录页面
+            else if (_nowPage == 1)
+            {
+                changeNowPage();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ////切换至注册页面
-            //if (_nowPage == 0)
-            //{
-            //    changeNowPage();
-            //    _nowPage = 1;
-            //}
-            ////注册
-            //else if (_nowPage == 1)
+            //当前在登录页面，点击注册则是转到注册页面
+            if (_nowPage == 0)
+            {
+                changeNowPage();
+            }
+            //当前在注册页面，点击注册则是注册
+            else if (_nowPage == 1)
             {
                 setVerifyUserNameColor(0);
                 setVerifyUserPhoneColor(0);
@@ -490,10 +489,12 @@ namespace HelloCSharp.UI
             if (_nowPage == 0)
             {
                 panel2.Show();
+                _nowPage = 1;
             }
             else if (_nowPage == 1)
             {
                 panel2.Hide();
+                _nowPage = 0;
             }
         }
 
