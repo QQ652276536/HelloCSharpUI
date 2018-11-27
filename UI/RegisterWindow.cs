@@ -108,7 +108,7 @@ namespace HelloCSharp.UI
             //当前在注册页面，点击登录则是转到登录页面
             else if (_nowPage == 1)
             {
-                changeNowPage();
+                ChangeNowPage();
             }
         }
 
@@ -117,16 +117,16 @@ namespace HelloCSharp.UI
             //当前在登录页面，点击注册则是转到注册页面
             if (_nowPage == 0)
             {
-                changeNowPage();
+                ChangeNowPage();
             }
             //当前在注册页面，点击注册则是注册
             else if (_nowPage == 1)
             {
-                setVerifyUserNameColor(0);
-                setVerifyUserPhoneColor(0);
-                setVerifyUserPassword(0);
-                setVerifySMS(0);
-                setVerifyReadChecked();
+                SetVerifyUserNameColor(0);
+                SetVerifyUserPhoneColor(0);
+                SetVerifyUserPassword(0);
+                SetVerifySMS(0);
+                SetVerifyReadChecked();
                 if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
                 {
                     Register register = new Register(GetRegisterParam("json"));
@@ -176,37 +176,37 @@ namespace HelloCSharp.UI
 
         private void textBox1_Click(object sender, EventArgs e)
         {
-            setVerifyUserNameColor(1);
+            SetVerifyUserNameColor(1);
         }
 
         private void textBox2_Click(object sender, EventArgs e)
         {
-            setVerifyUserPhoneColor(1);
+            SetVerifyUserPhoneColor(1);
         }
 
         private void textBox3_Click(object sender, EventArgs e)
         {
-            setVerifyUserPassword(1);
+            SetVerifyUserPassword(1);
         }
 
         private void textBox1_Leave(object sender, EventArgs e)
         {
-            setVerifyUserNameColor(0);
+            SetVerifyUserNameColor(0);
         }
 
         private void textBox2_Leave(object sender, EventArgs e)
         {
-            setVerifyUserPhoneColor(0);
+            SetVerifyUserPhoneColor(0);
         }
 
         private void textBox3_Leave(object sender, EventArgs e)
         {
-            setVerifyUserPassword(0);
+            SetVerifyUserPassword(0);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            setVerifyReadChecked();
+            SetVerifyReadChecked();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -219,7 +219,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2提示超长、-3提示太受欢迎、-4提示不能为纯数字、1验证通过</returns>
-        private int verifyUserName(String str)
+        private int VerifyUserName(String str)
         {
             if (str.Trim().Equals(""))
             {
@@ -275,12 +275,12 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 用户名
         /// </summary>
-        private void setVerifyUserNameColor(int result)
+        private void SetVerifyUserNameColor(int result)
         {
             _userName = textBox1.Text;
             if (result == 0)
             {
-                result = verifyUserName(_userName);
+                result = VerifyUserName(_userName);
             }
             switch (result)
             {
@@ -313,7 +313,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2提示超长、1验证通过</returns>
-        private int verifyUserPhone(String str)
+        private int VerifyUserPhone(String str)
         {
             if (str.Trim().Equals(""))
             {
@@ -331,12 +331,12 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 手机号
         /// </summary>
-        private void setVerifyUserPhoneColor(int result)
+        private void SetVerifyUserPhoneColor(int result)
         {
             _userPhone = textBox2.Text;
             if (result == 0)
             {
-                result = verifyUserPhone(_userPhone);
+                result = VerifyUserPhone(_userPhone);
             }
             switch (result)
             {
@@ -361,7 +361,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2提示非法、1验证通过</returns>
-        private int verifyUserPassword(String str)
+        private int VerifyUserPassword(String str)
         {
             if (str.Trim().Equals(""))
             {
@@ -379,12 +379,12 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 密码
         /// </summary>
-        private void setVerifyUserPassword(int result)
+        private void SetVerifyUserPassword(int result)
         {
             _userPwd = textBox3.Text;
             if (result == 0)
             {
-                result = verifyUserPassword(_userPwd);
+                result = VerifyUserPassword(_userPwd);
             }
             switch (result)
             {
@@ -409,7 +409,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2验证码错误、1验证通过</returns>
-        private int verifySMS(String str)
+        private int VerifySMS(String str)
         {
             if (str.Trim().Equals(""))
             {
@@ -428,12 +428,12 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 短信验证码
         /// </summary>
-        private void setVerifySMS(int result)
+        private void SetVerifySMS(int result)
         {
             _verifyCode = textBox4.Text;
             if (result == 0)
             {
-                result = verifySMS(_verifyCode);
+                result = VerifySMS(_verifyCode);
             }
             switch (result)
             {
@@ -455,7 +455,7 @@ namespace HelloCSharp.UI
         /// 
         /// </summary>
         /// <returns></returns>
-        private bool verifyReadChecked()
+        private bool VerifyReadChecked()
         {
             if (checkBox1.Checked)
             {
@@ -471,9 +471,9 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 协议
         /// </summary>
-        private void setVerifyReadChecked()
+        private void SetVerifyReadChecked()
         {
-            if (verifyReadChecked())
+            if (VerifyReadChecked())
             {
             }
             else
@@ -484,16 +484,18 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 切换登录、注册页面
         /// </summary>
-        private void changeNowPage()
+        private void ChangeNowPage()
         {
             if (_nowPage == 0)
             {
-                panel2.Show();
+                panel2.Visible = true;
+                panel5.Visible = false;
                 _nowPage = 1;
             }
             else if (_nowPage == 1)
             {
-                panel2.Hide();
+                panel5.Visible = true;
+                panel2.Visible = false;
                 _nowPage = 0;
             }
         }
