@@ -69,6 +69,12 @@
     <Compile Include="Excel\ExportService.cs" />
     <Compile Include="EntityClass.cs" />
     <Compile Include="GetSms.cs" />
+    <Compile Include="MyControl\HintTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MyControl\HintTextBox.Designer.cs">
+      <DependentUpon>HintTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Register.cs" />
     <Compile Include="UI\FileB.cs">
       <SubType>Form</SubType>

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using HelloCSharp.MyControl;
+using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
@@ -34,7 +35,7 @@ namespace HelloCSharp.UI
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new HintTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -91,7 +92,6 @@ namespace HelloCSharp.UI
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox1.Controls.Add(this.button1);
             this.textBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.textBox1.Location = new System.Drawing.Point(90, 28);
@@ -199,7 +199,7 @@ namespace HelloCSharp.UI
 
         #region 控件声明
 
-        public TextBox textBox1;
+        public HintTextBox textBox1;
         public TextBox textBox2;
         public TextBox textBox3;
         public CheckBox checkBox1;
