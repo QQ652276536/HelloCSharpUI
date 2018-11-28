@@ -36,10 +36,8 @@ namespace HelloCSharp.UI
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textBox1 = new HintTextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new HintTextBox();
+            this.textBox3 = new HintTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1.SuspendLayout();
@@ -97,48 +95,21 @@ namespace HelloCSharp.UI
             this.textBox1.Location = new System.Drawing.Point(90, 28);
             this.textBox1.MaxLength = 14;
             this.textBox1.Name = "textBox1";
+            this.textBox1.HintText = "手机/邮箱/用户名";
             this.textBox1.Size = new System.Drawing.Size(200, 29);
             this.textBox1.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(175, 7);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(12, 12);
-            this.button1.TabIndex = 15;
-            this.button1.UseVisualStyleBackColor = false;
             // 
             // textBox2
             // 
             this.textBox2.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox2.Controls.Add(this.button2);
             this.textBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox2.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.textBox2.Location = new System.Drawing.Point(90, 84);
-            this.textBox2.MaxLength = 11;
+            this.textBox2.MaxLength = 14;
             this.textBox2.Name = "textBox2";
+            this.textBox2.HintText = "密码";
             this.textBox2.Size = new System.Drawing.Size(200, 29);
             this.textBox2.TabIndex = 2;
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.Transparent;
-            this.button2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button2.BackgroundImage")));
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(175, 7);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(12, 12);
-            this.button2.TabIndex = 16;
-            this.button2.UseVisualStyleBackColor = false;
             // 
             // textBox3
             // 
@@ -146,10 +117,10 @@ namespace HelloCSharp.UI
             this.textBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.textBox3.Location = new System.Drawing.Point(90, 138);
-            this.textBox3.MaxLength = 14;
+            this.textBox3.MaxLength = 6;
             this.textBox3.Name = "textBox3";
-            this.textBox3.PasswordChar = '●';
-            this.textBox3.Size = new System.Drawing.Size(70, 29);
+            this.textBox3.HintText = "验证码";
+            this.textBox3.Size = new System.Drawing.Size(90, 29);
             this.textBox3.TabIndex = 3;
             // 
             // label2
@@ -200,13 +171,11 @@ namespace HelloCSharp.UI
         #region 控件声明
 
         public HintTextBox textBox1;
-        public TextBox textBox2;
-        public TextBox textBox3;
+        public HintTextBox textBox2;
+        public HintTextBox textBox3;
         public CheckBox checkBox1;
         public LinkLabel linkLabel1;
         public Label label1;
-        public Button button1;
-        public Button button2;
         public Label label2;
         public Label label3;
 

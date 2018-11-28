@@ -41,13 +41,15 @@ namespace HelloCSharp.MyControl
             clearBtn.Click += new EventHandler(clearBtn_Click);
             clearBtn.MouseHover += new EventHandler(clearBtn_MouseHover);
             clearBtn.MouseLeave += new EventHandler(clearBtn_MouseLeave);
+            clearBtn.Visible = false;
             base.Controls.Add(clearBtn);
         }
 
         private void clearBtn_Click(Object sender, EventArgs e)
         {
-            base.Text = String.Empty;
+            base.Text = "";
             hintLabel.Visible = true;
+            clearBtn.Visible = false;
         }
 
         private void clearBtn_MouseHover(Object sender, EventArgs e)
@@ -70,30 +72,6 @@ namespace HelloCSharp.MyControl
             base.Controls.Add(hintLabel);
         }
 
-        public void LabelIsVisible()
-        {
-            if (base.Text != String.Empty)
-            {
-                hintLabel.Visible = false;
-            }
-            else
-            {
-                hintLabel.Visible = true;
-            }
-        }
-
-        public Image BtnImage
-        {
-            get
-            {
-                return clearBtn.BackgroundImage;
-            }
-            set
-            {
-                clearBtn.BackgroundImage = value;
-            }
-        }
-
         public String HintText
         {
             get
@@ -114,7 +92,16 @@ namespace HelloCSharp.MyControl
             }
             set
             {
-                LabelIsVisible();
+                if (base.Text.Trim() != String.Empty)
+                {
+                    hintLabel.Visible = false;
+                    clearBtn.Visible = true;
+                }
+                else
+                {
+                    hintLabel.Visible = true;
+                    clearBtn.Visible = false;
+                }
                 base.Text = value;
             }
         }
@@ -128,20 +115,55 @@ namespace HelloCSharp.MyControl
             int tempHeight = (int)((base.Height - hintLabel.Height) / 2) - 2;
             hintLabel.Location = new Point(2, tempHeight);
             tempHeight = (int)((base.Height - clearBtn.Height) / 2) - 2;
-            clearBtn.Location = new Point(2, tempHeight);
+            int tempWidth = base.Width - clearBtn.Width - 10;
+            clearBtn.Location = new Point(tempWidth, tempHeight);
             base.OnSizeChanged(e);
         }
 
         protected override void OnEnter(EventArgs e)
         {
-            LabelIsVisible();
+            if (base.Text.Trim() != String.Empty)
+            {
+                hintLabel.Visible = false;
+                clearBtn.Visible = true;
+            }
+            else
+            {
+                hintLabel.Visible = true;
+                clearBtn.Visible = false;
+            }
             base.OnEnter(e);
         }
 
         protected override void OnLeave(EventArgs e)
         {
-            LabelIsVisible();
+            if (base.Text.Trim() != String.Empty)
+            {
+                hintLabel.Visible = false;
+                clearBtn.Visible = true;
+            }
+            else
+            {
+                hintLabel.Visible = true;
+                clearBtn.Visible = false;
+            }
+            base.Text = base.Text.Trim();
             base.OnLeave(e);
+        }
+
+        protected override void OnTextChanged(EventArgs e)
+        {
+            if (base.Text != String.Empty)
+            {
+                hintLabel.Visible = false;
+                clearBtn.Visible = true;
+            }
+            else
+            {
+                hintLabel.Visible = true;
+                clearBtn.Visible = false;
+            }
+            base.OnTextChanged(e);
         }
 
     }
