@@ -12,8 +12,9 @@ namespace HelloCSharp.MyControl
 {
     public partial class HintTextBox : TextBox
     {
-        public Label hintLabel = null;
-        public Button clearBtn = null;
+        private Label hintLabel = null;
+        //唉...只能用Picture代替Button了（黑线问题）
+        private PictureBox clear = null;
 
         public HintTextBox()
         {
@@ -28,41 +29,7 @@ namespace HelloCSharp.MyControl
             InitializeComponent();
         }
 
-        public void InitClearBtn()
-        {
-            clearBtn = new Button();
-            clearBtn.Size = new Size(14, 14);
-            clearBtn.BackColor = Color.Transparent;
-            clearBtn.BackgroundImage = Image.FromFile("../../Image/关闭1.png");
-            clearBtn.BackgroundImageLayout = ImageLayout.Stretch;
-            clearBtn.Cursor = Cursors.Hand;
-            clearBtn.FlatAppearance.BorderSize = 0;
-            clearBtn.FlatStyle = FlatStyle.Flat;
-            clearBtn.Click += new EventHandler(clearBtn_Click);
-            clearBtn.MouseHover += new EventHandler(clearBtn_MouseHover);
-            clearBtn.MouseLeave += new EventHandler(clearBtn_MouseLeave);
-            clearBtn.Visible = false;
-            base.Controls.Add(clearBtn);
-        }
-
-        private void clearBtn_Click(Object sender, EventArgs e)
-        {
-            base.Text = "";
-            hintLabel.Visible = true;
-            clearBtn.Visible = false;
-        }
-
-        private void clearBtn_MouseHover(Object sender, EventArgs e)
-        {
-            clearBtn.BackgroundImage = Image.FromFile("../../Image/关闭2.png");
-        }
-
-        private void clearBtn_MouseLeave(Object sender, EventArgs e)
-        {
-            clearBtn.BackgroundImage = Image.FromFile("../../Image/关闭1.png");
-        }
-
-        public void InitHintLabel()
+        private void InitHintLabel()
         {
             hintLabel = new Label();
             hintLabel.BorderStyle = BorderStyle.None;
@@ -70,6 +37,38 @@ namespace HelloCSharp.MyControl
             hintLabel.BackColor = Color.Transparent;
             hintLabel.AutoSize = true;
             base.Controls.Add(hintLabel);
+        }
+
+        private void InitClearBtn()
+        {
+            clear = new PictureBox();
+            clear.Size = new Size(14, 14);
+            clear.BackColor = Color.Transparent;
+            clear.BackgroundImage = Image.FromFile("../../Image/关闭1.png");
+            clear.BackgroundImageLayout = ImageLayout.Stretch;
+            clear.Cursor = Cursors.Hand;
+            clear.Click += new EventHandler(clearBtn_Click);
+            clear.MouseHover += new EventHandler(clearBtn_MouseHover);
+            clear.MouseLeave += new EventHandler(clearBtn_MouseLeave);
+            clear.Visible = false;
+            base.Controls.Add(clear);
+        }
+
+        private void clearBtn_Click(Object sender, EventArgs e)
+        {
+            base.Text = "";
+            hintLabel.Visible = true;
+            base.Focus();
+        }
+
+        private void clearBtn_MouseHover(Object sender, EventArgs e)
+        {
+            clear.BackgroundImage = Image.FromFile("../../Image/关闭2.png");
+        }
+
+        private void clearBtn_MouseLeave(Object sender, EventArgs e)
+        {
+            clear.BackgroundImage = Image.FromFile("../../Image/关闭1.png");
         }
 
         public String HintText
@@ -95,12 +94,12 @@ namespace HelloCSharp.MyControl
                 if (base.Text.Trim() != String.Empty)
                 {
                     hintLabel.Visible = false;
-                    clearBtn.Visible = true;
+                    clear.Visible = true;
                 }
                 else
                 {
                     hintLabel.Visible = true;
-                    clearBtn.Visible = false;
+                    clear.Visible = false;
                 }
                 base.Text = value;
             }
@@ -114,9 +113,9 @@ namespace HelloCSharp.MyControl
         {
             int tempHeight = (int)((base.Height - hintLabel.Height) / 2) - 2;
             hintLabel.Location = new Point(2, tempHeight);
-            tempHeight = (int)((base.Height - clearBtn.Height) / 2) - 2;
-            int tempWidth = base.Width - clearBtn.Width - 10;
-            clearBtn.Location = new Point(tempWidth, tempHeight);
+            tempHeight = (int)((base.Height - clear.Height) / 2) - 2;
+            int tempWidth = base.Width - clear.Width - 10;
+            clear.Location = new Point(tempWidth, tempHeight);
             base.OnSizeChanged(e);
         }
 
@@ -125,12 +124,12 @@ namespace HelloCSharp.MyControl
             if (base.Text.Trim() != String.Empty)
             {
                 hintLabel.Visible = false;
-                clearBtn.Visible = true;
+                clear.Visible = true;
             }
             else
             {
                 hintLabel.Visible = true;
-                clearBtn.Visible = false;
+                clear.Visible = false;
             }
             base.OnEnter(e);
         }
@@ -140,12 +139,12 @@ namespace HelloCSharp.MyControl
             if (base.Text.Trim() != String.Empty)
             {
                 hintLabel.Visible = false;
-                clearBtn.Visible = true;
+                clear.Visible = true;
             }
             else
             {
                 hintLabel.Visible = true;
-                clearBtn.Visible = false;
+                clear.Visible = false;
             }
             base.Text = base.Text.Trim();
             base.OnLeave(e);
@@ -156,12 +155,12 @@ namespace HelloCSharp.MyControl
             if (base.Text != String.Empty)
             {
                 hintLabel.Visible = false;
-                clearBtn.Visible = true;
+                clear.Visible = true;
             }
             else
             {
                 hintLabel.Visible = true;
-                clearBtn.Visible = false;
+                clear.Visible = false;
             }
             base.OnTextChanged(e);
         }

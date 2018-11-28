@@ -90,6 +90,6 @@ namespace HelloCSharp.UI
                 _nowPage = 0;
             }
         }
-
+        
     }
 }
