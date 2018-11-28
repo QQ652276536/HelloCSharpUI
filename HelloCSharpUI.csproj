@@ -1515,17 +1515,29 @@
     <Compile Include="NPOI\xls\Util\TempFile.cs" />
     <Compile Include="NPOI\xls\Util\ULongField.cs" />
     <Compile Include="Excel\ResolutionStaticHtml.cs" />
+    <Compile Include="UI\LoginControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\LoginControl.Designer.cs">
+      <DependentUpon>LoginControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\RegisterWindow.cs">
+    <Compile Include="UI\RegisterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\RegisterControl.Designer.cs">
+      <DependentUpon>RegisterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LoginAndRegisterWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\RegisterWindow.Designer.cs">
-      <DependentUpon>RegisterWindow.cs</DependentUpon>
+    <Compile Include="UI\LoginAndRegisterWindow.Designer.cs">
+      <DependentUpon>LoginAndRegisterWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="MainFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1535,11 +1547,17 @@
     <EmbeddedResource Include="UI\FileA.resx">
       <DependentUpon>FileA.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\LoginControl.resx">
+      <DependentUpon>LoginControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\RegisterWindow.resx">
-      <DependentUpon>RegisterWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\RegisterControl.resx">
+      <DependentUpon>RegisterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LoginAndRegisterWindow.resx">
+      <DependentUpon>LoginAndRegisterWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

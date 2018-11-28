@@ -1,36 +1,34 @@
-﻿using HelloCSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Data;
+using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Web.Script.Serialization;
+using System.Text.RegularExpressions;
 
 namespace HelloCSharp.UI
 {
-    public partial class RegisterWindow : Form
+    public partial class RegisterControl : UserControl
     {
-        String _userName = "";
-        String _userPhone = "";
-        String _userPwd = "";
-        String _verifyCode = "";
-        bool _userNameFlag = true;
-        bool _userPhoneFlag = true;
-        bool _userPasswordFlag = true;
-        bool _chkReadFlag = true;
-        bool _smsFlag = true;
-        bool _smsBtnClickFlag = true;
-        int _nowPage = 0;
-        int smsTime = 0;
+        public String _userName = "";
+        public String _userPhone = "";
+        public String _userPwd = "";
+        public String _verifyCode = "";
+        public bool _userNameFlag = true;
+        public bool _userPhoneFlag = true;
+        public bool _userPasswordFlag = true;
+        public bool _chkReadFlag = true;
+        public bool _smsFlag = true;
+        public bool _smsBtnClickFlag = true;
+        public int smsTime = 0;
 
-        public RegisterWindow()
+        public RegisterControl()
         {
             InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -56,17 +54,17 @@ namespace HelloCSharp.UI
         {
             if (_smsBtnClickFlag)
             {
-                this.button1.Text = "获取短信验证";
-                this.button1.Enabled = true;
-                this.button1.BackColor = System.Drawing.Color.Transparent;
-                this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+                this.button2.Text = "获取短信验证";
+                this.button2.Enabled = true;
+                this.button2.BackColor = System.Drawing.Color.Transparent;
+                this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             }
             else
             {
-                this.button1.Enabled = false;
-                this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))));
-                this.button1.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-                this.button1.Text = smsTime.ToString() + "秒后重新获取";
+                this.button2.Enabled = false;
+                this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))), ((int)(((byte)(171)))));
+                this.button2.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+                this.button2.Text = smsTime.ToString() + "秒后重新获取";
             }
         }
 
@@ -75,7 +73,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             //间隔时间，秒
             smsTime = 9;
@@ -98,43 +96,7 @@ namespace HelloCSharp.UI
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            //当前在登录页面，点击登录则是登录
-            if (_nowPage == 0)
-            {
-                //TODO:登录
-            }
-            //当前在注册页面，点击登录则是转到登录页面
-            else if (_nowPage == 1)
-            {
-                ChangeNowPage();
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //当前在登录页面，点击注册则是转到注册页面
-            if (_nowPage == 0)
-            {
-                ChangeNowPage();
-            }
-            //当前在注册页面，点击注册则是注册
-            else if (_nowPage == 1)
-            {
-                SetVerifyUserNameColor(0);
-                SetVerifyUserPhoneColor(0);
-                SetVerifyUserPassword(0);
-                SetVerifySMS(0);
-                SetVerifyReadChecked();
-                if (_userNameFlag && _userPhoneFlag && _userPasswordFlag && _smsFlag && _chkReadFlag)
-                {
-                    Register register = new Register(GetRegisterParam("json"));
-                }
-            }
-        }
-
-        private Dictionary<String, String> GetRegisterParam()
+        public Dictionary<String, String> GetRegisterParam()
         {
             Dictionary<String, String> dictionary = new Dictionary<string, string>();
             dictionary.Add("userName", _userName);
@@ -144,7 +106,7 @@ namespace HelloCSharp.UI
             return dictionary;
         }
 
-        private String GetRegisterParam(String param)
+        public String GetRegisterParam(String param)
         {
             switch (param)
             {
@@ -162,15 +124,15 @@ namespace HelloCSharp.UI
             }
         }
 
-        private void button4_MouseDown(object sender, MouseEventArgs e)
+        private void button1_MouseDown(object sender, MouseEventArgs e)
         {
-            this.button4.BackgroundImage = Image.FromFile("../../Image/眼睛_显示_o.png");
+            this.button1.BackgroundImage = Image.FromFile("../../Image/眼睛_显示_o.png");
             this.textBox3.PasswordChar = new char();
         }
 
-        private void button4_MouseUp(object sender, MouseEventArgs e)
+        private void button1_MouseUp(object sender, MouseEventArgs e)
         {
-            this.button4.BackgroundImage = Image.FromFile("../../Image/眼睛_隐藏_o.png");
+            this.button1.BackgroundImage = Image.FromFile("../../Image/眼睛_隐藏_o.png");
             this.textBox3.PasswordChar = '●';
         }
 
@@ -275,7 +237,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 用户名
         /// </summary>
-        private void SetVerifyUserNameColor(int result)
+        public void SetVerifyUserNameColor(int result)
         {
             _userName = textBox1.Text;
             if (result == 0)
@@ -331,7 +293,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 手机号
         /// </summary>
-        private void SetVerifyUserPhoneColor(int result)
+        public void SetVerifyUserPhoneColor(int result)
         {
             _userPhone = textBox2.Text;
             if (result == 0)
@@ -379,7 +341,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 密码
         /// </summary>
-        private void SetVerifyUserPassword(int result)
+        public void SetVerifyUserPassword(int result)
         {
             _userPwd = textBox3.Text;
             if (result == 0)
@@ -389,7 +351,7 @@ namespace HelloCSharp.UI
             switch (result)
             {
                 case -1:
-                    label7.Text = "请输入密码";
+                    label7.Text = "请您输入密码";
                     label7.ForeColor = Color.FromArgb(255, 0, 0);
                     break;
                 case -2:
@@ -428,7 +390,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 短信验证码
         /// </summary>
-        private void SetVerifySMS(int result)
+        public void SetVerifySMS(int result)
         {
             _verifyCode = textBox4.Text;
             if (result == 0)
@@ -471,32 +433,13 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 协议
         /// </summary>
-        private void SetVerifyReadChecked()
+        public void SetVerifyReadChecked()
         {
             if (VerifyReadChecked())
             {
             }
             else
             {
-            }
-        }
-
-        /// <summary>
-        /// 切换登录、注册页面
-        /// </summary>
-        private void ChangeNowPage()
-        {
-            if (_nowPage == 0)
-            {
-                panel2.Visible = true;
-                panel5.Visible = false;
-                _nowPage = 1;
-            }
-            else if (_nowPage == 1)
-            {
-                panel5.Visible = true;
-                panel2.Visible = false;
-                _nowPage = 0;
             }
         }
 
