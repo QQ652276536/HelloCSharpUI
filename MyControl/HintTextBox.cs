@@ -43,9 +43,9 @@ namespace HelloCSharp.MyControl
         private void InitClearBtn()
         {
             clear = new PictureBox();
-            clear.Size = new Size(14, 14);
+            clear.Size = new Size(12, 12);
             clear.BackColor = Color.Transparent;
-            clear.BackgroundImage = Image.FromFile("../../Image/关闭1.png");
+            clear.BackgroundImage = Image.FromFile("../../Image/关闭3.png");
             clear.BackgroundImageLayout = ImageLayout.Stretch;
             clear.Cursor = Cursors.Hand;
             clear.Click += new EventHandler(clearBtn_Click);
@@ -64,12 +64,12 @@ namespace HelloCSharp.MyControl
 
         private void clearBtn_MouseHover(Object sender, EventArgs e)
         {
-            clear.BackgroundImage = Image.FromFile("../../Image/关闭2.png");
+            clear.BackgroundImage = Image.FromFile("../../Image/关闭4.png");
         }
 
         private void clearBtn_MouseLeave(Object sender, EventArgs e)
         {
-            clear.BackgroundImage = Image.FromFile("../../Image/关闭1.png");
+            clear.BackgroundImage = Image.FromFile("../../Image/关闭3.png");
         }
 
         public String HintText
