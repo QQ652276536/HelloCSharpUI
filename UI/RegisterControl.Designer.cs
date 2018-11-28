@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using HelloCSharp.MyControl;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
@@ -31,7 +33,6 @@ namespace HelloCSharp.UI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterControl));
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -39,17 +40,16 @@ namespace HelloCSharp.UI
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new HintTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new HintTextBox();
+            this.textBox2 = new HintTextBox();
+            this.textBox3 = new HintTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.textBox3.SuspendLayout();
+            this.pictureBox1 = new PictureBox();
             this.SuspendLayout();
             // 
             // label8
@@ -155,6 +155,7 @@ namespace HelloCSharp.UI
             this.textBox4.Location = new System.Drawing.Point(90, 195);
             this.textBox4.MaxLength = 4;
             this.textBox4.Name = "textBox4";
+            this.textBox4.HintText = "请输入验证码";
             this.textBox4.Size = new System.Drawing.Size(90, 29);
             this.textBox4.TabIndex = 4;
             // 
@@ -214,6 +215,7 @@ namespace HelloCSharp.UI
             this.textBox1.Location = new System.Drawing.Point(90, 28);
             this.textBox1.MaxLength = 14;
             this.textBox1.Name = "textBox1";
+            this.textBox1.HintText = "请设置用户名";
             this.textBox1.Size = new System.Drawing.Size(200, 29);
             this.textBox1.TabIndex = 1;
             this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
@@ -227,6 +229,7 @@ namespace HelloCSharp.UI
             this.textBox2.Location = new System.Drawing.Point(90, 84);
             this.textBox2.MaxLength = 11;
             this.textBox2.Name = "textBox2";
+            this.textBox2.HintText = "可用于登录和找回密码";
             this.textBox2.Size = new System.Drawing.Size(200, 29);
             this.textBox2.TabIndex = 2;
             this.textBox2.Click += new System.EventHandler(this.textBox2_Click);
@@ -235,31 +238,28 @@ namespace HelloCSharp.UI
             // textBox3
             // 
             this.textBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox3.Controls.Add(this.button1);
             this.textBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.textBox3.Location = new System.Drawing.Point(90, 140);
             this.textBox3.MaxLength = 14;
             this.textBox3.Name = "textBox3";
+            this.textBox3.HintText = "请设置登录密码";
             this.textBox3.PasswordChar = '●';
-            this.textBox3.Size = new System.Drawing.Size(200, 29);
+            this.textBox3.Size = new System.Drawing.Size(164, 29);
             this.textBox3.TabIndex = 3;
             this.textBox3.Click += new System.EventHandler(this.textBox3_Click);
             this.textBox3.Leave += new System.EventHandler(this.textBox3_Leave);
-            // 
-            // button1
-            // 
-            this.button1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button1.BackgroundImage")));
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(158, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(30, 20);
-            this.button1.TabIndex = 15;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button1_MouseDown);
-            this.button1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button1_MouseUp);
+            //
+            //pictureBox1
+            //
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Location = new System.Drawing.Point(260, 140);
+            this.pictureBox1.Size = new System.Drawing.Size(29, 29);
+            this.pictureBox1.BackgroundImage = Image.FromFile("../../Image/闭眼1.png");
+            this.pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
+            this.pictureBox1.Cursor = Cursors.Hand;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // timer1
             // 
@@ -285,9 +285,9 @@ namespace HelloCSharp.UI
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.pictureBox1);
             this.Name = "RegisterControl";
             this.Size = new System.Drawing.Size(521, 290);
-            this.textBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,14 +297,14 @@ namespace HelloCSharp.UI
 
         #region 控件声明
 
-        public TextBox textBox1;
+        public HintTextBox textBox1;
         public Label label1;
-        public TextBox textBox2;
+        public HintTextBox textBox2;
         public Label label2;
-        public TextBox textBox3;
+        public HintTextBox textBox3;
         public Label label3;
         public Button button2;
-        public TextBox textBox4;
+        public HintTextBox textBox4;
         public Label label4;
         public CheckBox checkBox1;
         public LinkLabel linkLabel1;
@@ -312,8 +312,8 @@ namespace HelloCSharp.UI
         public Label label7;
         public Label label6;
         public Label label5;
-        public Button button1;
         public Timer timer1;
+        public PictureBox pictureBox1;
 
         #endregion
     }

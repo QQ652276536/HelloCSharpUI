@@ -1633,8 +1633,8 @@
     <Content Include="Image\关闭1.png" />
     <Content Include="Image\关闭2.png" />
     <Content Include="Image\桌面壁纸01.jpg" />
-    <Content Include="Image\眼睛_显示_o.png" />
-    <Content Include="Image\眼睛_隐藏_o.png" />
+    <Content Include="Image\睁眼1.png" />
+    <Content Include="Image\闭眼1.png" />
     <Content Include="NPOI\xls\Resources\functionMetadata.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -31,6 +31,18 @@ namespace HelloCSharp.UI
             InitializeComponent();
         }
 
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.pictureBox1.BackgroundImage = Image.FromFile("../../Image/睁眼1.png");
+            this.textBox3.PasswordChar = new char();
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.pictureBox1.BackgroundImage = Image.FromFile("../../Image/闭眼1.png");
+            this.textBox3.PasswordChar = '●';
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             smsTime--;
@@ -122,18 +134,6 @@ namespace HelloCSharp.UI
                 default:
                     return null;
             }
-        }
-
-        private void button1_MouseDown(object sender, MouseEventArgs e)
-        {
-            this.button1.BackgroundImage = Image.FromFile("../../Image/眼睛_显示_o.png");
-            this.textBox3.PasswordChar = new char();
-        }
-
-        private void button1_MouseUp(object sender, MouseEventArgs e)
-        {
-            this.button1.BackgroundImage = Image.FromFile("../../Image/眼睛_隐藏_o.png");
-            this.textBox3.PasswordChar = '●';
         }
 
         private void textBox1_Click(object sender, EventArgs e)
