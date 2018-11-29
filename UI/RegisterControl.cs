@@ -9,11 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Web.Script.Serialization;
 using System.Text.RegularExpressions;
+using HelloCSharp.MyControl;
 
 namespace HelloCSharp.UI
 {
     public partial class RegisterControl : UserControl
     {
+        #region 自定义控件
+
+        public HintTextBox textBox1;
+        public HintTextBox textBox2;
+        public HintTextBox textBox3;
+        public HintTextBox textBox4;
+
+        #endregion
+
+
+        #region 变量
+
         public String _userName = "";
         public String _userPhone = "";
         public String _userPwd = "";
@@ -26,9 +39,79 @@ namespace HelloCSharp.UI
         public bool _smsBtnClickFlag = true;
         public int smsTime = 0;
 
+        #endregion
+
         public RegisterControl()
         {
             InitializeComponent();
+            InitializeMyComponent();
+        }
+
+        private void InitializeMyComponent()
+        {
+            // 
+            // textBox1
+            // 
+            this.textBox1 = new HintTextBox();
+            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.textBox1.Location = new System.Drawing.Point(90, 28);
+            this.textBox1.MaxLength = 14;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.HintText = "请设置用户名";
+            this.textBox1.Size = new System.Drawing.Size(200, 29);
+            this.textBox1.TabIndex = 1;
+            this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
+            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
+            // 
+            // textBox2
+            // 
+            this.textBox2 = new HintTextBox();
+            this.textBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox2.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.textBox2.Location = new System.Drawing.Point(90, 84);
+            this.textBox2.MaxLength = 11;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.HintText = "可用于登录和找回密码";
+            this.textBox2.Size = new System.Drawing.Size(200, 29);
+            this.textBox2.TabIndex = 2;
+            this.textBox2.Click += new System.EventHandler(this.textBox2_Click);
+            this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
+            // 
+            // textBox3
+            // 
+            this.textBox3 = new HintTextBox();
+            this.textBox3.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox3.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.textBox3.Location = new System.Drawing.Point(90, 140);
+            this.textBox3.MaxLength = 14;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.HintText = "请设置登录密码";
+            this.textBox3.PasswordChar = '●';
+            this.textBox3.Size = new System.Drawing.Size(164, 29);
+            this.textBox3.TabIndex = 3;
+            this.textBox3.Click += new System.EventHandler(this.textBox3_Click);
+            this.textBox3.Leave += new System.EventHandler(this.textBox3_Leave);
+            // 
+            // textBox4
+            // 
+            this.textBox4 = new HintTextBox();
+            this.textBox4.BackColor = System.Drawing.SystemColors.Control;
+            this.textBox4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox4.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.textBox4.Location = new System.Drawing.Point(90, 195);
+            this.textBox4.MaxLength = 4;
+            this.textBox4.Name = "textBox4";
+            this.textBox4.HintText = "请输入验证码";
+            this.textBox4.Size = new System.Drawing.Size(90, 29);
+            this.textBox4.TabIndex = 4;
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.textBox4);
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)

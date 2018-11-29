@@ -1,5 +1,4 @@
-﻿using HelloCSharp.MyControl;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
@@ -35,13 +34,8 @@ namespace HelloCSharp.UI
             this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new HintTextBox();
-            this.textBox2 = new HintTextBox();
-            this.textBox3 = new HintTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1.SuspendLayout();
-            this.textBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -87,42 +81,6 @@ namespace HelloCSharp.UI
             this.checkBox1.Text = "下次自动登录";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox1.Location = new System.Drawing.Point(90, 28);
-            this.textBox1.MaxLength = 14;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.HintText = "手机/邮箱/用户名";
-            this.textBox1.Size = new System.Drawing.Size(200, 29);
-            this.textBox1.TabIndex = 1;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox2.Location = new System.Drawing.Point(90, 84);
-            this.textBox2.MaxLength = 14;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.HintText = "密码";
-            this.textBox2.Size = new System.Drawing.Size(200, 29);
-            this.textBox2.TabIndex = 2;
-            // 
-            // textBox3
-            // 
-            this.textBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox3.Location = new System.Drawing.Point(90, 138);
-            this.textBox3.MaxLength = 6;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.HintText = "验证码";
-            this.textBox3.Size = new System.Drawing.Size(90, 29);
-            this.textBox3.TabIndex = 3;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -154,13 +112,8 @@ namespace HelloCSharp.UI
             this.Controls.Add(this.label1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox3);
             this.Name = "LoginControl";
             this.Size = new System.Drawing.Size(521, 290);
-            this.textBox1.ResumeLayout(false);
-            this.textBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,9 +123,6 @@ namespace HelloCSharp.UI
 
         #region 控件声明
 
-        public HintTextBox textBox1;
-        public HintTextBox textBox2;
-        public HintTextBox textBox3;
         public CheckBox checkBox1;
         public LinkLabel linkLabel1;
         public Label label1;

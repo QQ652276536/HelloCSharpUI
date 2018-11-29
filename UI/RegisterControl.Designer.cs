@@ -1,5 +1,4 @@
-﻿using HelloCSharp.MyControl;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace HelloCSharp.UI
@@ -33,6 +32,7 @@ namespace HelloCSharp.UI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RegisterControl));
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -40,16 +40,13 @@ namespace HelloCSharp.UI
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox4 = new HintTextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new HintTextBox();
-            this.textBox2 = new HintTextBox();
-            this.textBox3 = new HintTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1 = new PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label8
@@ -147,18 +144,6 @@ namespace HelloCSharp.UI
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // textBox4
-            // 
-            this.textBox4.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox4.Location = new System.Drawing.Point(90, 195);
-            this.textBox4.MaxLength = 4;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.HintText = "请输入验证码";
-            this.textBox4.Size = new System.Drawing.Size(90, 29);
-            this.textBox4.TabIndex = 4;
-            // 
             // label4
             // 
             this.label4.BackColor = System.Drawing.Color.Transparent;
@@ -207,64 +192,25 @@ namespace HelloCSharp.UI
             this.label3.Text = "密   码";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox1.Location = new System.Drawing.Point(90, 28);
-            this.textBox1.MaxLength = 14;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.HintText = "请设置用户名";
-            this.textBox1.Size = new System.Drawing.Size(200, 29);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Click += new System.EventHandler(this.textBox1_Click);
-            this.textBox1.Leave += new System.EventHandler(this.textBox1_Leave);
-            // 
-            // textBox2
-            // 
-            this.textBox2.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox2.Location = new System.Drawing.Point(90, 84);
-            this.textBox2.MaxLength = 11;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.HintText = "可用于登录和找回密码";
-            this.textBox2.Size = new System.Drawing.Size(200, 29);
-            this.textBox2.TabIndex = 2;
-            this.textBox2.Click += new System.EventHandler(this.textBox2_Click);
-            this.textBox2.Leave += new System.EventHandler(this.textBox2_Leave);
-            // 
-            // textBox3
-            // 
-            this.textBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.textBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.textBox3.Location = new System.Drawing.Point(90, 140);
-            this.textBox3.MaxLength = 14;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.HintText = "请设置登录密码";
-            this.textBox3.PasswordChar = '●';
-            this.textBox3.Size = new System.Drawing.Size(164, 29);
-            this.textBox3.TabIndex = 3;
-            this.textBox3.Click += new System.EventHandler(this.textBox3_Click);
-            this.textBox3.Leave += new System.EventHandler(this.textBox3_Leave);
-            //
-            //pictureBox1
-            //
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Location = new System.Drawing.Point(260, 140);
-            this.pictureBox1.Size = new System.Drawing.Size(29, 29);
-            this.pictureBox1.BackgroundImage = Image.FromFile("../../Image/闭眼1.png");
-            this.pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
-            this.pictureBox1.Cursor = Cursors.Hand;
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
-            // 
             // timer1
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(260, 140);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(29, 29);
+            this.pictureBox1.TabIndex = 15;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // RegisterControl
             // 
@@ -277,17 +223,14 @@ namespace HelloCSharp.UI
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox3);
             this.Controls.Add(this.pictureBox1);
             this.Name = "RegisterControl";
             this.Size = new System.Drawing.Size(521, 290);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -297,14 +240,10 @@ namespace HelloCSharp.UI
 
         #region 控件声明
 
-        public HintTextBox textBox1;
         public Label label1;
-        public HintTextBox textBox2;
         public Label label2;
-        public HintTextBox textBox3;
         public Label label3;
         public Button button2;
-        public HintTextBox textBox4;
         public Label label4;
         public CheckBox checkBox1;
         public LinkLabel linkLabel1;
