@@ -115,6 +115,7 @@ namespace HelloCSharp.MyControl
             int tempHeight = (int)((base.Height - hintLabel.Height) / 2) - 2;
             hintLabel.Location = new Point(2, tempHeight);
             tempHeight = (int)((base.Height - clear.Height) / 2) - 2;
+            //注意,如果TextBox太小那么清除按钮的横向位置是负的
             int tempWidth = base.Width - clear.Width - 10;
             clear.Location = new Point(tempWidth, tempHeight);
             base.OnSizeChanged(e);
