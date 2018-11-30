@@ -75,6 +75,7 @@
     <Compile Include="MyControl\HintTextBox.Designer.cs">
       <DependentUpon>HintTextBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Rand.cs" />
     <Compile Include="Register.cs" />
     <Compile Include="UI\FileB.cs">
       <SubType>Form</SubType>

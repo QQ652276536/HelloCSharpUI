@@ -66,11 +66,18 @@ namespace HelloCSharp.UI
             this.textBox3.MaxLength = 6;
             this.textBox3.Name = "textBox3";
             this.textBox3.HintText = "验证码";
-            this.textBox3.Size = new System.Drawing.Size(90, 29);
+            this.textBox3.Size = new System.Drawing.Size(80, 29);
             this.textBox3.TabIndex = 3;
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox3);
+            Rand.StrAndNumber(6);
+            Rand.Str_char(2);
+            Rand r = new Rand();
+            YZMHelper y = new YZMHelper();
+            Bitmap bbb = y.Image;
+            Image image = Image.FromHbitmap(bbb.GetHbitmap());
+            this.pictureBox1.Image = image;
         }
     }
 }
