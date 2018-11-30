@@ -55,28 +55,22 @@ namespace HelloCSharp
         /// <summary>
         /// 生成随机纯字母随机数
         /// </summary>
-        /// <param name="IntStr">生成长度</param>
-        public static String Str_char(int Length)
-        {
-            return Str_char(Length, false);
-        }
-
-        /// <summary>
-        /// 生成随机纯字母随机数
-        /// </summary>
         /// <param name="Length">生成长度</param>
         /// <param name="Sleep">是否要在生成前将当前线程阻止以避免重复</param>
-        public static String Str_char(int Length, bool Sleep)
+        public static String Letters(int length, bool isSleep)
         {
-            if (Sleep) System.Threading.Thread.Sleep(3);
-            char[] Pattern = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-            String result = "";
-            int n = Pattern.Length;
-            Random random = new Random(~unchecked((int)DateTime.Now.Ticks));
-            for (int i = 0; i < Length; i++)
+            if (isSleep)
             {
-                int rnd = random.Next(0, n);
-                result += Pattern[rnd];
+                System.Threading.Thread.Sleep(3);
+            }
+            char[] charArray = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            String result = "";
+            int arrayLength = charArray.Length;
+            Random random = new Random(~unchecked((int)DateTime.Now.Ticks));
+            for (int i = 0; i < arrayLength; i++)
+            {
+                int lastIndex = random.Next(0, arrayLength);
+                result += charArray[lastIndex];
             }
             return result;
         }
