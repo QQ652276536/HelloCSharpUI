@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HelloCSharp.MyControl;
+using HelloCSharp;
+using System.IO;
 
 namespace HelloCSharp.UI
 {
@@ -71,12 +73,11 @@ namespace HelloCSharp.UI
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox3);
-            Rand.StrAndNumber(6);
-            Rand.Str_char(2);
-            Rand r = new Rand();
-            YZMHelper y = new YZMHelper();
-            Bitmap bbb = y.Image;
-            Image image = Image.FromHbitmap(bbb.GetHbitmap());
+            
+            VerifyImage v = new VerifyImage();
+            String code = v.Text;
+            Bitmap bitmap = v.Image;
+            Image image = Image.FromHbitmap(bitmap.GetHbitmap());
             this.pictureBox1.Image = image;
         }
     }

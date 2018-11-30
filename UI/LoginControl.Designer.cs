@@ -106,10 +106,8 @@ namespace HelloCSharp.UI
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.pictureBox1.Location = new System.Drawing.Point(175, 138);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Padding = new System.Windows.Forms.Padding(1);
             this.pictureBox1.Size = new System.Drawing.Size(64, 29);
             this.pictureBox1.TabIndex = 19;
             this.pictureBox1.TabStop = false;
