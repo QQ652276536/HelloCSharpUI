@@ -50,6 +50,7 @@ namespace HelloCSharp.UI
             this.label1.Size = new System.Drawing.Size(44, 17);
             this.label1.TabIndex = 14;
             this.label1.Text = "换一张";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // linkLabel1
             // 
@@ -139,9 +140,9 @@ namespace HelloCSharp.UI
         public Label label1;
         public Label label2;
         public Label label3;
+        public PictureBox pictureBox1;
 
         #endregion
-        private PictureBox pictureBox1;
 
     }
 }

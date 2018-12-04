@@ -23,6 +23,9 @@ namespace HelloCSharp.UI
 
         #endregion
 
+        VerifyImage _verifyImage;
+        String _verifyCode;
+
         public LoginControl()
         {
             InitializeComponent();
@@ -73,12 +76,26 @@ namespace HelloCSharp.UI
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox3);
-            
-            VerifyImage v = new VerifyImage();
-            String code = v.Text;
-            Bitmap bitmap = v.Image;
+            CreateVerifyImage();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            CreateVerifyImage();
+        }
+
+        private String CreateVerifyImage()
+        {
+            _verifyImage = new VerifyImage();
+            _verifyImage.ImageSize = pictureBox1.Size;
+            _verifyImage.CreateImage();
+            _verifyCode = _verifyImage.Text;
+            Console.WriteLine(_verifyCode);
+            Bitmap bitmap = _verifyImage.Image;
             Image image = Image.FromHbitmap(bitmap.GetHbitmap());
             this.pictureBox1.Image = image;
+            return _verifyCode;
         }
+
     }
 }

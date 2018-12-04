@@ -98,13 +98,12 @@ namespace HelloCSharp
        new Font(new FontFamily("Arial"), 10 + GetNextRandom(1),FontStyle.Regular),
        new Font(new FontFamily("Comic Sans MS"), 10 + GetNextRandom(1),FontStyle.Regular)
     };
+        //图片验证码的大小
         private Size _imageSize;
 
         public VerifyImage()
         {
-            //this._text = VerifyCode.Number(4, false);
             this._text = VerifyCode.StrAndNumber(4, false);
-            CreateImage();
         }
 
         public Size ImageSize
@@ -196,7 +195,7 @@ namespace HelloCSharp
         public void CreateImage()
         {
             int imageWidth = this._text.Length * _letterWidth;
-            Bitmap image = new Bitmap(64, 29);
+            Bitmap image = new Bitmap(_imageSize.Width, _imageSize.Height);
             Graphics graphics = Graphics.FromImage(image);
             graphics.Clear(Color.White);
             for (int i = 0; i < 2; i++)
