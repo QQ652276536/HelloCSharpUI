@@ -12,7 +12,7 @@ namespace HelloCSharp.MySQL.MySQLPool
         //数据库连接
         private MySqlConnection _connection;
         //连接是否在使用
-        private bool _useFlag;
+        private bool _useFlag = false;
 
         public ConnectionInfo(ref MySqlConnection connection)
         {
