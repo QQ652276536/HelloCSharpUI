@@ -10,7 +10,7 @@ namespace HelloCSharp.MySQL.MySQLPool
 {
     public class ConnectionPool
     {
-        public string _url = "server=101.132.102.203;user=root;database=test;port=3306;password=root;";
+        private string _url = "";
         //连接池初始连接数
         private int _initConnections = 10;
         //连接池自动增加数
@@ -57,7 +57,7 @@ namespace HelloCSharp.MySQL.MySQLPool
 
         public void CreatePool()
         {
-            if (!string.IsNullOrEmpty(_url))
+            if (string.IsNullOrEmpty(_url))
             {
                 return;
             }
@@ -98,37 +98,41 @@ namespace HelloCSharp.MySQL.MySQLPool
         /// 获取一个可用的数据库连接，如果当前没有可用的数据库连接则不能创建新的连接
         /// </summary>
         /// <returns></returns>
-        public MySqlConnection GetConnection()
+        public MySqlConnection GetCanUseConnection()
         {
             if (_connectionInfoList == null)
             {
                 return null;
             }
-            //获取一个可用的数据库连接
-            MySqlConnection canUseConnection = GetCanUseConnectoin();
+            //从连接池里获取一个可用的数据库连接
+            MySqlConnection canUseConnection = GetCanUseConnectoinByPool();
             //如果当前没有可使用的连接即所有连接都在使用中
             while (canUseConnection == null)
             {
                 Thread.Sleep(500);
                 //重新获取连接，直到获取到可有的连接
-                canUseConnection = GetCanUseConnectoin();
+                canUseConnection = GetCanUseConnectoinByPool();
             }
             return canUseConnection;
         }
 
         /// <summary>
-        /// 从连接池中获取一个可用的连接
+        /// 从连接池里获取一个可用的数据库连接
         /// </summary>
         /// <returns></returns>
-        public MySqlConnection GetCanUseConnectoin()
+        public MySqlConnection GetCanUseConnectoinByPool()
         {
             MySqlConnection connection = null;
             foreach (ConnectionInfo tempInfo in _connectionInfoList)
             {
+                if (tempInfo.GetUseFlag())
+                {
+                    continue;
+                }
                 connection = tempInfo.GetConnection();
                 tempInfo.SetUseFlag(true);
                 //测试此连接是否可用
-                if (!TestConnection(ref connection))
+                if (!TestUsableConnection(ref connection))
                 {
                     try
                     {
@@ -144,7 +148,7 @@ namespace HelloCSharp.MySQL.MySQLPool
             if (connection == null)
             {
                 CreateConnections(_autoAddSize);
-                connection = GetCanUseConnectoin();
+                connection = GetCanUseConnectoinByPool();
             }
             return connection;
         }
@@ -175,14 +179,13 @@ namespace HelloCSharp.MySQL.MySQLPool
         /// </summary>
         /// <param name="connection"></param>
         /// <returns></returns>
-        public bool TestConnection(ref MySqlConnection connection)
+        public bool TestUsableConnection(ref MySqlConnection connection)
         {
             try
             {
-                string selectStr = "";
-                string sql = string.Format(selectStr, "");
-                MySqlCommand command = new MySqlCommand(sql, connection);
-                //在判断是否有数据时，只可以用ExecuteReader()中的方法来检测
+                string selectStr = "select * from phonenumber_copy where name = ''";
+                MySqlCommand command = new MySqlCommand(selectStr, connection);
+                
                 MySqlDataReader dataReader = command.ExecuteReader();
                 dataReader.Close();
                 return true;
@@ -247,7 +250,7 @@ namespace HelloCSharp.MySQL.MySQLPool
             {
                 if (tempInfo.GetUseFlag())
                 {
-                    Thread.Sleep(5000);
+                    Thread.Sleep(1000);
                 }
                 //关闭这个连接
                 CloseConnection(tempInfo.GetConnection());

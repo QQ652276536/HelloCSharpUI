@@ -66,8 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Excel\EmailWindow.cs" />
-    <Compile Include="Excel\ExportService.cs" />
     <Compile Include="EntityClass.cs" />
     <Compile Include="GetSms.cs" />
     <Compile Include="MyControl\HintTextBox.cs">
@@ -78,6 +76,7 @@
     </Compile>
     <Compile Include="MySQL\MySQLPool\ConnectionInfo.cs" />
     <Compile Include="MySQL\MySQLPool\ConnectionPool.cs" />
+    <Compile Include="MySQL\MySQLPool\TestConnectionPool.cs" />
     <Compile Include="VerifyCode.cs" />
     <Compile Include="Register.cs" />
     <Compile Include="UI\FileB.cs">
@@ -1524,7 +1523,6 @@
     <Compile Include="NPOI\xls\Util\SystemOutLogger.cs" />
     <Compile Include="NPOI\xls\Util\TempFile.cs" />
     <Compile Include="NPOI\xls\Util\ULongField.cs" />
-    <Compile Include="Excel\ResolutionStaticHtml.cs" />
     <Compile Include="UI\LoginControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
