@@ -38,10 +38,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // folderBrowserDialog1
-            // 
-            this.folderBrowserDialog1.SelectedPath = "C:\\Users\\GAIA\\Desktop\\data\\day";
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(22, 12);
@@ -71,10 +67,6 @@
             this.button3.Text = "执行";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // folderBrowserDialog2
-            // 
-            this.folderBrowserDialog2.SelectedPath = "C:\\Users\\GAIA\\Desktop\\data\\tempDay";
             // 
             // label1
             // 
