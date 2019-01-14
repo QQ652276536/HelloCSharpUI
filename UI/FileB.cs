@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace HelloCSharp.UI
 {
@@ -63,14 +64,14 @@ namespace HelloCSharp.UI
 
         private void AnalysisHtml()
         {
-            TextDele txtDele = new TextDele(AnalysisAndCreate);
+            TextDele txtDele = new TextDele(AnalysisJson);
             this.BeginInvoke(txtDele);
         }
 
         /// <summary>
         /// 解析Html文件
         /// </summary>
-        private void AnalysisAndCreate()
+        private void AnalysisJson()
         {
             textBox1.Text = "";
             String inputPath = label1.Text;
@@ -82,28 +83,43 @@ namespace HelloCSharp.UI
                 //读取文件内容
                 StreamReader streanReader = new StreamReader(directoryInfo.ToString(), Encoding.Default);
                 String content = streanReader.ReadToEnd();
-                int startIndex1 = content.IndexOf("<ul id=\"resources\">");
-                content = content.Substring(startIndex1);
-                int startIndex2 = content.IndexOf("<div class=\"footer\">");
-                content = content.Substring(0, startIndex2);
-                AnalysisError(startIndex1, "A1");
-                AnalysisError(startIndex2, "A2");
-                String[] ulNodeArray = content.Split(new String[] { "<ul class=\"operations\">" }, StringSplitOptions.None);
-                for (int i = 0; i < ulNodeArray.Length; i++)
+                //反序列化Json
+                MyJsonClass myJsonClass = JsonConvert.DeserializeObject<MyJsonClass>(content);
+                List<HttpEntity> httpEntityList = myJsonClass.item;
+                foreach (HttpEntity tempHttpEntity in httpEntityList)
                 {
-                    //第一个元素并不包含我想要的信息
-                    if (i == 0)
+                    String oldName = tempHttpEntity.name;
+                    int index = oldName.IndexOf("/api");
+                    tempHttpEntity.name = "{{url}}" + oldName.Substring(index);
+                    RequestEntity requestEntity = tempHttpEntity.request;
+                    List<HeaderEntity> headerEntityList = requestEntity.header;
+                    foreach (HeaderEntity tempHeaderEntity in headerEntityList)
                     {
-                        continue;
+                        if (tempHeaderEntity.key.Equals("authorization"))
+                        {
+                            tempHeaderEntity.value = "Bearer {{bearer}}";
+                            break;
+                        }
                     }
-                    String tempStr = ulNodeArray[i];
-                    //获取请求方式
-                    int tempStartIndex = tempStr.IndexOf("class=\"toggleOperation\">");
-                    AnalysisError(tempStartIndex, "B1");
-                    String tempSubContent1 = tempStr.Substring(tempStartIndex + 24);
-                    int a = 1;
+                    //环境参数与请求参BodyEntity bodyEntity = requestEntity.body;
+                    //数对应暂时没实现String oldBodyStr = bodyEntity.raw;
+                    URLEntity urlEntity = requestEntity.url;
+                    String oldRaw = urlEntity.raw;
+                    index = oldRaw.IndexOf("/api");
+                    urlEntity.raw = "{{url}}" + oldRaw.Substring(index);
+                    List<String> hostList = new List<String>();
+                    hostList.Add("{{url}}");
+                    urlEntity.host = hostList;
                 }
-
+                myJsonClass.item = httpEntityList;
+                //序列化Json
+                String jsonStr = JsonConvert.SerializeObject(myJsonClass);
+                //写入文件
+                byte[] dataArray = Encoding.Default.GetBytes(jsonStr);
+                FileStream fileStream = new FileStream(outputPath+"/XXX.json",FileMode.Create);
+                fileStream.Write(dataArray, 0, dataArray.Length);
+                fileStream.Flush();
+                fileStream.Close();
                 textBox1.Text += "完成!";
                 textBox1.Select(textBox1.Text.Length, 0);
                 textBox1.ScrollToCaret();
@@ -114,15 +130,6 @@ namespace HelloCSharp.UI
             catch (IOException e)
             {
                 MessageBox.Show(e.Message);
-            }
-        }
-
-        private void AnalysisError(int param1, String param2 = "X")
-        {
-            if (param1 <= 0)
-            {
-                MessageBox.Show("解析" + param2 + "处失败！");
-                Application.Exit();
             }
         }
 
