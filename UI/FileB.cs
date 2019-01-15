@@ -95,11 +95,10 @@ namespace HelloCSharp.UI
                 {
                     List<EventEntity> eventEntityList = new List<EventEntity>();
                     EventEntity tempEventEntity = new EventEntity();
-                    //tempEventEntity.listen = tempFileName;
                     tempEventEntity.listen = "test";
                     ScriptEntity scriptEntity = new ScriptEntity();
                     List<String> execList = new List<String>();
-                    execList.Add("tests[\"State200\"] = responseCode.code === 200;");
+                    execList.Add("tests[\"状态200\"] = responseCode.code === 200;");
                     scriptEntity.exec = execList;
                     tempEventEntity.script = scriptEntity;
                     eventEntityList.Add(tempEventEntity);
