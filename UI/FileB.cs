@@ -82,31 +82,27 @@ namespace HelloCSharp.UI
                 DirectoryInfo directoryInfo = new DirectoryInfo(inputPath);
                 String fileName = directoryInfo.Name;
                 //读取文件内容
-                StreamReader streanReader = new StreamReader(directoryInfo.ToString(), Encoding.Default);
+                StreamReader streanReader = new StreamReader(directoryInfo.ToString(), Encoding.UTF8);
                 String content = streanReader.ReadToEnd();
                 //反序列化Json
                 MyJsonClass myJsonClass = JsonConvert.DeserializeObject<MyJsonClass>(content);
                 List<HttpEntity> httpEntityList = myJsonClass.item;
                 int index = 0;
-                UTF8Encoding utf8 = new UTF8Encoding();
+                String tempFileName = Path.GetFileNameWithoutExtension(inputPath);
+                index = tempFileName.IndexOf(".postman_collection");
+                tempFileName = tempFileName.Substring(0, index);
                 foreach (HttpEntity tempHttpEntity in httpEntityList)
                 {
-                    //String oldName = tempHttpEntity.name;
-                    //index = oldName.IndexOf("/api");
-                    //tempHttpEntity.name = "{{url}}" + oldName.Substring(index);
-                    List<EventEntity> eventEntityList = tempHttpEntity.eventEntity == null ? new List<EventEntity>() : tempHttpEntity.eventEntity;
-                    String tempFileName = Path.GetFileNameWithoutExtension(inputPath);
-                    index = tempFileName.IndexOf(".postman_collection");
-                    tempFileName = tempFileName.Substring(0, index);
-                    foreach (EventEntity tempEventEntity in eventEntityList)
-                    {
-                        tempEventEntity.listen = tempFileName;
-                        ScriptEntity scriptEntity = tempEventEntity.script == null ? new ScriptEntity() : tempEventEntity.script;
-                        List<String> execList = new List<String>();
-                        execList.Add("tests[\"State200\"] = responseCode.code === 200;");
-                        scriptEntity.exec = execList;
-                        tempEventEntity.script = scriptEntity;
-                    }
+                    List<EventEntity> eventEntityList = new List<EventEntity>();
+                    EventEntity tempEventEntity = new EventEntity();
+                    //tempEventEntity.listen = tempFileName;
+                    tempEventEntity.listen = "test";
+                    ScriptEntity scriptEntity = new ScriptEntity();
+                    List<String> execList = new List<String>();
+                    execList.Add("tests[\"State200\"] = responseCode.code === 200;");
+                    scriptEntity.exec = execList;
+                    tempEventEntity.script = scriptEntity;
+                    eventEntityList.Add(tempEventEntity);
                     tempHttpEntity.eventEntity = eventEntityList;
                     RequestEntity requestEntity = tempHttpEntity.request;
                     List<HeaderEntity> headerEntityList = requestEntity.header;
@@ -116,7 +112,7 @@ namespace HelloCSharp.UI
                         //header只保留authorization和content-type两个内容
                         if (headerEntityList[i].key.Equals("authorization"))
                         {
-                            headerEntityList[i].value = "Bearer {{bearer}}";
+                            headerEntityList[i].value = "Bearer {{Bearer}}";
                         }
                         else if (headerEntityList[i].key.Equals("content-type"))
                         {
@@ -141,8 +137,8 @@ namespace HelloCSharp.UI
                 //序列化Json
                 String jsonStr = JsonConvert.SerializeObject(myJsonClass);
                 //写入文件
-                byte[] dataArray = Encoding.Default.GetBytes(jsonStr);
-                FileStream fileStream = new FileStream(outputPath + "/XXX.json", FileMode.Create);
+                byte[] dataArray = Encoding.UTF8.GetBytes(jsonStr);
+                FileStream fileStream = new FileStream(outputPath + "\\" + tempFileName + "_AutoTest.json", FileMode.Create);
                 fileStream.Write(dataArray, 0, dataArray.Length);
                 fileStream.Flush();
                 fileStream.Close();
