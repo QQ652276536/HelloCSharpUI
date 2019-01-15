@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using MySqlX.XDevAPI;
 
 namespace HelloCSharp.UI
 {
@@ -86,19 +87,44 @@ namespace HelloCSharp.UI
                 //反序列化Json
                 MyJsonClass myJsonClass = JsonConvert.DeserializeObject<MyJsonClass>(content);
                 List<HttpEntity> httpEntityList = myJsonClass.item;
+                int index = 0;
+                UTF8Encoding utf8 = new UTF8Encoding();
                 foreach (HttpEntity tempHttpEntity in httpEntityList)
                 {
-                    String oldName = tempHttpEntity.name;
-                    int index = oldName.IndexOf("/api");
-                    tempHttpEntity.name = "{{url}}" + oldName.Substring(index);
+                    //String oldName = tempHttpEntity.name;
+                    //index = oldName.IndexOf("/api");
+                    //tempHttpEntity.name = "{{url}}" + oldName.Substring(index);
+                    List<EventEntity> eventEntityList = tempHttpEntity.eventEntity == null ? new List<EventEntity>() : tempHttpEntity.eventEntity;
+                    String tempFileName = Path.GetFileNameWithoutExtension(inputPath);
+                    index = tempFileName.IndexOf(".postman_collection");
+                    tempFileName = tempFileName.Substring(0, index);
+                    foreach (EventEntity tempEventEntity in eventEntityList)
+                    {
+                        tempEventEntity.listen = tempFileName;
+                        ScriptEntity scriptEntity = tempEventEntity.script == null ? new ScriptEntity() : tempEventEntity.script;
+                        List<String> execList = new List<String>();
+                        execList.Add("tests[\"State200\"] = responseCode.code === 200;");
+                        scriptEntity.exec = execList;
+                        tempEventEntity.script = scriptEntity;
+                    }
+                    tempHttpEntity.eventEntity = eventEntityList;
                     RequestEntity requestEntity = tempHttpEntity.request;
                     List<HeaderEntity> headerEntityList = requestEntity.header;
-                    foreach (HeaderEntity tempHeaderEntity in headerEntityList)
+                    int headerEntityListLength = headerEntityList.Count;
+                    for (int i = headerEntityListLength - 1; i >= 0; i--)
                     {
-                        if (tempHeaderEntity.key.Equals("authorization"))
+                        //header只保留authorization和content-type两个内容
+                        if (headerEntityList[i].key.Equals("authorization"))
                         {
-                            tempHeaderEntity.value = "Bearer {{bearer}}";
-                            break;
+                            headerEntityList[i].value = "Bearer {{bearer}}";
+                        }
+                        else if (headerEntityList[i].key.Equals("content-type"))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            headerEntityList.Remove(headerEntityList[i]);
                         }
                     }
                     //环境参数与请求参BodyEntity bodyEntity = requestEntity.body;
@@ -116,7 +142,7 @@ namespace HelloCSharp.UI
                 String jsonStr = JsonConvert.SerializeObject(myJsonClass);
                 //写入文件
                 byte[] dataArray = Encoding.Default.GetBytes(jsonStr);
-                FileStream fileStream = new FileStream(outputPath+"/XXX.json",FileMode.Create);
+                FileStream fileStream = new FileStream(outputPath + "/XXX.json", FileMode.Create);
                 fileStream.Write(dataArray, 0, dataArray.Length);
                 fileStream.Flush();
                 fileStream.Close();

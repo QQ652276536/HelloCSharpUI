@@ -10,9 +10,9 @@ namespace HelloCSharp
     {
     }
 
+    #region
     public class UserInfo
     {
-        #region
         public int _id;
         public int _deleteFlag;
         public String _userName;
@@ -21,76 +21,78 @@ namespace HelloCSharp
         public int _verifyCode;
         public String _registerTime;
         public int _rank;
-        #endregion
+    }
+    #endregion
+
+    #region
+    public class EventEntity
+    {
+        public String listen;
+        public ScriptEntity script;
+    }
+
+    public class ScriptEntity
+    {
+        public List<String> exec;
+        public String type = "text/javascript";
     }
 
     public class ResponseEntity
     {
-        #region
         public List<String> _strList;
-        #endregion
     }
 
     public class URLEntity
     {
-        #region
         public String raw;
+        [Newtonsoft.Json.JsonIgnore()]
         public String protocol;
         public List<String> host;
+        [Newtonsoft.Json.JsonIgnore()]
         public String port;
         public List<String> path;
-        #endregion
     }
 
     public class BodyEntity
     {
-        #region
         public String mode;
         public String raw;
-        #endregion
     }
 
     public class HeaderEntity
     {
-        #region
         public String key;
         public String value;
-        #endregion
     }
 
     public class RequestEntity
     {
-        #region
         public String method;
         public List<HeaderEntity> header;
         public BodyEntity body;
         public URLEntity url;
-        #endregion
     }
 
     public class HttpEntity
     {
-        #region
         public String name;
+        [Newtonsoft.Json.JsonProperty(PropertyName = "event")]
+        public List<EventEntity> eventEntity;
         public RequestEntity request;
         public List<String> response;
-        #endregion
     }
 
     public class InfoEntity
     {
-        #region
         public String _postman_id;
         public String name;
         public String schema;
-        #endregion
     }
 
     public class MyJsonClass
     {
-        #region
         public InfoEntity info;
         public List<HttpEntity> item;
-        #endregion
     }
+    #endregion
 }
