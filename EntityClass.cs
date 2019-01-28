@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HelloCSharp
 {
@@ -76,7 +74,7 @@ namespace HelloCSharp
     public class HttpEntity
     {
         public String name;
-        [Newtonsoft.Json.JsonProperty(PropertyName = "event")]
+        [JsonProperty(PropertyName = "event")]
         public List<EventEntity> eventEntity;
         public RequestEntity request;
         public List<String> response;

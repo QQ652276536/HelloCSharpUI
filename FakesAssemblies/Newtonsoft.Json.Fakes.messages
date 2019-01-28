@@ -1,0 +1,26 @@
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.StringUtils 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonToken 生成存根: 类型是一个值类型。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JavaScriptUtils 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonIgnoreAttribute 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.ReflectionUtils 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonType 生成存根: 类型是一个值类型。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.WriteState 生成存根: 类型是一个值类型。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Formatting 生成存根: 类型是一个值类型。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.ReferenceLoopHandling 生成存根: 类型是一个值类型。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.Func`2 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.CollectionUtils 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JavaScriptConvert 生成存根: 类型已密封。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.StringBuffer 生成存根: 类型对 exported or assembly(Newtonsoft.Json.Fakes) 不可见。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.StringUtils 生成填充码: 类型对 exported or assembly(Newtonsoft.Json.Fakes) 不可见。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonToken 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JavaScriptUtils 生成填充码: 类型对 exported or assembly(Newtonsoft.Json.Fakes) 不可见。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.ReflectionUtils 生成填充码: 类型对 exported or assembly(Newtonsoft.Json.Fakes) 不可见。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonType 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.WriteState 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Formatting 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonWriter+State 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.ReferenceLoopHandling 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.JsonReader+State 生成填充码: 类型是一个枚举。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.Func`2 生成填充码: 类型是一个委托。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.Utilities.CollectionUtils 生成填充码: 类型对 exported or assembly(Newtonsoft.Json.Fakes) 不可见。
+E:\CSharpWorkspace\HelloCSharpUI\Fakes\Newtonsoft.Json.fakes : warning : 无法为 Newtonsoft.Json.StringBuffer 生成填充码: 类型对 exported or assembly(Newtonsoft.Json.Fakes) 不可见。

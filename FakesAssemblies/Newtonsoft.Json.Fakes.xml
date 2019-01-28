@@ -1,0 +1,2078 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Newtonsoft.Json.Fakes</name>
+    </assembly>
+    <members>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter">
+            <summary>Newtonsoft.Json.Converters.AspNetAjaxDateTimeConverter 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.#ctor(Newtonsoft.Json.Converters.AspNetAjaxDateTimeConverter)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.AllInstances.CanConvertType">
+            <summary>设置 AspNetAjaxDateTimeConverter.CanConvert(Type valueType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.AllInstances.ReadJsonJsonReaderType">
+            <summary>设置 AspNetAjaxDateTimeConverter.ReadJson(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.AllInstances.WriteJsonJsonWriterObject">
+            <summary>设置 AspNetAjaxDateTimeConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.CanConvertType">
+            <summary>设置 AspNetAjaxDateTimeConverter.CanConvert(Type valueType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.Constructor">
+            <summary>设置 AspNetAjaxDateTimeConverter.AspNetAjaxDateTimeConverter() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.ReadJsonJsonReaderType">
+            <summary>设置 AspNetAjaxDateTimeConverter.ReadJson(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimAspNetAjaxDateTimeConverter.WriteJsonJsonWriterObject">
+            <summary>设置 AspNetAjaxDateTimeConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter">
+            <summary>Newtonsoft.Json.Converters.HtmlColorConverter 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.#ctor(Newtonsoft.Json.Converters.HtmlColorConverter)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.AllInstances.CanConvertType">
+            <summary>设置 HtmlColorConverter.CanConvert(Type valueType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.AllInstances.WriteJsonJsonWriterObject">
+            <summary>设置 HtmlColorConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.CanConvertType">
+            <summary>设置 HtmlColorConverter.CanConvert(Type valueType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.Constructor">
+            <summary>设置 HtmlColorConverter.HtmlColorConverter() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimHtmlColorConverter.WriteJsonJsonWriterObject">
+            <summary>设置 HtmlColorConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter">
+            <summary>Newtonsoft.Json.Converters.XmlNodeConverter 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.#ctor(Newtonsoft.Json.Converters.XmlNodeConverter)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.CanConvertType">
+            <summary>设置 XmlNodeConverter.CanConvert(Type valueType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.DeserializeNodeJsonReaderXmlDocumentXmlNamespaceManagerXmlNode">
+            <summary>设置 XmlNodeConverter.DeserializeNode(JsonReader reader, XmlDocument document, XmlNamespaceManager manager, XmlNode currentNode) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.DeserializeValueJsonReaderXmlDocumentXmlNamespaceManagerStringXmlNode">
+            <summary>设置 XmlNodeConverter.DeserializeValue(JsonReader reader, XmlDocument document, XmlNamespaceManager manager, String propertyName, XmlNode currentNode) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.GetPrefixString">
+            <summary>设置 XmlNodeConverter.GetPrefix(String qualifiedName) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.GetPropertyNameXmlNode">
+            <summary>设置 XmlNodeConverter.GetPropertyName(XmlNode node) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.IsNamespaceAttributeStringStringOut">
+            <summary>设置 XmlNodeConverter.IsNamespaceAttribute(String attributeName, String&amp; prefix) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.ReadJsonJsonReaderType">
+            <summary>设置 XmlNodeConverter.ReadJson(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.SerializeGroupedNodesJsonWriterXmlNode">
+            <summary>设置 XmlNodeConverter.SerializeGroupedNodes(JsonWriter writer, XmlNode node) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.SerializeNodeJsonWriterXmlNodeBoolean">
+            <summary>设置 XmlNodeConverter.SerializeNode(JsonWriter writer, XmlNode node, Boolean writePropertyName) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.AllInstances.WriteJsonJsonWriterObject">
+            <summary>设置 XmlNodeConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.CanConvertType">
+            <summary>设置 XmlNodeConverter.CanConvert(Type valueType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.Constructor">
+            <summary>设置 XmlNodeConverter.XmlNodeConverter() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.DeserializeNodeJsonReaderXmlDocumentXmlNamespaceManagerXmlNode">
+            <summary>设置 XmlNodeConverter.DeserializeNode(JsonReader reader, XmlDocument document, XmlNamespaceManager manager, XmlNode currentNode) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.DeserializeValueJsonReaderXmlDocumentXmlNamespaceManagerStringXmlNode">
+            <summary>设置 XmlNodeConverter.DeserializeValue(JsonReader reader, XmlDocument document, XmlNamespaceManager manager, String propertyName, XmlNode currentNode) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.GetPrefixString">
+            <summary>设置 XmlNodeConverter.GetPrefix(String qualifiedName) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.GetPropertyNameXmlNode">
+            <summary>设置 XmlNodeConverter.GetPropertyName(XmlNode node) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.IsNamespaceAttributeStringStringOut">
+            <summary>设置 XmlNodeConverter.IsNamespaceAttribute(String attributeName, String&amp; prefix) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.ReadJsonJsonReaderType">
+            <summary>设置 XmlNodeConverter.ReadJson(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.SerializeGroupedNodesJsonWriterXmlNode">
+            <summary>设置 XmlNodeConverter.SerializeGroupedNodes(JsonWriter writer, XmlNode node) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.SerializeNodeJsonWriterXmlNodeBoolean">
+            <summary>设置 XmlNodeConverter.SerializeNode(JsonWriter writer, XmlNode node, Boolean writePropertyName) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.ShimXmlNodeConverter.WriteJsonJsonWriterObject">
+            <summary>设置 XmlNodeConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter">
+            <summary>Newtonsoft.Json.Converters.AspNetAjaxDateTimeConverter 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.CanConvert(System.Type)">
+            <summary>设置 AspNetAjaxDateTimeConverter.CanConvert(Type valueType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.CanConvertType">
+            <summary>设置 AspNetAjaxDateTimeConverter.CanConvert(Type valueType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.InitializeStub">
+            <summary>初始化 type StubAspNetAjaxDateTimeConverter 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type)">
+            <summary>设置 AspNetAjaxDateTimeConverter.ReadJson(JsonReader reader, Type objectType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.ReadJsonJsonReaderType">
+            <summary>设置 AspNetAjaxDateTimeConverter.ReadJson(JsonReader reader, Type objectType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object)">
+            <summary>设置 AspNetAjaxDateTimeConverter.WriteJson(JsonWriter writer, Object value) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubAspNetAjaxDateTimeConverter.WriteJsonJsonWriterObject">
+            <summary>设置 AspNetAjaxDateTimeConverter.WriteJson(JsonWriter writer, Object value) 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter">
+            <summary>Newtonsoft.Json.Converters.HtmlColorConverter 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.CanConvert(System.Type)">
+            <summary>设置 HtmlColorConverter.CanConvert(Type valueType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.CanConvertType">
+            <summary>设置 HtmlColorConverter.CanConvert(Type valueType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.InitializeStub">
+            <summary>初始化 type StubHtmlColorConverter 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type)">
+            <summary>设置 JsonConverter.ReadJson(JsonReader reader, Type objectType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.ReadJsonJsonReaderType">
+            <summary>设置 JsonConverter.ReadJson(JsonReader reader, Type objectType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object)">
+            <summary>设置 HtmlColorConverter.WriteJson(JsonWriter writer, Object value) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubHtmlColorConverter.WriteJsonJsonWriterObject">
+            <summary>设置 HtmlColorConverter.WriteJson(JsonWriter writer, Object value) 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter">
+            <summary>Newtonsoft.Json.Converters.XmlNodeConverter 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.CanConvert(System.Type)">
+            <summary>设置 XmlNodeConverter.CanConvert(Type valueType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.CanConvertType">
+            <summary>设置 XmlNodeConverter.CanConvert(Type valueType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.InitializeStub">
+            <summary>初始化 type StubXmlNodeConverter 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type)">
+            <summary>设置 XmlNodeConverter.ReadJson(JsonReader reader, Type objectType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.ReadJsonJsonReaderType">
+            <summary>设置 XmlNodeConverter.ReadJson(JsonReader reader, Type objectType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object)">
+            <summary>设置 XmlNodeConverter.WriteJson(JsonWriter writer, Object value) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Converters.Fakes.StubXmlNodeConverter.WriteJsonJsonWriterObject">
+            <summary>设置 XmlNodeConverter.WriteJson(JsonWriter writer, Object value) 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimIdentifier">
+            <summary>Newtonsoft.Json.Identifier 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimIdentifier.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimIdentifier.#ctor(Newtonsoft.Json.Identifier)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimIdentifier.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.AllInstances.EqualsIdentifier">
+            <summary>设置 Identifier.Equals(Identifier function) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.AllInstances.EqualsObject">
+            <summary>设置 Identifier.Equals(Object obj) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.AllInstances.GetHashCode01">
+            <summary>设置 Identifier.GetHashCode() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.AllInstances.NameGet">
+            <summary>设置 Identifier.get_Name() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.AllInstances.ToString01">
+            <summary>设置 Identifier.ToString() 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimIdentifier.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimIdentifier.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.ConstructorString">
+            <summary>设置 Identifier.Identifier(String name) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.EqualityOpIdentifierIdentifier">
+            <summary>设置 Identifier.op_Equality(Identifier a, Identifier b) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.EqualsIdentifier">
+            <summary>设置 Identifier.Equals(Identifier function) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.EqualsIdentifierIdentifier">
+            <summary>设置 Identifier.Equals(Identifier a, Identifier b) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.EqualsObject">
+            <summary>设置 Identifier.Equals(Object obj) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.GetHashCode">
+            <summary>设置 Identifier.GetHashCode() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.InequalityOpIdentifierIdentifier">
+            <summary>设置 Identifier.op_Inequality(Identifier a, Identifier b) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.IsAsciiLetterChar">
+            <summary>设置 Identifier.IsAsciiLetter(Char c) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.NameGet">
+            <summary>设置 Identifier.get_Name() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimIdentifier.ToString">
+            <summary>设置 Identifier.ToString() 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptArray">
+            <summary>Newtonsoft.Json.JavaScriptArray 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.#ctor(Newtonsoft.Json.JavaScriptArray)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptArray.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.ICollection)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.IEnumerable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.IList)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.Generic.ICollection{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.Generic.IList{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.Generic.IReadOnlyCollection{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Bind(System.Collections.Generic.IReadOnlyList{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptArray.Constructor">
+            <summary>设置 JavaScriptArray.JavaScriptArray() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptArray.ConstructorIEnumerableOfObject">
+            <summary>设置 JavaScriptArray.JavaScriptArray(IEnumerable`1&lt;Object&gt; collection) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptArray.ConstructorInt32">
+            <summary>设置 JavaScriptArray.JavaScriptArray(Int32 capacity) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor">
+            <summary>Newtonsoft.Json.JavaScriptConstructor 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.#ctor(Newtonsoft.Json.JavaScriptConstructor)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.AllInstances.NameGet">
+            <summary>设置 JavaScriptConstructor.get_Name() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.AllInstances.ParametersGet">
+            <summary>设置 JavaScriptConstructor.get_Parameters() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.AllInstances.ToString01">
+            <summary>设置 JavaScriptConstructor.ToString() 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.ConstructorStringJavaScriptParameters">
+            <summary>设置 JavaScriptConstructor.JavaScriptConstructor(String name, JavaScriptParameters parameters) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.NameGet">
+            <summary>设置 JavaScriptConstructor.get_Name() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.ParametersGet">
+            <summary>设置 JavaScriptConstructor.get_Parameters() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConstructor.ToString">
+            <summary>设置 JavaScriptConstructor.ToString() 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptConvert">
+            <summary>Newtonsoft.Json.JavaScriptConvert 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ConvertDateTimeToJavaScriptTicksDateTime">
+            <summary>设置 JavaScriptConvert.ConvertDateTimeToJavaScriptTicks(DateTime dateTime) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ConvertJavaScriptTicksToDateTimeInt64">
+            <summary>设置 JavaScriptConvert.ConvertJavaScriptTicksToDateTime(Int64 javaScriptTicks) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.DeerializeXmlNodeString">
+            <summary>设置 JavaScriptConvert.DeerializeXmlNode(String value) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.DeserializeObjectOf1String``1(Microsoft.QualityTools.Testing.Fakes.FakesDelegates.Func{System.String,``0})">
+            <summary>设置 JavaScriptConvert.DeserializeObject(String value) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.DeserializeObjectOf1StringJsonConverterArray``1(Microsoft.QualityTools.Testing.Fakes.FakesDelegates.Func{System.String,Newtonsoft.Json.JsonConverter[],``0})">
+            <summary>设置 JavaScriptConvert.DeserializeObject(String value, JsonConverter[] converters) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.DeserializeObjectString">
+            <summary>设置 JavaScriptConvert.DeserializeObject(String value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.DeserializeObjectStringType">
+            <summary>设置 JavaScriptConvert.DeserializeObject(String value, Type type) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.DeserializeObjectStringTypeJsonConverterArray">
+            <summary>设置 JavaScriptConvert.DeserializeObject(String value, Type type, JsonConverter[] converters) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.SerializeObjectObject">
+            <summary>设置 JavaScriptConvert.SerializeObject(Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.SerializeObjectObjectJsonConverterArray">
+            <summary>设置 JavaScriptConvert.SerializeObject(Object value, JsonConverter[] converters) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.SerializeXmlNodeXmlNode">
+            <summary>设置 JavaScriptConvert.SerializeXmlNode(XmlNode node) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.StaticConstructor">
+            <summary>设置 JavaScriptConvert.JavaScriptConvert() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringBoolean">
+            <summary>设置 JavaScriptConvert.ToString(Boolean value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringByte">
+            <summary>设置 JavaScriptConvert.ToString(Byte value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringChar">
+            <summary>设置 JavaScriptConvert.ToString(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringDateTime">
+            <summary>设置 JavaScriptConvert.ToString(DateTime value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringDecimal">
+            <summary>设置 JavaScriptConvert.ToString(Decimal value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringDouble">
+            <summary>设置 JavaScriptConvert.ToString(Double value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringEnum">
+            <summary>设置 JavaScriptConvert.ToString(Enum value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringGuid">
+            <summary>设置 JavaScriptConvert.ToString(Guid value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringInt16">
+            <summary>设置 JavaScriptConvert.ToString(Int16 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringInt32">
+            <summary>设置 JavaScriptConvert.ToString(Int32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringInt64">
+            <summary>设置 JavaScriptConvert.ToString(Int64 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringObject">
+            <summary>设置 JavaScriptConvert.ToString(Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringSByte">
+            <summary>设置 JavaScriptConvert.ToString(SByte value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringSingle">
+            <summary>设置 JavaScriptConvert.ToString(Single value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringString">
+            <summary>设置 JavaScriptConvert.ToString(String value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringStringChar">
+            <summary>设置 JavaScriptConvert.ToString(String value, Char delimter) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringUInt16">
+            <summary>设置 JavaScriptConvert.ToString(UInt16 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringUInt32">
+            <summary>设置 JavaScriptConvert.ToString(UInt32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptConvert.ToStringUInt64">
+            <summary>设置 JavaScriptConvert.ToString(UInt64 value) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptObject">
+            <summary>Newtonsoft.Json.JavaScriptObject 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.#ctor(Newtonsoft.Json.JavaScriptObject)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptObject.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.ICollection)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.IDictionary)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.IEnumerable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.Generic.ICollection{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.Generic.IReadOnlyCollection{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Runtime.Serialization.IDeserializationCallback)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptObject.Constructor">
+            <summary>设置 JavaScriptObject.JavaScriptObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptObject.ConstructorJavaScriptObject">
+            <summary>设置 JavaScriptObject.JavaScriptObject(JavaScriptObject javaScriptObject) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptParameters">
+            <summary>Newtonsoft.Json.JavaScriptParameters 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.#ctor(Newtonsoft.Json.JavaScriptParameters)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.ICollection)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.IEnumerable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.IList)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.Generic.ICollection{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.Generic.IList{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.Generic.IReadOnlyCollection{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.Bind(System.Collections.Generic.IReadOnlyList{System.Object})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.ConstructorIListOfObject">
+            <summary>设置 JavaScriptParameters.JavaScriptParameters(IList`1&lt;Object&gt; list) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJavaScriptParameters.StaticConstructor">
+            <summary>设置 JavaScriptParameters.JavaScriptParameters() 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonConverter">
+            <summary>Newtonsoft.Json.JsonConverter 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverter.#ctor(Newtonsoft.Json.JsonConverter)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonConverter.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverter.AllInstances.ReadJsonJsonReaderType">
+            <summary>设置 JsonConverter.ReadJson(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverter.AllInstances.WriteJsonJsonWriterObject">
+            <summary>设置 JsonConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverter.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverter.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverter.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverter.Constructor">
+            <summary>设置 JsonConverter.JsonConverter() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverter.ReadJsonJsonReaderType">
+            <summary>设置 JsonConverter.ReadJson(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverter.WriteJsonJsonWriterObject">
+            <summary>设置 JsonConverter.WriteJson(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonConverterCollection">
+            <summary>Newtonsoft.Json.JsonConverterCollection 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.#ctor(Newtonsoft.Json.JsonConverterCollection)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.ICollection)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.IEnumerable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.IList)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.Generic.ICollection{Newtonsoft.Json.JsonConverter})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.Generic.IEnumerable{Newtonsoft.Json.JsonConverter})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.Generic.IList{Newtonsoft.Json.JsonConverter})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.Generic.IReadOnlyCollection{Newtonsoft.Json.JsonConverter})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Bind(System.Collections.Generic.IReadOnlyList{Newtonsoft.Json.JsonConverter})">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonConverterCollection.Constructor">
+            <summary>设置 JsonConverterCollection.JsonConverterCollection() 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute">
+            <summary>Newtonsoft.Json.JsonIgnoreAttribute 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.#ctor(Newtonsoft.Json.JsonIgnoreAttribute)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonIgnoreAttribute.Constructor">
+            <summary>设置 JsonIgnoreAttribute.JsonIgnoreAttribute() 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonReader">
+            <summary>Newtonsoft.Json.JsonReader 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReader.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReader.#ctor(Newtonsoft.Json.JsonReader)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ClearCurrentChar">
+            <summary>设置 JsonReader.ClearCurrentChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.Close">
+            <summary>设置 JsonReader.Close() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.CurrentIsSeperator">
+            <summary>设置 JsonReader.CurrentIsSeperator() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.DisposeBoolean">
+            <summary>设置 JsonReader.Dispose(Boolean disposing) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.EatWhitespaceBoolean">
+            <summary>设置 JsonReader.EatWhitespace(Boolean oneOrMore) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.HasNext">
+            <summary>设置 JsonReader.HasNext() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.MatchValueString">
+            <summary>设置 JsonReader.MatchValue(String value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.MatchValueStringBoolean">
+            <summary>设置 JsonReader.MatchValue(String value, Boolean noTrailingNonSeperatorCharacters) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.MoveNext">
+            <summary>设置 JsonReader.MoveNext() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.MoveToChar">
+            <summary>设置 JsonReader.MoveTo(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseComment">
+            <summary>设置 JsonReader.ParseComment() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseConstructor">
+            <summary>设置 JsonReader.ParseConstructor() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseFalse">
+            <summary>设置 JsonReader.ParseFalse() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseNull">
+            <summary>设置 JsonReader.ParseNull() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseNumber">
+            <summary>设置 JsonReader.ParseNumber() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseObject">
+            <summary>设置 JsonReader.ParseObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParsePostValue">
+            <summary>设置 JsonReader.ParsePostValue() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseProperty">
+            <summary>设置 JsonReader.ParseProperty() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseQuotedPropertyChar">
+            <summary>设置 JsonReader.ParseQuotedProperty(Char quoteChar) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseStringChar">
+            <summary>设置 JsonReader.ParseString(Char quote) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseTrue">
+            <summary>设置 JsonReader.ParseTrue() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseUndefined">
+            <summary>设置 JsonReader.ParseUndefined() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseUnquotedProperty">
+            <summary>设置 JsonReader.ParseUnquotedProperty() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ParseValue">
+            <summary>设置 JsonReader.ParseValue() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.PeekNext">
+            <summary>设置 JsonReader.PeekNext() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.QuoteCharGet">
+            <summary>设置 JsonReader.get_QuoteChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.Read">
+            <summary>设置 JsonReader.Read() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.SetStateBasedOnCurrent">
+            <summary>设置 JsonReader.SetStateBasedOnCurrent() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.SetTokenJsonToken">
+            <summary>设置 JsonReader.SetToken(JsonToken newToken) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.SetTokenJsonTokenObject">
+            <summary>设置 JsonReader.SetToken(JsonToken newToken, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.SystemIDisposableDispose">
+            <summary>设置 JsonReader.System.IDisposable.Dispose() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.TokenTypeGet">
+            <summary>设置 JsonReader.get_TokenType() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ValidIdentifierCharChar">
+            <summary>设置 JsonReader.ValidIdentifierChar(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ValidateEndJsonToken">
+            <summary>设置 JsonReader.ValidateEnd(JsonToken endToken) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ValueGet">
+            <summary>设置 JsonReader.get_Value() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.AllInstances.ValueTypeGet">
+            <summary>设置 JsonReader.get_ValueType() 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReader.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReader.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReader.Bind(System.IDisposable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ClearCurrentChar">
+            <summary>设置 JsonReader.ClearCurrentChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.Close">
+            <summary>设置 JsonReader.Close() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ConstructorTextReader">
+            <summary>设置 JsonReader.JsonReader(TextReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.CurrentIsSeperator">
+            <summary>设置 JsonReader.CurrentIsSeperator() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.DisposeBoolean">
+            <summary>设置 JsonReader.Dispose(Boolean disposing) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.EatWhitespaceBoolean">
+            <summary>设置 JsonReader.EatWhitespace(Boolean oneOrMore) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.HasNext">
+            <summary>设置 JsonReader.HasNext() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.MatchValueString">
+            <summary>设置 JsonReader.MatchValue(String value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.MatchValueStringBoolean">
+            <summary>设置 JsonReader.MatchValue(String value, Boolean noTrailingNonSeperatorCharacters) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.MoveNext">
+            <summary>设置 JsonReader.MoveNext() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.MoveToChar">
+            <summary>设置 JsonReader.MoveTo(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseComment">
+            <summary>设置 JsonReader.ParseComment() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseConstructor">
+            <summary>设置 JsonReader.ParseConstructor() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseFalse">
+            <summary>设置 JsonReader.ParseFalse() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseNull">
+            <summary>设置 JsonReader.ParseNull() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseNumber">
+            <summary>设置 JsonReader.ParseNumber() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseObject">
+            <summary>设置 JsonReader.ParseObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParsePostValue">
+            <summary>设置 JsonReader.ParsePostValue() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseProperty">
+            <summary>设置 JsonReader.ParseProperty() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseQuotedPropertyChar">
+            <summary>设置 JsonReader.ParseQuotedProperty(Char quoteChar) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseStringChar">
+            <summary>设置 JsonReader.ParseString(Char quote) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseTrue">
+            <summary>设置 JsonReader.ParseTrue() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseUndefined">
+            <summary>设置 JsonReader.ParseUndefined() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseUnquotedProperty">
+            <summary>设置 JsonReader.ParseUnquotedProperty() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ParseValue">
+            <summary>设置 JsonReader.ParseValue() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.PeekNext">
+            <summary>设置 JsonReader.PeekNext() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.QuoteCharGet">
+            <summary>设置 JsonReader.get_QuoteChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.Read">
+            <summary>设置 JsonReader.Read() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.SetStateBasedOnCurrent">
+            <summary>设置 JsonReader.SetStateBasedOnCurrent() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.SetTokenJsonToken">
+            <summary>设置 JsonReader.SetToken(JsonToken newToken) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.SetTokenJsonTokenObject">
+            <summary>设置 JsonReader.SetToken(JsonToken newToken, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.SystemIDisposableDispose">
+            <summary>设置 JsonReader.System.IDisposable.Dispose() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.TokenTypeGet">
+            <summary>设置 JsonReader.get_TokenType() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ValidIdentifierCharChar">
+            <summary>设置 JsonReader.ValidIdentifierChar(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ValidateEndJsonToken">
+            <summary>设置 JsonReader.ValidateEnd(JsonToken endToken) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ValueGet">
+            <summary>设置 JsonReader.get_Value() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReader.ValueTypeGet">
+            <summary>设置 JsonReader.get_ValueType() 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonReaderException">
+            <summary>Newtonsoft.Json.JsonReaderException 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReaderException.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReaderException.#ctor(Newtonsoft.Json.JsonReaderException)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonReaderException.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReaderException.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReaderException.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReaderException.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonReaderException.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReaderException.Constructor">
+            <summary>设置 JsonReaderException.JsonReaderException() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReaderException.ConstructorString">
+            <summary>设置 JsonReaderException.JsonReaderException(String message) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonReaderException.ConstructorStringException">
+            <summary>设置 JsonReaderException.JsonReaderException(String message, Exception innerException) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonSerializationException">
+            <summary>Newtonsoft.Json.JsonSerializationException 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializationException.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializationException.#ctor(Newtonsoft.Json.JsonSerializationException)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonSerializationException.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializationException.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializationException.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializationException.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializationException.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializationException.Constructor">
+            <summary>设置 JsonSerializationException.JsonSerializationException() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializationException.ConstructorString">
+            <summary>设置 JsonSerializationException.JsonSerializationException(String message) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializationException.ConstructorStringException">
+            <summary>设置 JsonSerializationException.JsonSerializationException(String message, Exception innerException) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonSerializer">
+            <summary>Newtonsoft.Json.JsonSerializer 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializer.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializer.#ctor(Newtonsoft.Json.JsonSerializer)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.ConvertersGet">
+            <summary>设置 JsonSerializer.get_Converters() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.DeserializeJsonReader">
+            <summary>设置 JsonSerializer.Deserialize(JsonReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.DeserializeJsonReaderType">
+            <summary>设置 JsonSerializer.Deserialize(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.EnsureTypeObjectType">
+            <summary>设置 JsonSerializer.EnsureType(Object value, Type targetType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.GetObjectJsonReaderType">
+            <summary>设置 JsonSerializer.GetObject(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.HasMatchingConverterTypeJsonConverterOut">
+            <summary>设置 JsonSerializer.HasMatchingConverter(Type type, JsonConverter&amp; matchingConverter) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.PopulateJavaScriptArrayJsonReader">
+            <summary>设置 JsonSerializer.PopulateJavaScriptArray(JsonReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.PopulateJavaScriptObjectJsonReader">
+            <summary>设置 JsonSerializer.PopulateJavaScriptObject(JsonReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.PopulateListJsonReaderType">
+            <summary>设置 JsonSerializer.PopulateList(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.PopulateObjectJsonReaderType">
+            <summary>设置 JsonSerializer.PopulateObject(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.ReferenceLoopHandlingGet">
+            <summary>设置 JsonSerializer.get_ReferenceLoopHandling() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.ReferenceLoopHandlingSetReferenceLoopHandling">
+            <summary>设置 JsonSerializer.set_ReferenceLoopHandling(ReferenceLoopHandling value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeCollectionJsonWriterICollection">
+            <summary>设置 JsonSerializer.SerializeCollection(JsonWriter writer, ICollection values) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeDictionaryJsonWriterIDictionary">
+            <summary>设置 JsonSerializer.SerializeDictionary(JsonWriter writer, IDictionary values) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeJsonWriterObject">
+            <summary>设置 JsonSerializer.Serialize(JsonWriter jsonWriter, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeListJsonWriterIList">
+            <summary>设置 JsonSerializer.SerializeList(JsonWriter writer, IList values) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeObjectJsonWriterObject">
+            <summary>设置 JsonSerializer.SerializeObject(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeTextWriterObject">
+            <summary>设置 JsonSerializer.Serialize(TextWriter textWriter, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SerializeValueJsonWriterObject">
+            <summary>设置 JsonSerializer.SerializeValue(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.SetObjectMemberJsonReaderObjectTypeString">
+            <summary>设置 JsonSerializer.SetObjectMember(JsonReader reader, Object target, Type targetType, String memberName) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.AllInstances.WriteMemberInfoPropertyJsonWriterObjectMemberInfo">
+            <summary>设置 JsonSerializer.WriteMemberInfoProperty(JsonWriter writer, Object value, MemberInfo member) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializer.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonSerializer.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.Constructor">
+            <summary>设置 JsonSerializer.JsonSerializer() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.ConvertersGet">
+            <summary>设置 JsonSerializer.get_Converters() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.DeserializeJsonReader">
+            <summary>设置 JsonSerializer.Deserialize(JsonReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.DeserializeJsonReaderType">
+            <summary>设置 JsonSerializer.Deserialize(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.EnsureTypeObjectType">
+            <summary>设置 JsonSerializer.EnsureType(Object value, Type targetType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.GetObjectJsonReaderType">
+            <summary>设置 JsonSerializer.GetObject(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.HasMatchingConverterTypeJsonConverterOut">
+            <summary>设置 JsonSerializer.HasMatchingConverter(Type type, JsonConverter&amp; matchingConverter) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.PopulateJavaScriptArrayJsonReader">
+            <summary>设置 JsonSerializer.PopulateJavaScriptArray(JsonReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.PopulateJavaScriptObjectJsonReader">
+            <summary>设置 JsonSerializer.PopulateJavaScriptObject(JsonReader reader) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.PopulateListJsonReaderType">
+            <summary>设置 JsonSerializer.PopulateList(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.PopulateObjectJsonReaderType">
+            <summary>设置 JsonSerializer.PopulateObject(JsonReader reader, Type objectType) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.ReferenceLoopHandlingGet">
+            <summary>设置 JsonSerializer.get_ReferenceLoopHandling() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.ReferenceLoopHandlingSetReferenceLoopHandling">
+            <summary>设置 JsonSerializer.set_ReferenceLoopHandling(ReferenceLoopHandling value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeCollectionJsonWriterICollection">
+            <summary>设置 JsonSerializer.SerializeCollection(JsonWriter writer, ICollection values) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeDictionaryJsonWriterIDictionary">
+            <summary>设置 JsonSerializer.SerializeDictionary(JsonWriter writer, IDictionary values) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeJsonWriterObject">
+            <summary>设置 JsonSerializer.Serialize(JsonWriter jsonWriter, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeListJsonWriterIList">
+            <summary>设置 JsonSerializer.SerializeList(JsonWriter writer, IList values) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeObjectJsonWriterObject">
+            <summary>设置 JsonSerializer.SerializeObject(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeTextWriterObject">
+            <summary>设置 JsonSerializer.Serialize(TextWriter textWriter, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SerializeValueJsonWriterObject">
+            <summary>设置 JsonSerializer.SerializeValue(JsonWriter writer, Object value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.SetObjectMemberJsonReaderObjectTypeString">
+            <summary>设置 JsonSerializer.SetObjectMember(JsonReader reader, Object target, Type targetType, String memberName) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonSerializer.WriteMemberInfoPropertyJsonWriterObjectMemberInfo">
+            <summary>设置 JsonSerializer.WriteMemberInfoProperty(JsonWriter writer, Object value, MemberInfo member) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonWriter">
+            <summary>Newtonsoft.Json.JsonWriter 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriter.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriter.#ctor(Newtonsoft.Json.JsonWriter)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.AutoCompleteAll">
+            <summary>设置 JsonWriter.AutoCompleteAll() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.AutoCompleteCloseJsonToken">
+            <summary>设置 JsonWriter.AutoCompleteClose(JsonToken tokenBeingClosed) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.AutoCompleteJsonToken">
+            <summary>设置 JsonWriter.AutoComplete(JsonToken tokenBeingWritten) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.Close">
+            <summary>设置 JsonWriter.Close() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.DisposeBoolean">
+            <summary>设置 JsonWriter.Dispose(Boolean disposing) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.Flush">
+            <summary>设置 JsonWriter.Flush() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.FormattingGet">
+            <summary>设置 JsonWriter.get_Formatting() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.FormattingSetFormatting">
+            <summary>设置 JsonWriter.set_Formatting(Formatting value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.IndentCharGet">
+            <summary>设置 JsonWriter.get_IndentChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.IndentCharSetChar">
+            <summary>设置 JsonWriter.set_IndentChar(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.IndentationGet">
+            <summary>设置 JsonWriter.get_Indentation() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.IndentationSetInt32">
+            <summary>设置 JsonWriter.set_Indentation(Int32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.QuoteCharGet">
+            <summary>设置 JsonWriter.get_QuoteChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.QuoteCharSetChar">
+            <summary>设置 JsonWriter.set_QuoteChar(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.QuoteNameGet">
+            <summary>设置 JsonWriter.get_QuoteName() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.QuoteNameSetBoolean">
+            <summary>设置 JsonWriter.set_QuoteName(Boolean value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.SerializeStackGet">
+            <summary>设置 JsonWriter.get_SerializeStack() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.SystemIDisposableDispose">
+            <summary>设置 JsonWriter.System.IDisposable.Dispose() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteCommentString">
+            <summary>设置 JsonWriter.WriteComment(String text) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteEnd">
+            <summary>设置 JsonWriter.WriteEnd() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteEndArray">
+            <summary>设置 JsonWriter.WriteEndArray() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteEndObject">
+            <summary>设置 JsonWriter.WriteEndObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteIndent">
+            <summary>设置 JsonWriter.WriteIndent() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteNull">
+            <summary>设置 JsonWriter.WriteNull() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WritePropertyNameString">
+            <summary>设置 JsonWriter.WritePropertyName(String name) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteRawString">
+            <summary>设置 JsonWriter.WriteRaw(String javaScript) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteStartArray">
+            <summary>设置 JsonWriter.WriteStartArray() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteStartObject">
+            <summary>设置 JsonWriter.WriteStartObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteStateGet">
+            <summary>设置 JsonWriter.get_WriteState() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteUndefined">
+            <summary>设置 JsonWriter.WriteUndefined() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueBoolean">
+            <summary>设置 JsonWriter.WriteValue(Boolean value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueByte">
+            <summary>设置 JsonWriter.WriteValue(Byte value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueChar">
+            <summary>设置 JsonWriter.WriteValue(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueDateTime">
+            <summary>设置 JsonWriter.WriteValue(DateTime value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueDecimal">
+            <summary>设置 JsonWriter.WriteValue(Decimal value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueDouble">
+            <summary>设置 JsonWriter.WriteValue(Double value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueInt16">
+            <summary>设置 JsonWriter.WriteValue(Int16 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueInt32">
+            <summary>设置 JsonWriter.WriteValue(Int32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueInt64">
+            <summary>设置 JsonWriter.WriteValue(Int64 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueInternalStringJsonToken">
+            <summary>设置 JsonWriter.WriteValueInternal(String value, JsonToken token) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueSByte">
+            <summary>设置 JsonWriter.WriteValue(SByte value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueSingle">
+            <summary>设置 JsonWriter.WriteValue(Single value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueString">
+            <summary>设置 JsonWriter.WriteValue(String value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueUInt16">
+            <summary>设置 JsonWriter.WriteValue(UInt16 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueUInt32">
+            <summary>设置 JsonWriter.WriteValue(UInt32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteValueUInt64">
+            <summary>设置 JsonWriter.WriteValue(UInt64 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AllInstances.WriteWhitespaceString">
+            <summary>设置 JsonWriter.WriteWhitespace(String ws) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AutoCompleteAll">
+            <summary>设置 JsonWriter.AutoCompleteAll() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AutoCompleteCloseJsonToken">
+            <summary>设置 JsonWriter.AutoCompleteClose(JsonToken tokenBeingClosed) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.AutoCompleteJsonToken">
+            <summary>设置 JsonWriter.AutoComplete(JsonToken tokenBeingWritten) 的 填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriter.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriter.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriter.Bind(System.IDisposable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.Close">
+            <summary>设置 JsonWriter.Close() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.ConstructorTextWriter">
+            <summary>设置 JsonWriter.JsonWriter(TextWriter textWriter) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.DisposeBoolean">
+            <summary>设置 JsonWriter.Dispose(Boolean disposing) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.Flush">
+            <summary>设置 JsonWriter.Flush() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.FormattingGet">
+            <summary>设置 JsonWriter.get_Formatting() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.FormattingSetFormatting">
+            <summary>设置 JsonWriter.set_Formatting(Formatting value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.IndentCharGet">
+            <summary>设置 JsonWriter.get_IndentChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.IndentCharSetChar">
+            <summary>设置 JsonWriter.set_IndentChar(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.IndentationGet">
+            <summary>设置 JsonWriter.get_Indentation() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.IndentationSetInt32">
+            <summary>设置 JsonWriter.set_Indentation(Int32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.QuoteCharGet">
+            <summary>设置 JsonWriter.get_QuoteChar() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.QuoteCharSetChar">
+            <summary>设置 JsonWriter.set_QuoteChar(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.QuoteNameGet">
+            <summary>设置 JsonWriter.get_QuoteName() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.QuoteNameSetBoolean">
+            <summary>设置 JsonWriter.set_QuoteName(Boolean value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.SerializeStackGet">
+            <summary>设置 JsonWriter.get_SerializeStack() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.StaticConstructor">
+            <summary>设置 JsonWriter.JsonWriter() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.SystemIDisposableDispose">
+            <summary>设置 JsonWriter.System.IDisposable.Dispose() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteCommentString">
+            <summary>设置 JsonWriter.WriteComment(String text) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteEnd">
+            <summary>设置 JsonWriter.WriteEnd() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteEndArray">
+            <summary>设置 JsonWriter.WriteEndArray() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteEndObject">
+            <summary>设置 JsonWriter.WriteEndObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteIndent">
+            <summary>设置 JsonWriter.WriteIndent() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteNull">
+            <summary>设置 JsonWriter.WriteNull() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WritePropertyNameString">
+            <summary>设置 JsonWriter.WritePropertyName(String name) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteRawString">
+            <summary>设置 JsonWriter.WriteRaw(String javaScript) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteStartArray">
+            <summary>设置 JsonWriter.WriteStartArray() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteStartObject">
+            <summary>设置 JsonWriter.WriteStartObject() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteStateGet">
+            <summary>设置 JsonWriter.get_WriteState() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteUndefined">
+            <summary>设置 JsonWriter.WriteUndefined() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueBoolean">
+            <summary>设置 JsonWriter.WriteValue(Boolean value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueByte">
+            <summary>设置 JsonWriter.WriteValue(Byte value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueChar">
+            <summary>设置 JsonWriter.WriteValue(Char value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueDateTime">
+            <summary>设置 JsonWriter.WriteValue(DateTime value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueDecimal">
+            <summary>设置 JsonWriter.WriteValue(Decimal value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueDouble">
+            <summary>设置 JsonWriter.WriteValue(Double value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueInt16">
+            <summary>设置 JsonWriter.WriteValue(Int16 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueInt32">
+            <summary>设置 JsonWriter.WriteValue(Int32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueInt64">
+            <summary>设置 JsonWriter.WriteValue(Int64 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueInternalStringJsonToken">
+            <summary>设置 JsonWriter.WriteValueInternal(String value, JsonToken token) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueSByte">
+            <summary>设置 JsonWriter.WriteValue(SByte value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueSingle">
+            <summary>设置 JsonWriter.WriteValue(Single value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueString">
+            <summary>设置 JsonWriter.WriteValue(String value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueUInt16">
+            <summary>设置 JsonWriter.WriteValue(UInt16 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueUInt32">
+            <summary>设置 JsonWriter.WriteValue(UInt32 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteValueUInt64">
+            <summary>设置 JsonWriter.WriteValue(UInt64 value) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriter.WriteWhitespaceString">
+            <summary>设置 JsonWriter.WriteWhitespace(String ws) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonWriterException">
+            <summary>Newtonsoft.Json.JsonWriterException 的填充码类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriterException.#ctor">
+            <summary>初始化新的填充码实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriterException.#ctor(Newtonsoft.Json.JsonWriterException)">
+            <summary>初始化给定实例的新填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.ShimJsonWriterException.AllInstances">
+            <summary>为所有实例成员定义填充码</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriterException.BehaveAsCurrent">
+            <summary>为已填充的类型的所有方法分配“Current”行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriterException.BehaveAsNotImplemented">
+            <summary>为已填充的类型的所有方法分配“NotImplemented”行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriterException.Behavior">
+            <summary>为已填充的类型的所有方法分配行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.ShimJsonWriterException.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>将接口的成员绑定到此填充码。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriterException.Constructor">
+            <summary>设置 JsonWriterException.JsonWriterException() 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriterException.ConstructorString">
+            <summary>设置 JsonWriterException.JsonWriterException(String message) 的 填充码</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.ShimJsonWriterException.ConstructorStringException">
+            <summary>设置 JsonWriterException.JsonWriterException(String message, Exception innerException) 的 填充码</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubIdentifier">
+            <summary>Newtonsoft.Json.Identifier 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubIdentifier.#ctor(System.String)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubIdentifier.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubIdentifier.GetHashCode">
+            <summary>设置 Identifier.GetHashCode() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubIdentifier.GetHashCode01">
+            <summary>设置 Identifier.GetHashCode() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubIdentifier.InitializeStub">
+            <summary>初始化 type StubIdentifier 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubIdentifier.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubIdentifier.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubIdentifier.ToString">
+            <summary>设置 Identifier.ToString() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubIdentifier.ToString01">
+            <summary>设置 Identifier.ToString() 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJavaScriptArray">
+            <summary>Newtonsoft.Json.JavaScriptArray 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptArray.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptArray.#ctor(System.Int32)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptArray.#ctor(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptArray.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptArray.InitializeStub">
+            <summary>初始化 type StubJavaScriptArray 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptArray.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptArray.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJavaScriptConstructor">
+            <summary>Newtonsoft.Json.JavaScriptConstructor 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.#ctor(System.String,Newtonsoft.Json.JavaScriptParameters)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.InitializeStub">
+            <summary>初始化 type StubJavaScriptConstructor 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.ToString">
+            <summary>设置 JavaScriptConstructor.ToString() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJavaScriptConstructor.ToString01">
+            <summary>设置 JavaScriptConstructor.ToString() 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJavaScriptObject">
+            <summary>Newtonsoft.Json.JavaScriptObject 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptObject.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptObject.#ctor(Newtonsoft.Json.JavaScriptObject)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptObject.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptObject.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>设置 Dictionary`2.GetObjectData(SerializationInfo info, StreamingContext context) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJavaScriptObject.GetObjectDataSerializationInfoStreamingContext">
+            <summary>设置 Dictionary`2.GetObjectData(SerializationInfo info, StreamingContext context) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptObject.InitializeStub">
+            <summary>初始化 type StubJavaScriptObject 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptObject.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptObject.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptObject.OnDeserialization(System.Object)">
+            <summary>设置 Dictionary`2.OnDeserialization(Object sender) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJavaScriptObject.OnDeserializationObject">
+            <summary>设置 Dictionary`2.OnDeserialization(Object sender) 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJavaScriptParameters">
+            <summary>Newtonsoft.Json.JavaScriptParameters 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptParameters.#ctor(System.Collections.Generic.IList{System.Object})">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptParameters.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJavaScriptParameters.InitializeStub">
+            <summary>初始化 type StubJavaScriptParameters 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptParameters.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJavaScriptParameters.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonConverter">
+            <summary>Newtonsoft.Json.JsonConverter 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverter.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonConverter.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverter.CanConvert(System.Type)">
+            <summary>设置 JsonConverter.CanConvert(Type objectType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverter.CanConvertType">
+            <summary>设置 JsonConverter.CanConvert(Type objectType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverter.InitializeStub">
+            <summary>初始化 type StubJsonConverter 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonConverter.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonConverter.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type)">
+            <summary>设置 JsonConverter.ReadJson(JsonReader reader, Type objectType) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverter.ReadJsonJsonReaderType">
+            <summary>设置 JsonConverter.ReadJson(JsonReader reader, Type objectType) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object)">
+            <summary>设置 JsonConverter.WriteJson(JsonWriter writer, Object value) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverter.WriteJsonJsonWriterObject">
+            <summary>设置 JsonConverter.WriteJson(JsonWriter writer, Object value) 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonConverterCollection">
+            <summary>Newtonsoft.Json.JsonConverterCollection 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverterCollection.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonConverterCollection.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverterCollection.ClearItems">
+            <summary>设置 Collection`1.ClearItems() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverterCollection.ClearItems01">
+            <summary>设置 Collection`1.ClearItems() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverterCollection.InitializeStub">
+            <summary>初始化 type StubJsonConverterCollection 的新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverterCollection.InsertItem(System.Int32,Newtonsoft.Json.JsonConverter)">
+            <summary>设置 Collection`1.InsertItem(Int32 index, !0 item) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverterCollection.InsertItemInt32JsonConverter">
+            <summary>设置 Collection`1.InsertItem(Int32 index, !0 item) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonConverterCollection.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonConverterCollection.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverterCollection.RemoveItem(System.Int32)">
+            <summary>设置 Collection`1.RemoveItem(Int32 index) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverterCollection.RemoveItemInt32">
+            <summary>设置 Collection`1.RemoveItem(Int32 index) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonConverterCollection.SetItem(System.Int32,Newtonsoft.Json.JsonConverter)">
+            <summary>设置 Collection`1.SetItem(Int32 index, !0 item) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonConverterCollection.SetItemInt32JsonConverter">
+            <summary>设置 Collection`1.SetItem(Int32 index, !0 item) 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonReader">
+            <summary>Newtonsoft.Json.JsonReader 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReader.#ctor(System.IO.TextReader)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReader.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReader.InitializeStub">
+            <summary>初始化 type StubJsonReader 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReader.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReader.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonReaderException">
+            <summary>Newtonsoft.Json.JsonReaderException 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.#ctor(System.String)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.#ctor(System.String,System.Exception)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.AttachBackingFieldToHelpLink">
+            <summary>附加委托以将 StubJsonReaderException.HelpLink 作为具有支持字段的属性进行模拟。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.AttachBackingFieldToSource">
+            <summary>附加委托以将 StubJsonReaderException.Source 作为具有支持字段的属性进行模拟。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.Data">
+            <summary>设置 Exception.get_Data() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.DataGet">
+            <summary>设置 Exception.get_Data() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.GetBaseException">
+            <summary>设置 Exception.GetBaseException() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.GetBaseException01">
+            <summary>设置 Exception.GetBaseException() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>设置 Exception.GetObjectData(SerializationInfo info, StreamingContext context) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.GetObjectDataSerializationInfoStreamingContext">
+            <summary>设置 Exception.GetObjectData(SerializationInfo info, StreamingContext context) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.HelpLink">
+            <summary>设置 Exception.get_HelpLink() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.HelpLinkGet">
+            <summary>设置 Exception.get_HelpLink() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.HelpLinkSetString">
+            <summary>设置 Exception.set_HelpLink(String value) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.InitializeStub">
+            <summary>初始化 type StubJsonReaderException 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.Message">
+            <summary>设置 Exception.get_Message() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.MessageGet">
+            <summary>设置 Exception.get_Message() 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.Source">
+            <summary>设置 Exception.get_Source() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.SourceGet">
+            <summary>设置 Exception.get_Source() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.SourceSetString">
+            <summary>设置 Exception.set_Source(String value) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonReaderException.StackTrace">
+            <summary>设置 Exception.get_StackTrace() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.StackTraceGet">
+            <summary>设置 Exception.get_StackTrace() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonReaderException.ToString">
+            <summary>设置 Exception.ToString() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonReaderException.ToString01">
+            <summary>设置 Exception.ToString() 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonSerializationException">
+            <summary>Newtonsoft.Json.JsonSerializationException 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.#ctor(System.String)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.#ctor(System.String,System.Exception)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.AttachBackingFieldToHelpLink">
+            <summary>附加委托以将 StubJsonSerializationException.HelpLink 作为具有支持字段的属性进行模拟。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.AttachBackingFieldToSource">
+            <summary>附加委托以将 StubJsonSerializationException.Source 作为具有支持字段的属性进行模拟。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.Data">
+            <summary>设置 Exception.get_Data() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.DataGet">
+            <summary>设置 Exception.get_Data() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.GetBaseException">
+            <summary>设置 Exception.GetBaseException() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.GetBaseException01">
+            <summary>设置 Exception.GetBaseException() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>设置 Exception.GetObjectData(SerializationInfo info, StreamingContext context) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.GetObjectDataSerializationInfoStreamingContext">
+            <summary>设置 Exception.GetObjectData(SerializationInfo info, StreamingContext context) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.HelpLink">
+            <summary>设置 Exception.get_HelpLink() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.HelpLinkGet">
+            <summary>设置 Exception.get_HelpLink() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.HelpLinkSetString">
+            <summary>设置 Exception.set_HelpLink(String value) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.InitializeStub">
+            <summary>初始化 type StubJsonSerializationException 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.Message">
+            <summary>设置 Exception.get_Message() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.MessageGet">
+            <summary>设置 Exception.get_Message() 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.Source">
+            <summary>设置 Exception.get_Source() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.SourceGet">
+            <summary>设置 Exception.get_Source() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.SourceSetString">
+            <summary>设置 Exception.set_Source(String value) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializationException.StackTrace">
+            <summary>设置 Exception.get_StackTrace() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.StackTraceGet">
+            <summary>设置 Exception.get_StackTrace() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializationException.ToString">
+            <summary>设置 Exception.ToString() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonSerializationException.ToString01">
+            <summary>设置 Exception.ToString() 的 stub</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonSerializer">
+            <summary>Newtonsoft.Json.JsonSerializer 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializer.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializer.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonSerializer.InitializeStub">
+            <summary>初始化 type StubJsonSerializer 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializer.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonSerializer.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonWriter">
+            <summary>Newtonsoft.Json.JsonWriter 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriter.#ctor(System.IO.TextWriter)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriter.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriter.InitializeStub">
+            <summary>初始化 type StubJsonWriter 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriter.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriter.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="T:Newtonsoft.Json.Fakes.StubJsonWriterException">
+            <summary>Newtonsoft.Json.JsonWriterException 的存根类型</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.#ctor">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.#ctor(System.String)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.#ctor(System.String,System.Exception)">
+            <summary>初始化新实例</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.AttachBackingFieldToHelpLink">
+            <summary>附加委托以将 StubJsonWriterException.HelpLink 作为具有支持字段的属性进行模拟。</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.AttachBackingFieldToSource">
+            <summary>附加委托以将 StubJsonWriterException.Source 作为具有支持字段的属性进行模拟。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.CallBase">
+            <summary>获取或设置一个值，该值指示是否应调用基方法而不调用回退行为</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.Data">
+            <summary>设置 Exception.get_Data() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.DataGet">
+            <summary>设置 Exception.get_Data() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.GetBaseException">
+            <summary>设置 Exception.GetBaseException() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.GetBaseException01">
+            <summary>设置 Exception.GetBaseException() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>设置 Exception.GetObjectData(SerializationInfo info, StreamingContext context) 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.GetObjectDataSerializationInfoStreamingContext">
+            <summary>设置 Exception.GetObjectData(SerializationInfo info, StreamingContext context) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.HelpLink">
+            <summary>设置 Exception.get_HelpLink() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.HelpLinkGet">
+            <summary>设置 Exception.get_HelpLink() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.HelpLinkSetString">
+            <summary>设置 Exception.set_HelpLink(String value) 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.InitializeStub">
+            <summary>初始化 type StubJsonWriterException 的新实例</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.InstanceBehavior">
+            <summary>获取或设置实例行为。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.InstanceObserver">
+            <summary>获取或设置实例观察者。</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.Message">
+            <summary>设置 Exception.get_Message() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.MessageGet">
+            <summary>设置 Exception.get_Message() 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.Source">
+            <summary>设置 Exception.get_Source() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.SourceGet">
+            <summary>设置 Exception.get_Source() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.SourceSetString">
+            <summary>设置 Exception.set_Source(String value) 的 stub</summary>
+        </member>
+        <member name="P:Newtonsoft.Json.Fakes.StubJsonWriterException.StackTrace">
+            <summary>设置 Exception.get_StackTrace() 的 stub</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.StackTraceGet">
+            <summary>设置 Exception.get_StackTrace() 的 stub</summary>
+        </member>
+        <member name="M:Newtonsoft.Json.Fakes.StubJsonWriterException.ToString">
+            <summary>设置 Exception.ToString() 的 存根</summary>
+        </member>
+        <member name="F:Newtonsoft.Json.Fakes.StubJsonWriterException.ToString01">
+            <summary>设置 Exception.ToString() 的 stub</summary>
+        </member>
+    </members>
+</doc>
