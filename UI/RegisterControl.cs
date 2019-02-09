@@ -13,6 +13,9 @@ using HelloCSharp.MyControl;
 
 namespace HelloCSharp.UI
 {
+    /// <summary>
+    /// 注册控件
+    /// </summary>
     public partial class RegisterControl : UserControl
     {
         #region 自定义控件
@@ -23,8 +26,7 @@ namespace HelloCSharp.UI
         public HintTextBox textBox4;
 
         #endregion
-
-
+        
         #region 变量
 
         public String _userName = "";

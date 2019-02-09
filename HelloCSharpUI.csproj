@@ -51,6 +51,10 @@
       <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="QRCoder, Version=1.3.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\QRCoder.1.3.5\lib\net40\QRCoder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -1632,6 +1636,7 @@
     <Content Include="Image\LOL7.png" />
     <Content Include="Image\LOL8.png" />
     <Content Include="Image\LOL9.png" />
+    <Content Include="Image\QQ.JPG" />
     <Content Include="Image\Snipaste1.png" />
     <Content Include="Image\Snipaste2.png" />
     <Content Include="Image\Snipaste3.png" />

@@ -13,6 +13,9 @@ using System.IO;
 
 namespace HelloCSharp.UI
 {
+    /// <summary>
+    /// 登录控件
+    /// </summary>
     public partial class LoginControl : UserControl
     {
         #region 自定义控件
@@ -84,6 +87,10 @@ namespace HelloCSharp.UI
             CreateVerifyImage();
         }
 
+        /// <summary>
+        /// 生成验证码
+        /// </summary>
+        /// <returns></returns>
         private String CreateVerifyImage()
         {
             _verifyImage = new VerifyImage();

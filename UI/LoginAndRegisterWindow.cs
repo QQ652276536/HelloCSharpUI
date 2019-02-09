@@ -1,10 +1,6 @@
-﻿using HelloCSharp;
+﻿using QRCoder;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
 
 namespace HelloCSharp.UI
@@ -22,6 +18,7 @@ namespace HelloCSharp.UI
             _registerControl = new RegisterControl();
             this.panel2.Controls.Add(_loginControl);
             this.panel2.Controls.Add(_registerControl);
+            CreateQRCode();
         }
 
         /// <summary>
@@ -63,7 +60,8 @@ namespace HelloCSharp.UI
                 _registerControl.SetVerifyUserPassword(0);
                 _registerControl.SetVerifySMS(0);
                 _registerControl.SetVerifyReadChecked();
-                if (_registerControl._userNameFlag && _registerControl._userPhoneFlag && _registerControl._userPasswordFlag && _registerControl._smsFlag && _registerControl._chkReadFlag)
+                if (_registerControl._userNameFlag && _registerControl._userPhoneFlag && _registerControl._userPasswordFlag
+                    && _registerControl._smsFlag && _registerControl._chkReadFlag)
                 {
                     Register register = new Register(_registerControl.GetRegisterParam("json"));
                 }
@@ -89,6 +87,21 @@ namespace HelloCSharp.UI
                 _registerControl.Visible = false;
                 _nowPage = 0;
             }
+        }
+
+        /// <summary>
+        /// 生成二维码
+        /// </summary>
+        private void CreateQRCode()
+        {
+            QRCodeGenerator codeGenerator = new QRCodeGenerator();
+            QRCodeData codeData = codeGenerator.CreateQrCode("www.nullpointer.vip", QRCodeGenerator.ECCLevel.M, true, true, QRCodeGenerator.EciMode.Utf8, 1);
+            QRCode code = new QRCode(codeData);
+            //图标路径
+            Bitmap icon = new Bitmap("../../Image/QQ.JPG");
+            Bitmap bitmap = code.GetGraphic(7, Color.FromArgb(255, 128, 0), Color.White, icon, 15, 1, false);
+            Image image = Image.FromHbitmap(bitmap.GetHbitmap());
+            this.pictureBox1.Image = image;
         }
     }
 }
