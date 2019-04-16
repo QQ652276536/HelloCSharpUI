@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HelloCSharp.UI
@@ -57,8 +51,8 @@ namespace HelloCSharp.UI
         private void panel_Click(object sender, EventArgs e)
         {
             Control control = sender as Control;
-            String panelName = control.Name;
-            String typeName = control.GetType().Name;
+            string panelName = control.Name;
+            string typeName = control.GetType().Name;
             if (typeName.Equals("Label"))
             {
                 panelName = control.Parent.Name;

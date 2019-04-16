@@ -6,7 +6,7 @@ namespace HelloCSharp.MySQL
 {
     class MySqlUtil
     {
-        public static String _URL = "server=101.132.102.203;user=root;database=test;port=3306;password=root;";
+        public static string _URL = "server=101.132.102.203;user=root;database=test;port=3306;password=root;";
         public MySqlConnection _connection = null;
 
         public MySqlUtil()
@@ -22,8 +22,8 @@ namespace HelloCSharp.MySQL
                 _connection.Open();
                 Logger.Instance.WriteLog("Connection is open...");
                 int id = 111;
-                String name = "AAA";
-                String sqlStr = String.Format(@"insert into test1(id,name) values ('{0}','{1}')", id, name);
+                string name = "AAA";
+                string sqlStr = string.Format(@"insert into test1(id,name) values ('{0}','{1}')", id, name);
                 MySqlCommand command = new MySqlCommand(sqlStr, _connection);
                 if (command.ExecuteNonQuery() > 0)
                 {

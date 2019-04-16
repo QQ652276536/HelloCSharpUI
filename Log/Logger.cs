@@ -55,7 +55,7 @@ namespace HelloCSharp.Log
             try
             {
                 string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                basePath = @"C:\MyLogs";
+                basePath = @"E:\MyLogs";
                 if (!Directory.Exists(basePath + "\\Log"))
                 {
                     Directory.CreateDirectory(basePath + "\\Log");

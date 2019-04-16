@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HelloCSharp.UI
@@ -68,8 +63,8 @@ namespace HelloCSharp.UI
         private void CreateFileB()
         {
             textBox1.Text = "";
-            String inputPath = label1.Text;
-            String outputPath = label2.Text;
+            string inputPath = label1.Text;
+            string outputPath = label2.Text;
             DirectoryInfo directoryInfo = new DirectoryInfo(inputPath);
             FileInfo[] fileInfoArray = directoryInfo.GetFiles();
             FileStream fileStream = null;
@@ -79,7 +74,7 @@ namespace HelloCSharp.UI
             {
                 for (int i = 0; i < fileInfoArray.Length; i++)
                 {
-                    String tempPath = fileInfoArray[i].FullName;
+                    string tempPath = fileInfoArray[i].FullName;
                     textBox1.Text += tempPath + "\r\n";
                     streamReader = new StreamReader(tempPath);
                     streamWriter = new StreamWriter(outputPath + "\\" + fileInfoArray[i].Name);
@@ -89,16 +84,16 @@ namespace HelloCSharp.UI
                         continue;
                     }
                     int lineIndex = 0;
-                    String nextLine;
+                    string nextLine;
                     while ((nextLine = streamReader.ReadLine()) != null)
                     {
                         if (lineIndex > 1 && lineIndex < lineCount - 1)
                         {
-                            String[] contentArray = nextLine.Split(new String[] { "," }, StringSplitOptions.None);
+                            string[] contentArray = nextLine.Split(new string[] { "," }, StringSplitOptions.None);
                             int arrayLength = contentArray.Length;
-                            String dateStr1 = contentArray[0];
-                            String dateStr2 = dateStr1.Replace('/', '-');
-                            String lineStr = "";
+                            string dateStr1 = contentArray[0];
+                            string dateStr2 = dateStr1.Replace('/', '-');
+                            string lineStr = "";
                             if (arrayLength == 7)
                             {
                                 lineStr = dateStr2 + "," + contentArray[1] + "," + contentArray[2] + "," + contentArray[3] + ","
@@ -112,7 +107,7 @@ namespace HelloCSharp.UI
                             }
                             else if (arrayLength == 9)
                             {
-                                String str1 = contentArray[1];
+                                string str1 = contentArray[1];
                                 StringBuilder stringBuilder = new StringBuilder(str1);
                                 stringBuilder.Insert(2, ":");
                                 stringBuilder.Insert(5, ":00");
@@ -147,7 +142,7 @@ namespace HelloCSharp.UI
             }
         }
 
-        private int GetLineCount(String path)
+        private int GetLineCount(string path)
         {
             FileStream fileStream = null;
             StreamReader streamReader = null;
@@ -156,7 +151,7 @@ namespace HelloCSharp.UI
             {
                 fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
                 streamReader = new StreamReader(fileStream, Encoding.Default);
-                String lineContent;
+                string lineContent;
                 while ((lineContent = streamReader.ReadLine()) != null)
                 {
                     lineCount++;

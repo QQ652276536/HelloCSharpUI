@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace HelloCSharp.UI
 {
@@ -75,20 +74,20 @@ namespace HelloCSharp.UI
         private void AnalysisJson()
         {
             textBox1.Text = "";
-            String inputPath = label1.Text;
-            String outputPath = label2.Text;
+            string inputPath = label1.Text;
+            string outputPath = label2.Text;
             try
             {
                 DirectoryInfo directoryInfo = new DirectoryInfo(inputPath);
-                String fileName = directoryInfo.Name;
+                string fileName = directoryInfo.Name;
                 //读取文件内容
                 StreamReader streanReader = new StreamReader(directoryInfo.ToString(), Encoding.UTF8);
-                String content = streanReader.ReadToEnd();
+                string content = streanReader.ReadToEnd();
                 //反序列化Json
                 MyJsonClass myJsonClass = JsonConvert.DeserializeObject<MyJsonClass>(content);
                 List<HttpEntity> httpEntityList = myJsonClass.item;
                 int index = 0;
-                String tempFileName = Path.GetFileNameWithoutExtension(inputPath);
+                string tempFileName = Path.GetFileNameWithoutExtension(inputPath);
                 index = tempFileName.IndexOf(".postman_collection");
                 tempFileName = tempFileName.Substring(0, index);
                 foreach (HttpEntity tempHttpEntity in httpEntityList)
@@ -97,7 +96,7 @@ namespace HelloCSharp.UI
                     EventEntity tempEventEntity = new EventEntity();
                     tempEventEntity.listen = "test";
                     ScriptEntity scriptEntity = new ScriptEntity();
-                    List<String> execList = new List<String>();
+                    List<string> execList = new List<string>();
                     execList.Add("tests[\"状态200\"] = responseCode.code === 200;");
                     scriptEntity.exec = execList;
                     tempEventEntity.script = scriptEntity;
@@ -123,18 +122,18 @@ namespace HelloCSharp.UI
                         }
                     }
                     //环境参数与请求参BodyEntity bodyEntity = requestEntity.body;
-                    //数对应暂时没实现String oldBodyStr = bodyEntity.raw;
+                    //数对应暂时没实现string oldBodyStr = bodyEntity.raw;
                     URLEntity urlEntity = requestEntity.url;
-                    String oldRaw = urlEntity.raw;
+                    string oldRaw = urlEntity.raw;
                     index = oldRaw.IndexOf("/api");
                     urlEntity.raw = "{{url}}" + oldRaw.Substring(index);
-                    List<String> hostList = new List<String>();
+                    List<string> hostList = new List<string>();
                     hostList.Add("{{url}}");
                     urlEntity.host = hostList;
                 }
                 myJsonClass.item = httpEntityList;
                 //序列化Json
-                String jsonStr = JsonConvert.SerializeObject(myJsonClass);
+                string jsonStr = JsonConvert.SerializeObject(myJsonClass);
                 //写入文件
                 byte[] dataArray = Encoding.UTF8.GetBytes(jsonStr);
                 FileStream fileStream = new FileStream(outputPath + "\\" + tempFileName + "_AutoTest.json", FileMode.Create);
@@ -166,8 +165,8 @@ namespace HelloCSharp.UI
         private void CreateFileB()
         {
             textBox1.Text = "";
-            String inputPath = label1.Text;
-            String outputPath = label2.Text;
+            string inputPath = label1.Text;
+            string outputPath = label2.Text;
             DirectoryInfo directoryInfo = new DirectoryInfo(inputPath);
             FileInfo[] fileInfoArray = directoryInfo.GetFiles();
             Regex regex = new Regex("[a-zA-Z][1]");
@@ -175,17 +174,17 @@ namespace HelloCSharp.UI
             {
                 for (int i = 0; i < fileInfoArray.Length; i++)
                 {
-                    String tempPath = fileInfoArray[i].FullName;
+                    string tempPath = fileInfoArray[i].FullName;
                     tempPath += "\r\n";
                     textBox1.Text += tempPath;
-                    String tempNameA = fileInfoArray[i].Name;
+                    string tempNameA = fileInfoArray[i].Name;
                     if (regex.IsMatch(tempNameA))
                     {
                         int tempIndexA = tempNameA.IndexOf("1");
                         tempNameA = tempNameA.Remove(tempIndexA, 1);
                         tempNameA = tempNameA.Insert(tempIndexA, "");
                     }
-                    String tempPathA = outputPath + "\\" + tempNameA;
+                    string tempPathA = outputPath + "\\" + tempNameA;
                     fileInfoArray[i].MoveTo(tempPathA);
                 }
                 textBox1.Text += "完成!";

@@ -1,4 +1,4 @@
-﻿using HelloCSharp.MySQL.MySQLPool;
+﻿using HelloCSharp.MySQL;
 using HelloCSharp.UI;
 using System;
 using System.Windows.Forms;
@@ -15,14 +15,10 @@ namespace HelloCSharp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //MySqlUtil mySqlUtil = new MySqlUtil();
-            //EmailWindow window = new EmailWindow();
+            MySqlUtil mySqlUtil = new MySqlUtil();
             Application.Run(new LoginAndRegisterWindow());
             //Application.Run(new MainForm());
             //Application.Run(new FileB());
-
-            //TestConnectionPool t = new TestConnectionPool();
-            //t.Test();
         }
 
     }

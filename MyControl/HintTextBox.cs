@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HelloCSharp.MyControl
@@ -72,7 +67,7 @@ namespace HelloCSharp.MyControl
             clear.BackgroundImage = Image.FromFile("../../Image/关闭3.png");
         }
 
-        public String HintText
+        public string HintText
         {
             get
             {
@@ -92,7 +87,7 @@ namespace HelloCSharp.MyControl
             }
             set
             {
-                if (base.Text.Trim() != String.Empty)
+                if (base.Text.Trim() != string.Empty)
                 {
                     hintLabel.Visible = false;
                     clear.Visible = true;
@@ -123,7 +118,7 @@ namespace HelloCSharp.MyControl
 
         protected override void OnEnter(EventArgs e)
         {
-            if (base.Text.Trim() != String.Empty)
+            if (base.Text.Trim() != string.Empty)
             {
                 hintLabel.Visible = false;
                 clear.Visible = true;
@@ -138,7 +133,7 @@ namespace HelloCSharp.MyControl
 
         protected override void OnLeave(EventArgs e)
         {
-            if (base.Text.Trim() != String.Empty)
+            if (base.Text.Trim() != string.Empty)
             {
                 hintLabel.Visible = false;
                 clear.Visible = true;
@@ -154,7 +149,7 @@ namespace HelloCSharp.MyControl
 
         protected override void OnTextChanged(EventArgs e)
         {
-            if (base.Text != String.Empty)
+            if (base.Text != string.Empty)
             {
                 hintLabel.Visible = false;
                 clear.Visible = true;

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Web.Script.Serialization;
 using System.Text.RegularExpressions;
@@ -29,10 +25,10 @@ namespace HelloCSharp.UI
         
         #region 变量
 
-        public String _userName = "";
-        public String _userPhone = "";
-        public String _userPwd = "";
-        public String _verifyCode = "";
+        public string _userName = "";
+        public string _userPhone = "";
+        public string _userPwd = "";
+        public string _verifyCode = "";
         public bool _userNameFlag = true;
         public bool _userPhoneFlag = true;
         public bool _userPasswordFlag = true;
@@ -182,7 +178,7 @@ namespace HelloCSharp.UI
             timer1.Start();
             //获取验证码
             GetSms getSMS = new GetSms(_userPhone);
-            String sendSms = getSMS._code;
+            string sendSms = getSMS._code;
             //TODO:验证手机号是否已存在，如果已存在先提示他手机号已存在可直接登录，他点确认后跳转至登录页面
             if (sendSms.Equals("1"))
             {
@@ -193,9 +189,9 @@ namespace HelloCSharp.UI
             }
         }
 
-        public Dictionary<String, String> GetRegisterParam()
+        public Dictionary<string, string> GetRegisterParam()
         {
-            Dictionary<String, String> dictionary = new Dictionary<string, string>();
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
             dictionary.Add("userName", _userName);
             dictionary.Add("userPhone", _userPhone);
             dictionary.Add("userPwd", _userPwd);
@@ -203,7 +199,7 @@ namespace HelloCSharp.UI
             return dictionary;
         }
 
-        public String GetRegisterParam(String param)
+        public string GetRegisterParam(string param)
         {
             switch (param)
             {
@@ -214,7 +210,7 @@ namespace HelloCSharp.UI
                     userInfo._userPwd = _userPwd;
                     userInfo._verifyCode = Convert.ToInt32(_verifyCode);
                     JavaScriptSerializer serializer = new JavaScriptSerializer();
-                    String strJson = serializer.Serialize(userInfo);
+                    string strJson = serializer.Serialize(userInfo);
                     return strJson;
                 default:
                     return null;
@@ -266,7 +262,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2提示超长、-3提示太受欢迎、-4提示不能为纯数字、1验证通过</returns>
-        private int VerifyUserName(String str)
+        private int VerifyUserName(string str)
         {
             if (str.Trim().Equals(""))
             {
@@ -360,7 +356,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2提示超长、1验证通过</returns>
-        private int VerifyUserPhone(String str)
+        private int VerifyUserPhone(string str)
         {
             if (str.Trim().Equals(""))
             {
@@ -408,7 +404,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2提示非法、1验证通过</returns>
-        private int VerifyUserPassword(String str)
+        private int VerifyUserPassword(string str)
         {
             if (str.Trim().Equals(""))
             {
@@ -456,7 +452,7 @@ namespace HelloCSharp.UI
         /// </summary>
         /// <param name="str"></param>
         /// <returns>-1提示为空，-2验证码错误、1验证通过</returns>
-        private int VerifySMS(String str)
+        private int VerifySMS(string str)
         {
             if (str.Trim().Equals(""))
             {

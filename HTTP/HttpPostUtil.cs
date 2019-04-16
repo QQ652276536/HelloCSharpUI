@@ -1,5 +1,4 @@
 ﻿using HelloCSharp.Log;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -9,7 +8,7 @@ namespace HelloCSharp.HTTP
 {
     class HttpPostUtil
     {
-        public static HttpWebResponse HttpPost(String url, String parameters)
+        public static HttpWebResponse HttpPost(string url, string parameters)
         {
             if (parameters == null || parameters.Trim().Equals(""))
             {
@@ -37,7 +36,7 @@ namespace HelloCSharp.HTTP
             }
         }
 
-        public static HttpWebResponse HttpPost(String url, IDictionary<String, String> parameters)
+        public static HttpWebResponse HttpPost(string url, IDictionary<string, string> parameters)
         {
             if (parameters == null || parameters.Count == 0)
             {
@@ -50,7 +49,7 @@ namespace HelloCSharp.HTTP
                 request.ContentType = "application/x-www-form-urlencoded";
                 StringBuilder builder = new StringBuilder();
                 bool appendFlag = false;
-                foreach (String key in parameters.Keys)
+                foreach (string key in parameters.Keys)
                 {
                     if (!appendFlag)
                     {
@@ -77,7 +76,7 @@ namespace HelloCSharp.HTTP
             }
         }
 
-        public static String GetResponseStr(HttpWebResponse response)
+        public static string GetResponseStr(HttpWebResponse response)
         {
             if (response == null)
             {

@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using HelloCSharp.MyControl;
-using HelloCSharp;
-using System.IO;
 
 namespace HelloCSharp.UI
 {
@@ -27,7 +19,7 @@ namespace HelloCSharp.UI
         #endregion
 
         VerifyImage _verifyImage;
-        String _verifyCode;
+        string _verifyCode;
 
         public LoginControl()
         {
@@ -91,14 +83,14 @@ namespace HelloCSharp.UI
         /// 生成验证码
         /// </summary>
         /// <returns></returns>
-        private String CreateVerifyImage()
+        private string CreateVerifyImage()
         {
             _verifyImage = new VerifyImage();
             _verifyImage.ImageSize = pictureBox1.Size;
             _verifyImage.CreateImage();
             _verifyCode = _verifyImage.Text;
             Console.WriteLine(_verifyCode);
-            Bitmap bitmap = _verifyImage.Image;
+            System.Drawing.Bitmap bitmap = _verifyImage.Image;
             Image image = Image.FromHbitmap(bitmap.GetHbitmap());
             this.pictureBox1.Image = image;
             return _verifyCode;
