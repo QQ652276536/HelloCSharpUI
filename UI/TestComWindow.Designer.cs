@@ -1,6 +1,6 @@
 ﻿namespace TestCOM
 {
-    partial class TestComForm
+    partial class TestComWindow
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -87,14 +87,14 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.ForeColor = System.Drawing.Color.Green;
+            this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(228, 87);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(175, 33);
             this.label1.TabIndex = 7;
-            this.label1.Text = "设备已连接";
+            this.label1.Text = "设备已断开";
             // 
-            // Form1
+            // TestComWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -104,7 +104,7 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "TestComWindow";
             this.Text = "SN自动写入";
             this.ResumeLayout(false);
             this.PerformLayout();

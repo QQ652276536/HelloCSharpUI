@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace TestCOM
 {
-    public partial class TestComForm : Form
+    public partial class TestComWindow : Form
     {
         private int _number = 0;
         private Dictionary<string, SerialPort> _portDirectory;
@@ -23,21 +23,7 @@ namespace TestCOM
         private string[] _timerPorts;
         private System.Timers.Timer _timer;
 
-        /// <summary>
-        /// 在非UI线程对控件进行操作的委托
-        /// </summary>
-        /// <param name="param"></param>
-        /// <param name="param2"></param>
-        /// <param name="param3"></param>
-        private delegate void ShowDataDelegate(int param, ref string param2, string param3 = null);
-
-        /// <summary>
-        /// 向设备写入SN号码的委托
-        /// </summary>
-        /// <param name="serialPort"></param>
-        private delegate void WriterDele(ref SerialPort serialPort);
-
-        public TestComForm()
+        public TestComWindow()
         {
             InitializeComponent();
             comboBox1.SelectedIndex = 0;
@@ -53,10 +39,31 @@ namespace TestCOM
             _timer = new System.Timers.Timer(500);
             //到达时间的时候执行事件
             _timer.Elapsed += new System.Timers.ElapsedEventHandler(CheckPorts);
-            //设置一直执行
+            //设置启动后是否一直执行
             _timer.AutoReset = true;
+            //程序启动时需要判断是否有设备连接
+            FirstRunLabelState();
         }
 
+        /// <summary>
+        /// 在非UI线程对控件进行操作的委托
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="param2"></param>
+        /// <param name="param3"></param>
+        private delegate void ShowDataDelegate(int param, ref string param2, string param3 = null);
+
+        /// <summary>
+        /// 向设备写入SN号码的委托
+        /// </summary>
+        /// <param name="serialPort"></param>
+        private delegate void WriterDele(ref SerialPort serialPort);
+
+        /// <summary>
+        /// 定时检测串口是否有变动
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
         {
             _timerPorts = SerialPort.GetPortNames();
@@ -64,10 +71,11 @@ namespace TestCOM
             {
                 _ports = (string[])_timerPorts.Clone();
                 Array.Sort(_ports);
-                //如果只有两个串口时总是会报"端口被占用"的异常,这里先用这个LowFunc回避一下,以后弄懂了再解决吧
+                //如果只有两个串口时总会报"端口被占用"的异常,这里先用这个LowFunc回避一下,以后弄懂了再解决
                 if (_timerPorts.Length > 2)
                 {
-                    FirstWriterSN();
+                    bool flag = CompareComNameArray(_ports, _timerPorts);
+                    LabelTextChanged(flag);
                 }
             }
         }
@@ -105,14 +113,26 @@ namespace TestCOM
         /// 向串口发送一条查询SN号码的命令
         /// </summary>
         /// <param name="serialPort"></param>
-        private void CheckIsExsit(ref SerialPort serialPort)
+        private void CheckSNIsExsit(ref SerialPort serialPort)
         {
             //清理残余的缓冲区
-            serialPort.DiscardInBuffer();
-            serialPort.DiscardOutBuffer();
+            //serialPort.DiscardInBuffer();
+            //serialPort.DiscardOutBuffer();
             serialPort.Encoding = Encoding.ASCII;
             //发送数据
             serialPort.Write("AT+QCSN?\r\n");
+        }
+
+        /// <summary>
+        /// 比较串品名数组内的元素是否一致
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="array2"></param>
+        /// <returns></returns>
+        private bool CompareComNameArray(string[] array, string[] array2)
+        {
+            IEnumerable<string> enums = from a in array join a2 in array2 on a equals a2 select a;
+            return array.Length == array2.Length && enums.Count() == array.Length;
         }
 
         /// <summary>
@@ -127,7 +147,7 @@ namespace TestCOM
             string portName = tempSerialPort.PortName;
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
-            //SN查询命令的返回内容
+            //查询SN号码返回的内容
             if (tempStr.Contains("AT+QCSN?"))
             {
                 string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
@@ -169,7 +189,19 @@ namespace TestCOM
             else if (tempStr.Contains("OK"))
             {
                 //写入之前先通过命令查询串口返回的SN号码,并和本地文本作比较,如果相同则提示是否覆盖
-                CheckIsExsit(ref tempSerialPort);
+                CheckSNIsExsit(ref tempSerialPort);
+            }
+        }
+
+        /// <summary>
+        /// 程序运行时Label内容的更新
+        /// </summary>
+        private void FirstRunLabelState()
+        {
+            //如果串口数在2个以上则表示有设备连接
+            if (_ports.Contains("COM1") && _ports.Length > 2)
+            {
+                LabelTextChanged(true);
             }
         }
 
@@ -194,8 +226,8 @@ namespace TestCOM
                         serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                         serialPort.Open();
                         //清理残余的缓冲区
-                        serialPort.DiscardInBuffer();
-                        serialPort.DiscardOutBuffer();
+                        //serialPort.DiscardInBuffer();
+                        //serialPort.DiscardOutBuffer();
                         serialPort.Encoding = Encoding.ASCII;
                         //发送数据,用于测试是否连通
                         serialPort.Write("ate1\r\n");
@@ -209,6 +241,25 @@ namespace TestCOM
                     int error = -1;
                 }
             }
+        }
+
+        /// <summary>
+        /// Label内容更新
+        /// </summary>
+        /// <param name="flag"></param>
+        private void LabelTextChanged(bool flag)
+        {
+            if (flag)
+            {
+                label1.Text = "设备已连接";
+                label1.ForeColor = Color.Green;
+            }
+            else
+            {
+                label1.Text = "设备已断开";
+                label1.ForeColor = Color.Red;
+            }
+            label1.Invalidate();
         }
 
         /// <summary>
@@ -358,14 +409,14 @@ namespace TestCOM
         /// <param name="param3"></param>
         private void TextBoxChanged(int param, ref string param2, string param3 = null)
         {
-            // 当跨线程刷新UI界面时
+            //当跨线程刷新UI界面时
             if (textBox1.InvokeRequired)
             {
-                // 使用委托发出ShowData调用
+                //使用委托发出ShowData调用
                 textBox1.Invoke(new ShowDataDelegate(TextBoxChanged), param, param2, param3);
                 return;
             }
-            // 使用委托发出的TextBoxChanged方法调用会跳到这来执行：在textBox1中显示
+            //使用委托发出的TextBoxChanged方法调用会跳到这来执行：在textBox1中显示
             switch (param)
             {
                 case 0:
@@ -398,5 +449,6 @@ namespace TestCOM
             }
             textBox1.Invalidate();
         }
+
     }
 }
