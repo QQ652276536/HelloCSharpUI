@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
-    public partial class MainForm : Form
+    public partial class MainWindow : Form
     {
-        public MainForm()
+        public MainWindow()
         {
             InitializeComponent();
             PanelsRegisterEvents();
@@ -61,13 +61,13 @@ namespace HelloCSharp.UI
             switch (panelName)
             {
                 case "panFileA":
-                    FileA fileA = new FileA();
+                    FileAWindow fileA = new FileAWindow();
                     this.StartPosition = FormStartPosition.CenterScreen;
                     fileA.ShowDialog();
                     break;
                 case "panFileB":
                     this.StartPosition = FormStartPosition.CenterScreen;
-                    FileB fileB = new FileB();
+                    FileBWindow fileB = new FileBWindow();
                     fileB.ShowDialog();
                     break;
                 case "panFileC":

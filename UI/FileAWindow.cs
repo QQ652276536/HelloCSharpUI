@@ -7,12 +7,12 @@ using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
-    public partial class FileA : Form
+    public partial class FileAWindow : Form
     {
         private delegate void TextDele();
         private List<Thread> _threadList;
 
-        public FileA()
+        public FileAWindow()
         {
             InitializeComponent();
             _threadList = new List<Thread>();

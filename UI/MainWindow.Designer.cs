@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
-    partial class MainForm
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@ namespace HelloCSharp.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();

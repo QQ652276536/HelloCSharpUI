@@ -9,12 +9,12 @@ using Newtonsoft.Json;
 
 namespace HelloCSharp.UI
 {
-    public partial class FileB : Form
+    public partial class FileBWindow : Form
     {
         private delegate void TextDele();
         private List<Thread> _threadList;
 
-        public FileB()
+        public FileBWindow()
         {
             InitializeComponent();
             _threadList = new List<Thread>();

@@ -1,6 +1,6 @@
 ﻿namespace HelloCSharp.UI
 {
-    partial class FileB
+    partial class FileBWindow
     {
         /// <summary>
         /// Required designer variable.
