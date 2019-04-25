@@ -73,7 +73,6 @@
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(608, 350);
             this.textBox1.TabIndex = 5;
-            this.textBox1.Text = "成功写入MLATA201904276854764";
             // 
             // button2
             // 

@@ -52,21 +52,26 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// Button控件的委托
+        /// Button控件
         /// </summary>
         /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
         private delegate void ButtonDele(int index, bool flag, string txt = null);
 
         /// <summary>
-        /// Label控件的委托
+        /// Label控件
         /// </summary>
         /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
         private delegate void LabelDele(int index, bool flag);
 
         /// <summary>
-        /// TextBox控件的委托
+        /// 弹窗
+        /// </summary>
+        private delegate bool MessageBoxDele();
+
+        /// <summary>
+        /// TextBox控件
         /// </summary>
         /// <param name="param">写入状态</param>
         /// <param name="param2"></param>
@@ -74,44 +79,22 @@ namespace TestCOM
         private delegate void TextBoxDele(int param, ref string param2, string param3 = null);
 
         /// <summary>
-        /// 向设备写入SN号码的委托
+        /// 向设备写入SN号码
         /// </summary>
-        /// <param name="serialPort"></param>
-        private delegate void WriterDele(ref SerialPort serialPort);
+        private delegate void WriterDele();
 
         /// <summary>
-        /// 定时检测串口是否有变动
+        /// 询问是否覆盖SN号码
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
+        /// <returns></returns>
+        private bool AskIsOverlay()
         {
-            _timerPorts = SerialPort.GetPortNames();
-            Array.Sort(_timerPorts);
-            if (!CompareComNameArray(_ports, _timerPorts))
+            DialogResult dr = MessageBox.Show("该设备已经存在SN号码,是否覆盖?", "警告", MessageBoxButtons.OKCancel);
+            if (dr == DialogResult.OK)
             {
-                //有新设备连接
-                if (_timerPorts.Length > 2)
-                {
-                    CheckConnAndStartState(1, true);
-                }
-                //设备断开连接
-                else
-                {
-                    //设备断开时禁止打开串口和写入SN
-                    CheckConnAndStartState(1, false);
-                    CheckConnAndStartState(2, false);
-                    //设备断开时清除所有串口相关的数据
-                    Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
-                    foreach (SerialPort tempPort in values)
-                    {
-                        tempPort.Close();
-                    }
-                    _serialPort = null;
-                }
-                //更新当前串口名数组
-                _ports = (string[])_timerPorts.Clone();
+                return true;
             }
+            return false;
         }
 
         /// <summary>
@@ -137,6 +120,7 @@ namespace TestCOM
                 _portDictionary.Clear();
                 _serialPort = null;
                 ButtonStateChanged(1, true, "开启串口");
+                ButtonStateChanged(2, false);
                 LabelTextChanged(2, false);
             }
         }
@@ -151,7 +135,7 @@ namespace TestCOM
             if (_serialPort != null)
             {
                 //写入之前先通过命令查询串口返回的SN号码,并和本地文本作比较,如果相同则提示是否覆盖
-                QuerySN(ref _serialPort);
+                QuerySN();
             }
             else
             {
@@ -232,6 +216,41 @@ namespace TestCOM
         }
 
         /// <summary>
+        /// 定时检测串口是否有变动
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
+        {
+            _timerPorts = SerialPort.GetPortNames();
+            Array.Sort(_timerPorts);
+            if (!CompareComNameArray(_ports, _timerPorts))
+            {
+                //有新设备连接
+                if (_timerPorts.Length > 2)
+                {
+                    CheckConnAndStartState(1, true);
+                }
+                //设备断开连接
+                else
+                {
+                    //设备断开时禁止打开串口和写入SN
+                    CheckConnAndStartState(1, false);
+                    CheckConnAndStartState(2, false);
+                    //设备断开时清除所有串口相关的数据
+                    Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
+                    foreach (SerialPort tempPort in values)
+                    {
+                        tempPort.Close();
+                    }
+                    _serialPort = null;
+                }
+                //更新当前串口名数组
+                _ports = (string[])_timerPorts.Clone();
+            }
+        }
+
+        /// <summary>
         /// 向串口发送一条查询SN号码的命令
         /// </summary>
         /// <param name="serialPort"></param>
@@ -254,31 +273,58 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 接收查询设备SN号码返回的内容
+        /// 生成SN号码
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DataReceivedQueryCom(object sender, SerialDataReceivedEventArgs e)
+        /// <param name="content"></param>
+        private void CreateSNNumber(ref string content)
         {
-            SerialPort tempSerialPort = (SerialPort)sender;
-            string portName = tempSerialPort.PortName;
-            //读取缓冲区所有字节
-            string tempStr = tempSerialPort.ReadExisting();
-            if (tempStr.Contains("AT+QCSN?"))
+            //公司名
+            content = "MLA";
+            //产品缩写
+            string selectItem = comboBox1.SelectedItem.ToString();
+            switch (selectItem)
             {
-                string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-                int index = ReadContentByLine(ref snNumber);
-                if (index > 0)
-                {
-                    string tempParam = "";
-                    TextBoxChangedByDele(3, ref tempParam);
-                    //确认覆盖
-                    if ("Exist".Equals(tempParam))
-                    {
-                        WriterSN(tempSerialPort);
-                    }
-                }
+                case "T1-Lite-L":
+                    content += "T1A";
+                    break;
+                case "T1-Lite-W":
+                    content += "T1B";
+                    break;
+                case "T-L":
+                    content += "T1C";
+                    break;
+                case "T-W":
+                    content += "T1D";
+                    break;
             }
+            //年,4位
+            content += DateTime.Now.Year.ToString();
+            //月,1位
+            if ("10".Equals(DateTime.Now.Month.ToString()))
+            {
+                content += "A";
+            }
+            else if ("11".Equals(DateTime.Now.Month.ToString()))
+            {
+                content += "B";
+            }
+            else if ("12".Equals(DateTime.Now.Month.ToString()))
+            {
+                content += "C";
+            }
+            else
+            {
+                content += DateTime.Now.Month.ToString();
+            }
+            //日,2位
+            content += DateTime.Now.Day.ToString("D2");
+            //顺序号,6位
+            long currentTicks1 = DateTime.Now.Ticks;
+            long currentTicks2 = (currentTicks1 - new DateTime(1970, 1, 1, 0, 0, 0, 0).Ticks) / 10000;
+            string tickStr = currentTicks2.ToString();
+            tickStr = tickStr.Substring(tickStr.Length - 3);
+            tickStr += (++_number).ToString("D3");
+            content += tickStr;
         }
 
         /// <summary>
@@ -304,48 +350,50 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 接收串口返回的内容
-        /// 辅助线程
+        /// 接收写入SN操作所返回的内容
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceivedWriterSN(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort tempSerialPort = (SerialPort)sender;
             string portName = tempSerialPort.PortName;
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
-            //查询SN号码返回的内容
+            //查询设备的SN号码所返回的内容
             if (tempStr.Contains("AT+QCSN?"))
             {
+                string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
+                //snNumber = "MLAT1A2019424115001";
+                int index = ReadContentByLine(ref snNumber);
+                //该设备已经写过SN号码
+                if (index > 0)
+                {
+                    //询问是否覆盖
+                    MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
+                    if ((bool)this.Invoke(messageBoxDele))
+                    {
+                        //TODO:覆盖本地日志
+                        WriterSNA();
+                    }
+                }
             }
-            //写入成功后的返回内容
+            //写入SN号码所返回的内容
             else if (tempStr.Contains("MLA"))
             {
                 string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
+                //较验一致
                 if (snNumber.Equals(_snNumber))
                 {
-                    string tempParam = "";
-                    TextBoxChangedByDele(1, ref tempParam, snNumber);
-                    //写入成功则关闭所有串口,防止下次串口访问失败
-                    Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
-                    foreach (SerialPort port in values)
-                    {
-                        port.Close();
-                    }
-                    _portDictionary.Clear();
+                    WriterLocalLog(snNumber);
+                    TextBoxChangedByDele(1, ref snNumber);
                 }
+                //较验不一致
                 else
                 {
-                    string tempParam = "";
-                    TextBoxChangedByDele(2, ref tempParam);
+                    TextBoxChangedByDele(2, ref snNumber);
                 }
-            }
-            //测试串口是否通畅的返回内容
-            else if (tempStr.Contains("OK"))
-            {
-                //写入之前先通过命令查询串口返回的SN号码,并和本地文本作比较,如果相同则提示是否覆盖
-                CheckSNIsExsit(ref tempSerialPort);
+                _snNumber = null;
             }
         }
 
@@ -436,11 +484,11 @@ namespace TestCOM
         /// 查询设备的SN号码
         /// </summary>
         /// <param name="serialPort"></param>
-        private void QuerySN(ref SerialPort serialPort)
+        private void QuerySN()
         {
-            serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedQueryCom);
-            serialPort.Write("AT+QCSN?\r\n");
+            _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
+            _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
+            _serialPort.Write("AT+QCSN?\r\n");
         }
 
         /// <summary>
@@ -477,75 +525,32 @@ namespace TestCOM
         /// 向设备写入SN号码
         /// </summary>
         /// <param name="param"></param>
-        private void WriterSN(object param)
+        private void WriterSNA()
         {
-            WriterDele textDele = new WriterDele(WriterSN);
-            this.BeginInvoke(textDele, new Object[] { param as SerialPort });
+            WriterDele textDele = new WriterDele(WriterSNB);
+            this.BeginInvoke(textDele);
         }
 
         /// <summary>
         /// 向设备写入SN号码
         /// </summary>
-        /// <param name="serialPort"></param>
-        private void WriterSN(ref SerialPort serialPort)
+        private void WriterSNB()
         {
-            string content;
-            //公司名
-            content = "MLA";
-            //产品缩写
-            string selectItem = comboBox1.SelectedItem.ToString();
-            switch (selectItem)
+            string content = "";
+            CreateSNNumber(ref content);
+            if (!"".Equals(content))
             {
-                case "T1-Lite-L":
-                    content += "T1A";
-                    break;
-                case "T1-Lite-W":
-                    content += "T1B";
-                    break;
-                case "T-L":
-                    content += "T1C";
-                    break;
-                case "T-W":
-                    content += "T1D";
-                    break;
+                //发送命令之前留痕,用作SN写入成功返回时较验
+                _snNumber = content;
+                _serialPort.Write("AT+QCSN=\"" + content + "\"\r\n");
             }
-            //年,4位
-            content += DateTime.Now.Year.ToString();
-            //月,1位
-            if ("10".Equals(DateTime.Now.Month.ToString()))
-            {
-                content += "A";
-            }
-            else if ("11".Equals(DateTime.Now.Month.ToString()))
-            {
-                content += "B";
-            }
-            else if ("12".Equals(DateTime.Now.Month.ToString()))
-            {
-                content += "C";
-            }
-            else
-            {
-                content += DateTime.Now.Month.ToString();
-            }
-            //日,2位
-            content += DateTime.Now.Day.ToString("D2");
-            //顺序号,6位
-            long currentTicks1 = DateTime.Now.Ticks;
-            long currentTicks2 = (currentTicks1 - new DateTime(1970, 1, 1, 0, 0, 0, 0).Ticks) / 10000;
-            string tickStr = currentTicks2.ToString();
-            tickStr = tickStr.Substring(tickStr.Length - 3);
-            tickStr += (++_number).ToString("D3");
-            content += tickStr;
-            //清理残余的缓冲区
-            //serialPort.DiscardInBuffer();
-            //serialPort.DiscardOutBuffer();
-            serialPort.Encoding = Encoding.ASCII;
-            //发送命令之前留痕,用作串口返回时的较验
-            _snNumber = content;
-            //发送写入命令
-            serialPort.Write("AT+QCSN=\"" + content + "\"\r\n");
-            //写入本地文本
+        }
+
+        /// <summary>
+        /// 将SN号码写入本地日志
+        /// </summary>
+        private void WriterLocalLog(string content)
+        {
             FileStream fileStream = new FileStream(_path, FileMode.Append, FileAccess.Write);
             StreamWriter streamWriter = new StreamWriter(fileStream);
             streamWriter.WriteLine(content);
@@ -646,18 +651,6 @@ namespace TestCOM
                     textBox1.Text += "写入失败!\r\n原因:SN号码不一致!\r\n";
                     textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
-                    MessageBox.Show("写入失败!\r\n原因:SN号码不一致!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
-                case 3:
-                    DialogResult dr = MessageBox.Show("该设备已经存在SN号码,是否覆盖?", "警告", MessageBoxButtons.OKCancel);
-                    if (dr == DialogResult.OK)
-                    {
-                        param2 = "Exist";
-                    }
-                    else if (dr == DialogResult.Cancel)
-                    {
-                        param2 = "NoExist";
-                    }
                     break;
             }
             textBox1.Invalidate();

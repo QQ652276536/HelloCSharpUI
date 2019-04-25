@@ -50,19 +50,19 @@ namespace HelloCSharp.MyControl
             base.Controls.Add(clear);
         }
 
-        private void clearBtn_Click(Object sender, EventArgs e)
+        private void clearBtn_Click(object sender, EventArgs e)
         {
             base.Text = "";
             hintLabel.Visible = true;
             base.Focus();
         }
 
-        private void clearBtn_MouseHover(Object sender, EventArgs e)
+        private void clearBtn_MouseHover(object sender, EventArgs e)
         {
             clear.BackgroundImage = Image.FromFile("../../Image/关闭4.png");
         }
 
-        private void clearBtn_MouseLeave(Object sender, EventArgs e)
+        private void clearBtn_MouseLeave(object sender, EventArgs e)
         {
             clear.BackgroundImage = Image.FromFile("../../Image/关闭3.png");
         }
