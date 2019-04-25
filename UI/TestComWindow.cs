@@ -41,6 +41,7 @@ namespace TestCOM
             _portDictionary = new Dictionary<string, SerialPort>();
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
+            Array.Sort(_ports);
             //实例化Timer类,设置间隔时间为毫秒
             _timer = new System.Timers.Timer(100);
             //到达时间的时候执行事件
@@ -91,23 +92,32 @@ namespace TestCOM
             _timerPorts = SerialPort.GetPortNames();
             if (_ports.Length != _timerPorts.Length)
             {
-                Array.Sort(_ports);
                 Array.Sort(_timerPorts);
-                //当前连接串口数小于定时器扫描出来的串口数则说明有新设备连接
+                //有新设备连接
                 if (_ports.Length < _timerPorts.Length)
                 {
-                    CheckConnState(true);
+                    CheckConnAndStartState(1, true);
                 }
-                //反之
+                //设备已断开连接
                 else if (_ports.Length > _timerPorts.Length)
                 {
-                    CheckConnState(false);
+                    //设备断开时禁止开启串口和写入SN
+                    CheckConnAndStartState(1, false);
+                    CheckConnAndStartState(2, false);
+                    //设备断开时清除所有串口相关的数据
+                    Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
+                    foreach (SerialPort tempPort in values)
+                    {
+                        tempPort.Close();
+                    }
+                    _serialPort = null;
                 }
                 //当前串口数与扫描出来的串口数一致则比较串名是否相同
                 else
                 {
                     bool flag = CompareComNameArray(_ports, _timerPorts);
-                    CheckConnState(flag);
+                    CheckConnAndStartState(1, flag);
+                    CheckConnAndStartState(2, flag);
                 }
                 //更新当前串口名数组
                 _ports = (string[])_timerPorts.Clone();
@@ -116,7 +126,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 开始生成SN号码
+        /// 测试串口是否通畅
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -124,15 +134,20 @@ namespace TestCOM
         {
             if (button1.Text.Equals("开启串口"))
             {
-                //TODO:测试串口是否通畅
                 WriterTestCom();
                 ButtonStateChanged(1, true, "关闭串口");
             }
             else
             {
-                //TODO:关闭所有串口
+                Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
+                foreach (SerialPort tempPort in values)
+                {
+                    tempPort.Close();
+                }
+                _portDictionary.Clear();
+                _serialPort = null;
                 ButtonStateChanged(1, true, "开启串口");
-                LabelTextChanged(2,false);
+                LabelTextChanged(2, false);
             }
         }
 
@@ -181,23 +196,42 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 检查设备连接状态
-        /// </summary>
+        /// 按钮状态的更新
+        /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
-        private void CheckConnState(bool flag)
+        private void ButtonStateChangedByDele(int index, bool flag)
         {
-            LabelDele labelDele = new LabelDele(LabelTextChanged);
-            this.BeginInvoke(labelDele, new object[] { 1, flag });
+            //非UI线程访问该控件时
+            if (button1.InvokeRequired)
+            {
+                button1.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag);
+                return;
+            }
+            else if (button2.InvokeRequired)
+            {
+                button2.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag);
+                return;
+            }
+            ButtonStateChanged(index, flag);
         }
 
         /// <summary>
-        /// 检查串口是否开启
+        /// 检测设备连接状态和串口开启状态
         /// </summary>
+        /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
-        private void CheckOpenState(bool flag)
+        private void CheckConnAndStartState(int index, bool flag)
         {
             LabelDele labelDele = new LabelDele(LabelTextChanged);
-            this.BeginInvoke(labelDele, new object[] { 2, flag });
+            switch (index)
+            {
+                case 1:
+                    this.BeginInvoke(labelDele, new object[] { 1, flag });
+                    break;
+                case 2:
+                    this.BeginInvoke(labelDele, new object[] { 2, flag });
+                    break;
+            }
         }
 
         /// <summary>
@@ -238,7 +272,7 @@ namespace TestCOM
                 _serialPort = tempSerialPort;
                 //如果串口是通的则允许执行写入SN操作
                 ButtonStateChangedByDele(2, true);
-                CheckOpenState(true);
+                LabelTextChangedByDele(2,true);
             }
         }
 
@@ -310,6 +344,12 @@ namespace TestCOM
             {
                 LabelTextChanged(1, true);
             }
+            //设备断开时禁止开启串口和写入SN
+            else
+            {
+                LabelTextChanged(1, false);
+                LabelTextChanged(2, false);
+            }
         }
 
         /// <summary>
@@ -337,44 +377,6 @@ namespace TestCOM
                 }
                 catch (Exception e)
                 {
-                    int error = -1;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 写入的是串口总是返回查询内容的ATE1命令,这里用作测试串口是否通畅
-        /// </summary>
-        private void FirstWriterSN()
-        {
-            foreach (string portName in _ports)
-            {
-                //TODO:波特率暂时写死
-                SerialPort serialPort = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One);
-                try
-                {
-                    if (!portName.Equals("COM1"))
-                    {
-                        _portDictionary.Add(portName, serialPort);
-                        serialPort.RtsEnable = true;
-                        serialPort.DtrEnable = true;
-                        serialPort.Handshake = Handshake.None;
-                        serialPort.ReceivedBytesThreshold = 1;
-                        serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-                        serialPort.Open();
-                        //清理残余的缓冲区
-                        //serialPort.DiscardInBuffer();
-                        //serialPort.DiscardOutBuffer();
-                        serialPort.Encoding = Encoding.ASCII;
-                        //发送数据,用于测试是否连通
-                        serialPort.Write("ate1\r\n");
-                        Thread.Sleep(100);
-                    }
-                }
-                //超时处理
-                catch (Exception ex)
-                {
-                    _portDictionary.Remove(portName);
                     int error = -1;
                 }
             }
@@ -432,6 +434,27 @@ namespace TestCOM
                         break;
                     }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index">从1开始</param>
+        /// <param name="flag"></param>
+        private void LabelTextChangedByDele(int index, bool flag)
+        {
+            //非UI线程访问该控件时
+            if (label1.InvokeRequired)
+            {
+                label1.Invoke(new LabelDele(LabelTextChangedByDele), index, flag);
+                return;
+            }
+            else if (label2.InvokeRequired)
+            {
+                label2.Invoke(new LabelDele(LabelTextChangedByDele), index, flag);
+                return;
+            }
+            LabelTextChanged(index, flag);
         }
 
         /// <summary>
@@ -570,26 +593,6 @@ namespace TestCOM
             {
             }
             return result;
-        }
-
-        /// <summary>
-        /// 按钮状态的更新
-        /// <param name="index">从1开始</param>
-        /// <param name="flag"></param>
-        private void ButtonStateChangedByDele(int index, bool flag)
-        {
-            //非UI线程访问该控件时
-            if (button1.InvokeRequired)
-            {
-                button1.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag);
-                return;
-            }
-            else if (button2.InvokeRequired)
-            {
-                button2.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag);
-                return;
-            }
-            ButtonStateChanged(index, flag);
         }
 
         /// <summary>
