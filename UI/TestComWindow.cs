@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/*串口开启状态下拨出设备,设备的连接状态无法正确响应,且再插入设备会抛出"资源占用"的异常*/
 namespace TestCOM
 {
     public partial class TestComWindow : Form
@@ -51,7 +48,7 @@ namespace TestCOM
             //程序启动即执行
             _timer.Start();
             //程序启动时需要判断是否有设备连接
-            FirstRunLabelState();
+            FirstRunConnState();
         }
 
         /// <summary>
@@ -59,7 +56,7 @@ namespace TestCOM
         /// </summary>
         /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
-        private delegate void ButtonDele(int index, bool flag);
+        private delegate void ButtonDele(int index, bool flag, string txt = null);
 
         /// <summary>
         /// Label控件的委托
@@ -90,18 +87,18 @@ namespace TestCOM
         private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
         {
             _timerPorts = SerialPort.GetPortNames();
-            if (_ports.Length != _timerPorts.Length)
+            Array.Sort(_timerPorts);
+            if (!CompareComNameArray(_ports, _timerPorts))
             {
-                Array.Sort(_timerPorts);
                 //有新设备连接
-                if (_ports.Length < _timerPorts.Length)
+                if (_timerPorts.Length > 2)
                 {
                     CheckConnAndStartState(1, true);
                 }
-                //设备已断开连接
-                else if (_ports.Length > _timerPorts.Length)
+                //设备断开连接
+                else
                 {
-                    //设备断开时禁止开启串口和写入SN
+                    //设备断开时禁止打开串口和写入SN
                     CheckConnAndStartState(1, false);
                     CheckConnAndStartState(2, false);
                     //设备断开时清除所有串口相关的数据
@@ -112,16 +109,8 @@ namespace TestCOM
                     }
                     _serialPort = null;
                 }
-                //当前串口数与扫描出来的串口数一致则比较串名是否相同
-                else
-                {
-                    bool flag = CompareComNameArray(_ports, _timerPorts);
-                    CheckConnAndStartState(1, flag);
-                    CheckConnAndStartState(2, flag);
-                }
                 //更新当前串口名数组
                 _ports = (string[])_timerPorts.Clone();
-
             }
         }
 
@@ -134,9 +123,10 @@ namespace TestCOM
         {
             if (button1.Text.Equals("开启串口"))
             {
-                WriterTestCom();
-                ButtonStateChanged(1, true, "关闭串口");
+                //串口开启成功才改变按钮状态
+                TestSN();
             }
+            //关闭所有串口
             else
             {
                 Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
@@ -158,14 +148,21 @@ namespace TestCOM
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
-            //写入之前先通过命令查询串口返回的SN号码,并和本地文本作比较,如果相同则提示是否覆盖
-            //CheckSNIsExsit(ref tempSerialPort);
+            if (_serialPort != null)
+            {
+                //写入之前先通过命令查询串口返回的SN号码,并和本地文本作比较,如果相同则提示是否覆盖
+                QuerySN(ref _serialPort);
+            }
+            else
+            {
+                MessageBox.Show("写入失败!请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
         /// 按钮状态更新
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
         /// <param name="txt"></param>
         private void ButtonStateChanged(int index, bool flag, string txt = null)
@@ -199,20 +196,20 @@ namespace TestCOM
         /// 按钮状态的更新
         /// <param name="index">从1开始</param>
         /// <param name="flag"></param>
-        private void ButtonStateChangedByDele(int index, bool flag)
+        private void ButtonStateChangedByDele(int index, bool flag, string txt = null)
         {
             //非UI线程访问该控件时
             if (button1.InvokeRequired)
             {
-                button1.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag);
+                button1.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag, txt);
                 return;
             }
             else if (button2.InvokeRequired)
             {
-                button2.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag);
+                button2.Invoke(new ButtonDele(ButtonStateChangedByDele), index, flag, txt);
                 return;
             }
-            ButtonStateChanged(index, flag);
+            ButtonStateChanged(index, flag, txt);
         }
 
         /// <summary>
@@ -257,6 +254,34 @@ namespace TestCOM
         }
 
         /// <summary>
+        /// 接收查询设备SN号码返回的内容
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataReceivedQueryCom(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort tempSerialPort = (SerialPort)sender;
+            string portName = tempSerialPort.PortName;
+            //读取缓冲区所有字节
+            string tempStr = tempSerialPort.ReadExisting();
+            if (tempStr.Contains("AT+QCSN?"))
+            {
+                string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
+                int index = ReadContentByLine(ref snNumber);
+                if (index > 0)
+                {
+                    string tempParam = "";
+                    TextBoxChangedByDele(3, ref tempParam);
+                    //确认覆盖
+                    if ("Exist".Equals(tempParam))
+                    {
+                        WriterSN(tempSerialPort);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 接收测试串口是否通畅返回的内容
         /// </summary>
         /// <param name="sender"></param>
@@ -270,9 +295,11 @@ namespace TestCOM
             if (tempStr.Contains("OK"))
             {
                 _serialPort = tempSerialPort;
+                //如果串口是通的则改变按钮状态
+                ButtonStateChangedByDele(1, true, "关闭串口");
                 //如果串口是通的则允许执行写入SN操作
                 ButtonStateChangedByDele(2, true);
-                LabelTextChangedByDele(2,true);
+                LabelTextChangedByDele(2, true);
             }
         }
 
@@ -291,18 +318,6 @@ namespace TestCOM
             //查询SN号码返回的内容
             if (tempStr.Contains("AT+QCSN?"))
             {
-                string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-                bool tempFlag = ReadContentByLine(ref snNumber);
-                if (tempFlag)
-                {
-                    string tempParam = "";
-                    TextBoxChangedByDele(3, ref tempParam);
-                    //确认覆盖
-                    if ("Exist".Equals(tempParam))
-                    {
-                        WriterSN(tempSerialPort);
-                    }
-                }
             }
             //写入成功后的返回内容
             else if (tempStr.Contains("MLA"))
@@ -335,11 +350,11 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 程序运行时Label内容的更新
+        /// 程序启动时设备的连接状态
         /// </summary>
-        private void FirstRunLabelState()
+        private void FirstRunConnState()
         {
-            //如果串口数在2个以上则表示有设备连接
+            //如果串口数在2个以上则表示有设备连接,就先这样判断吧
             if (_ports.Contains("COM1") && _ports.Length > 2)
             {
                 LabelTextChanged(1, true);
@@ -353,9 +368,85 @@ namespace TestCOM
         }
 
         /// <summary>
+        /// Label内容更新
+        /// </summary>
+        /// <param name="flag"></param>
+        private void LabelTextChanged(int index, bool flag)
+        {
+            switch (index)
+            {
+                //设备是否连接
+                case 1:
+                    {
+                        if
+                            (flag)
+                        {
+                            label1.Text = "设备已连接";
+                            label1.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            label1.Text = "设备已断开";
+                            label1.ForeColor = Color.Red;
+                        }
+                        label1.Invalidate();
+                        break;
+                    }
+                //串口是否开启
+                case 2:
+                    {
+                        if (flag)
+                        {
+                            label2.Text = "串口已开启";
+                            label2.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            label2.Text = "串口已关闭";
+                            label2.ForeColor = Color.Red;
+                        }
+                        label2.Invalidate();
+                        break;
+                    }
+            }
+        }
+
+        /// <summary>
+        /// 标签内容更新
+        /// </summary>
+        /// <param name="index">从1开始</param>
+        /// <param name="flag"></param>
+        private void LabelTextChangedByDele(int index, bool flag)
+        {
+            //非UI线程访问该控件时
+            if (label1.InvokeRequired)
+            {
+                label1.Invoke(new LabelDele(LabelTextChangedByDele), index, flag);
+                return;
+            }
+            else if (label2.InvokeRequired)
+            {
+                label2.Invoke(new LabelDele(LabelTextChangedByDele), index, flag);
+                return;
+            }
+            LabelTextChanged(index, flag);
+        }
+
+        /// <summary>
+        /// 查询设备的SN号码
+        /// </summary>
+        /// <param name="serialPort"></param>
+        private void QuerySN(ref SerialPort serialPort)
+        {
+            serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
+            serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedQueryCom);
+            serialPort.Write("AT+QCSN?\r\n");
+        }
+
+        /// <summary>
         /// 测试串口是否通畅,写入的是串口总是返回查询内容的ATE1命令
         /// </summary>
-        private void WriterTestCom()
+        private void TestSN()
         {
             foreach (string portName in _ports)
             {
@@ -380,81 +471,6 @@ namespace TestCOM
                     int error = -1;
                 }
             }
-        }
-
-        /// <summary>
-        /// Label内容更新
-        /// </summary>
-        /// <param name="flag"></param>
-        private void LabelTextChanged(int index, bool flag)
-        {
-            switch (index)
-            {
-                //设备是否连接
-                case 1:
-                    {
-                        if
-                            (flag)
-                        {
-                            label1.Text = "设备已连接";
-                            label1.ForeColor = Color.Green;
-                            //设备已连接状态下才能开启串口,写入SN由串口是否通畅决定
-                            ButtonStateChanged(1, true);
-                        }
-                        else
-                        {
-                            label1.Text = "设备已断开";
-                            label1.ForeColor = Color.Red;
-                            //设备已断开状态下禁止开启串口和写入SN
-                            ButtonStateChanged(1, false);
-                            ButtonStateChanged(2, false);
-                        }
-                        label1.Invalidate();
-                        break;
-                    }
-                //串口是否开启
-                case 2:
-                    {
-                        if (flag)
-                        {
-                            label2.Text = "串口已开启";
-                            label2.ForeColor = Color.Green;
-                            //串口已开启才能执行写入
-                            button2.Enabled = true;
-                        }
-                        else
-                        {
-                            label2.Text = "串口已关闭";
-                            label2.ForeColor = Color.Red;
-                            //串口未开启禁止写入
-                            button2.Enabled = false;
-                        }
-                        label2.Invalidate();
-                        button2.Invalidate();
-                        break;
-                    }
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index">从1开始</param>
-        /// <param name="flag"></param>
-        private void LabelTextChangedByDele(int index, bool flag)
-        {
-            //非UI线程访问该控件时
-            if (label1.InvokeRequired)
-            {
-                label1.Invoke(new LabelDele(LabelTextChangedByDele), index, flag);
-                return;
-            }
-            else if (label2.InvokeRequired)
-            {
-                label2.Invoke(new LabelDele(LabelTextChangedByDele), index, flag);
-                return;
-            }
-            LabelTextChanged(index, flag);
         }
 
         /// <summary>
@@ -538,25 +554,28 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 判断写入的SN在文本中是否存在
+        /// 判断SN在文本中是否存在
         /// </summary>
+        /// <param name="snNumber"></param>
         /// <returns></returns>
-        private bool ReadContentByLine(ref string snNumber)
+        private int ReadContentByLine(ref string snNumber)
         {
             FileStream fs = new FileStream(_path, FileMode.Open, FileAccess.Read);
             StreamReader sr = new StreamReader(fs);
             sr.BaseStream.Seek(0, SeekOrigin.Begin);
             string strLine;
+            int index = 0;
             while ((strLine = sr.ReadLine()) != null)
             {
+                index++;
                 if (strLine.Equals(snNumber))
                 {
-                    return true;
+                    return index;
                 }
             }
             fs.Close();
             sr.Close();
-            return false;
+            return index;
         }
 
         /// <summary>
