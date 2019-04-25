@@ -2,6 +2,7 @@
 using HelloCSharp.UI;
 using System;
 using System.Windows.Forms;
+using TestCOM;
 
 namespace HelloCSharp
 {
@@ -15,10 +16,8 @@ namespace HelloCSharp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            MySqlUtil mySqlUtil = new MySqlUtil();
-            Application.Run(new LoginAndRegisterWindow());
-            //Application.Run(new MainForm());
-            //Application.Run(new FileB());
+
+            Application.Run(new TestComWindow());
         }
 
     }
