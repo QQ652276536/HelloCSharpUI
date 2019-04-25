@@ -13,6 +13,7 @@ namespace TestCOM
     public partial class TestComWindow : Form
     {
         private int _number = 0;
+        private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary;
         private string[] _ports;
         private string _path = "E:\\TestComLog";
@@ -79,17 +80,17 @@ namespace TestCOM
         private delegate void TextBoxDele(int param, ref string param2, string param3 = null);
 
         /// <summary>
-        /// 向设备写入SN号码
+        /// 向设备写入SN
         /// </summary>
         private delegate void WriterDele();
 
         /// <summary>
-        /// 询问是否覆盖SN号码
+        /// 询问是否覆盖SN
         /// </summary>
         /// <returns></returns>
         private bool AskIsOverlay()
         {
-            DialogResult dr = MessageBox.Show("该设备已经存在SN号码,是否覆盖?", "警告", MessageBoxButtons.OKCancel);
+            DialogResult dr = MessageBox.Show("该设备已经存在SN,是否覆盖?", "警告", MessageBoxButtons.OKCancel);
             if (dr == DialogResult.OK)
             {
                 return true;
@@ -126,7 +127,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 开始写入SN号码
+        /// 开始写入SN
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -134,7 +135,7 @@ namespace TestCOM
         {
             if (_serialPort != null)
             {
-                //写入之前先通过命令查询串口返回的SN号码,并和本地文本作比较,如果相同则提示是否覆盖
+                //写入之前先通过命令查询串口返回的SN,并和本地文本作比较,如果相同则提示是否覆盖
                 QuerySN();
             }
             else
@@ -251,7 +252,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 向串口发送一条查询SN号码的命令
+        /// 向串口发送一条查询SN的命令
         /// </summary>
         /// <param name="serialPort"></param>
         private void CheckSNIsExsit(ref SerialPort serialPort)
@@ -273,7 +274,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 生成SN号码
+        /// 生成SN
         /// </summary>
         /// <param name="content"></param>
         private void CreateSNNumber(ref string content)
@@ -360,32 +361,43 @@ namespace TestCOM
             string portName = tempSerialPort.PortName;
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
-            //查询设备的SN号码所返回的内容
-            if (tempStr.Contains("AT+QCSN?"))
+            string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
+            //查询设备的SN所返回的内容
+            if (tempStr.IndexOf("AT+QCSN?") == 0)
             {
-                string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-                //snNumber = "MLAT1A2019424115001";
-                int index = ReadContentByLine(ref snNumber);
-                //该设备已经写过SN号码
-                if (index > 0)
+                _overlayIndex = ReadContentByLine(ref snNumber);
+                //该设备已经写过SN
+                if (_overlayIndex > 0)
                 {
-                    //询问是否覆盖
+                    //询问是否覆盖再写入设备
                     MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
                     if ((bool)this.Invoke(messageBoxDele))
                     {
-                        //TODO:覆盖本地日志
                         WriterSNA();
                     }
                 }
+                //直接写入设备
+                else
+                {
+                    WriterSNA();
+                }
             }
-            //写入SN号码所返回的内容
-            else if (tempStr.Contains("MLA"))
+            //向设备写入SN后返回的内容
+            else if (tempStr.IndexOf("AT+QCSN=") == 0)
             {
-                string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
                 //较验一致
                 if (snNumber.Equals(_snNumber))
                 {
-                    WriterLocalLog(snNumber);
+                    //覆盖本地日志
+                    if (_overlayIndex > 0)
+                    {
+                        OverlayWriterLocalLog(ref _overlayIndex, ref _snNumber);
+                    }
+                    //写入本地日志
+                    else
+                    {
+                        WriterLocalLog(snNumber);
+                    }
                     TextBoxChangedByDele(1, ref snNumber);
                 }
                 //较验不一致
@@ -394,6 +406,7 @@ namespace TestCOM
                     TextBoxChangedByDele(2, ref snNumber);
                 }
                 _snNumber = null;
+                _overlayIndex = 0;
             }
         }
 
@@ -481,7 +494,18 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 查询设备的SN号码
+        /// 覆盖设备原来在本地日志的SN
+        /// </summary>
+        /// <param name="content"></param>
+        private void OverlayWriterLocalLog(ref int index, ref string content)
+        {
+            string[] arrayLines = File.ReadAllLines(_path);
+            arrayLines[index -1] = content;
+            File.WriteAllLines(_path,arrayLines);
+        }
+
+        /// <summary>
+        /// 查询设备的SN
         /// </summary>
         /// <param name="serialPort"></param>
         private void QuerySN()
@@ -522,7 +546,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 向设备写入SN号码
+        /// 向设备写入SN
         /// </summary>
         /// <param name="param"></param>
         private void WriterSNA()
@@ -532,7 +556,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 向设备写入SN号码
+        /// 向设备写入SN
         /// </summary>
         private void WriterSNB()
         {
@@ -547,7 +571,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 将SN号码写入本地日志
+        /// 将SN写入本地日志
         /// </summary>
         private void WriterLocalLog(string content)
         {
@@ -565,21 +589,21 @@ namespace TestCOM
         /// <returns></returns>
         private int ReadContentByLine(ref string snNumber)
         {
-            FileStream fs = new FileStream(_path, FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(fs);
-            sr.BaseStream.Seek(0, SeekOrigin.Begin);
+            FileStream fileStream = new FileStream(_path, FileMode.Open, FileAccess.Read);
+            StreamReader streamReader = new StreamReader(fileStream);
+            streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
             string strLine;
             int index = 0;
-            while ((strLine = sr.ReadLine()) != null)
+            while ((strLine = streamReader.ReadLine()) != null)
             {
                 index++;
                 if (strLine.Equals(snNumber))
                 {
-                    return index;
+                    break;
                 }
             }
-            fs.Close();
-            sr.Close();
+            fileStream.Close();
+            streamReader.Close();
             return index;
         }
 
@@ -643,12 +667,14 @@ namespace TestCOM
                     textBox1.ScrollToCaret();
                     break;
                 case 1:
-                    textBox1.Text += "写入成功!SN号码:" + param2 + "\r\n";
+                    textBox1.Text += "写入成功!SN:" + param2 + "\r\n";
+                    textBox1.ForeColor = Color.Green;
                     textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
                     break;
                 case 2:
-                    textBox1.Text += "写入失败!\r\n原因:SN号码不一致!\r\n";
+                    textBox1.Text += "写入失败!原因:SN不一致!\r\n";
+                    textBox1.ForeColor = Color.Red;
                     textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
                     break;
