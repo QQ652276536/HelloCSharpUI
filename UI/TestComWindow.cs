@@ -14,7 +14,7 @@ namespace TestCOM
     {
         private int _number = 0;
         private int _overlayIndex = 0;
-        private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string,SerialPort>();
+        private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
         private string _path = "E:\\TestComLog";
         private SerialPort _serialPort;
@@ -100,8 +100,8 @@ namespace TestCOM
         {
             if (_serialPort != null)
             {
-                //查询设备的SN并写入
-                QueryAndWriterSN();
+                //验证是否符合写入条件
+                CheckDeviceState();
             }
             else
             {
@@ -152,7 +152,7 @@ namespace TestCOM
         /// <param name="e"></param>
         private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
         {
-            string [] tempPorts = SerialPort.GetPortNames();
+            string[] tempPorts = SerialPort.GetPortNames();
             Array.Sort(tempPorts);
             //串口名有变动
             if (!CompareComNameArray(_ports, tempPorts))
@@ -278,6 +278,45 @@ namespace TestCOM
                 _serialPort = tempSerialPort;
                 LabelTextChangedByDele(true);
             }
+        }
+
+        /// <summary>
+        /// 接收验证设备所返回的内容
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataReceivedCheckSN(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort tempSerialPort = (SerialPort)sender;
+            string portName = tempSerialPort.PortName;
+            //读取缓冲区所有字节
+            string tempStr = tempSerialPort.ReadExisting();
+            string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
+            //查询设备是否符合写入条件(是否以0P和08结尾)
+            if (tempStr.Contains("+EGMR:"))
+            {
+                if (snNumber.EndsWith("0P") || snNumber.EndsWith("08"))
+                {
+                    WriterDele writerDele = new WriterDele(QueryAndWriterSN);
+                    writerDele.Invoke();
+                }
+                //禁止写入
+                else
+                {
+                    TextBoxChangedByDele(3, ref snNumber);
+                    MessageBoxDele messageBoxDele = new MessageBoxDele(DeviceError);
+                    this.Invoke(messageBoxDele);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 禁止写入
+        /// </summary>
+        private bool DeviceError()
+        {
+            MessageBox.Show("该设备不符合写入条件,禁止写入!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
         }
 
         /// <summary>
@@ -407,11 +446,25 @@ namespace TestCOM
         }
 
         /// <summary>
+        /// 验证设备是否符合写入条件
+        /// </summary>
+        private void CheckDeviceState()
+        {
+            _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedCheckSN);
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.Open();
+            }
+            _serialPort.Write("at+egmr=0,5\r\n");
+        }
+
+        /// <summary>
         /// 查询设备的SN
         /// </summary>
         /// <param name="serialPort"></param>
         private void QueryAndWriterSN()
         {
+            _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedCheckSN);
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
             if (!_serialPort.IsOpen)
             {
@@ -423,7 +476,7 @@ namespace TestCOM
         /// <summary>
         /// 测试串口是否通畅,写入的是串口总是返回查询内容的ATE1命令
         /// </summary>
-        private void TestSN(string [] ports)
+        private void TestSN(string[] ports)
         {
             _portDictionary.Clear();
             foreach (string portName in ports)
@@ -432,17 +485,17 @@ namespace TestCOM
                 {
                     //TODO:波特率暂时写死
                     SerialPort serialPort = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One);
-                    _portDictionary.Add(portName,serialPort);
-                        serialPort.RtsEnable = true;
-                        serialPort.DtrEnable = true;
-                        serialPort.Handshake = Handshake.None;
-                        serialPort.ReceivedBytesThreshold = 1;
-                        serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedTestCom);
-                        serialPort.Open();
-                        serialPort.Write("ate1\r\n");
-                        Thread.Sleep(100);
-                        serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
-                        serialPort.Close();
+                    _portDictionary.Add(portName, serialPort);
+                    serialPort.RtsEnable = true;
+                    serialPort.DtrEnable = true;
+                    serialPort.Handshake = Handshake.None;
+                    serialPort.ReceivedBytesThreshold = 1;
+                    serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedTestCom);
+                    serialPort.Open();
+                    serialPort.Write("ate1\r\n");
+                    Thread.Sleep(100);
+                    serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
+                    serialPort.Close();
                 }
                 catch (Exception e)
                 {
@@ -586,7 +639,7 @@ namespace TestCOM
                     textBox1.ScrollToCaret();
                     break;
                 case 3:
-                    textBox1.Text += "写入失败!原因:设备状态不符!\r\n";
+                    textBox1.Text += "写入失败!原因:该设备不符合写入条件!\r\n";
                     textBox1.ForeColor = Color.Red;
                     textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
