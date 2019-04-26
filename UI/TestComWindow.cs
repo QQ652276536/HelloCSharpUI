@@ -585,9 +585,29 @@ namespace TestCOM
                     textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
                     break;
+                case 3:
+                    textBox1.Text += "写入失败!原因:设备状态不符!\r\n";
+                    textBox1.ForeColor = Color.Red;
+                    textBox1.Select(textBox1.Text.Length, 0);
+                    textBox1.ScrollToCaret();
+                    break;
             }
             textBox1.Invalidate();
         }
 
+        private void 串口设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 数据库配置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 日志路径ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
