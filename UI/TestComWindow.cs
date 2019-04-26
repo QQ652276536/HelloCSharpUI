@@ -5,21 +5,20 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
-/*串口开启状态下拨出设备,设备的连接状态无法正确响应,且再插入设备会抛出"资源占用"的异常*/
 namespace TestCOM
 {
     public partial class TestComWindow : Form
     {
         private int _number = 0;
         private int _overlayIndex = 0;
-        private Dictionary<string, SerialPort> _portDictionary;
+        private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string,SerialPort>();
         private string[] _ports;
         private string _path = "E:\\TestComLog";
         private SerialPort _serialPort;
         private string _snNumber;
-        private string[] _timerPorts;
         private System.Timers.Timer _timer;
 
         public TestComWindow()
@@ -36,20 +35,16 @@ namespace TestCOM
             StreamWriter streamWriter = new StreamWriter(fileStream);
             streamWriter.Close();
             fileStream.Close();
-            _portDictionary = new Dictionary<string, SerialPort>();
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
-            //实例化Timer类,设置间隔时间为毫秒
-            _timer = new System.Timers.Timer(100);
-            //到达时间的时候执行事件
-            _timer.Elapsed += new System.Timers.ElapsedEventHandler(CheckPorts);
-            //设置启动后是否一直执行
-            _timer.AutoReset = true;
-            //程序启动即执行
-            _timer.Start();
             //程序启动时需要判断是否有设备连接
             FirstRunConnState();
+            //定时器
+            _timer = new System.Timers.Timer(500);
+            _timer.Elapsed += new System.Timers.ElapsedEventHandler(CheckPorts);
+            _timer.AutoReset = true;
+            _timer.Start();
         }
 
         /// <summary>
@@ -103,8 +98,6 @@ namespace TestCOM
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            //测试串口
-            TestSN();
             if (_serialPort != null)
             {
                 //查询设备的SN并写入
@@ -112,7 +105,7 @@ namespace TestCOM
             }
             else
             {
-                MessageBox.Show("写入失败!请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("写入失败!\r\n请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -159,35 +152,50 @@ namespace TestCOM
         /// <param name="e"></param>
         private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
         {
-            _timerPorts = SerialPort.GetPortNames();
-            Array.Sort(_timerPorts);
-            if (!CompareComNameArray(_ports, _timerPorts))
+            string [] tempPorts = SerialPort.GetPortNames();
+            Array.Sort(tempPorts);
+            //串口名有变动
+            if (!CompareComNameArray(_ports, tempPorts))
             {
-                //有新设备连接
-                if (_timerPorts.Length > 2)
+                _ports = (string[])tempPorts.Clone();
+                Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
+                foreach (SerialPort port in values)
+                {
+                    if (port.IsOpen)
+                    {
+                        port.Close();
+                    }
+                    port.Dispose();
+                }
+                if (_serialPort != null)
+                {
+                    _serialPort.Close();
+                    _serialPort = null;
+                }
+                TestSN(tempPorts);
+                Thread.Sleep(100);
+                //设备已连接
+                if (_serialPort != null)
                 {
                     CheckConnStartState(true);
                 }
                 //设备断开连接
                 else
                 {
+                    //关闭设备的串口
+                    if (_serialPort != null)
+                    {
+                        _serialPort.Close();
+                        _serialPort = null;
+                    }
                     //设备断开时禁止写入SN
                     CheckConnStartState(false);
-                    //设备断开时清除所有串口相关的数据
-                    Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
-                    foreach (SerialPort tempPort in values)
-                    {
-                        tempPort.Close();
-                    }
-                    _serialPort = null;
                 }
-                //更新当前串口名数组
-                _ports = (string[])_timerPorts.Clone();
             }
         }
 
         /// <summary>
-        /// 比较串品名数组内的元素是否一致
+        /// 比较串口名数组内的元素是否一致
         /// </summary>
         /// <param name="array"></param>
         /// <param name="array2"></param>
@@ -266,6 +274,7 @@ namespace TestCOM
             string tempStr = tempSerialPort.ReadExisting();
             if (tempStr.Contains("OK"))
             {
+                //获取测试通过的串口
                 _serialPort = tempSerialPort;
                 LabelTextChangedByDele(true);
             }
@@ -336,9 +345,10 @@ namespace TestCOM
         /// </summary>
         private void FirstRunConnState()
         {
-            //如果串口数在2个以上则表示有设备连接,就先这样判断吧
-            //试试_serialPort不为null则说明有新设备连接上
-            if (_ports.Contains("COM1") && _ports.Length > 2)
+            //_serialPort不为null则说明有设备连接
+            TestSN(_ports);
+            Thread.Sleep(100);
+            if (_serialPort != null)
             {
                 LabelTextChanged(true);
                 ButtonStateChanged(true);
@@ -402,25 +412,27 @@ namespace TestCOM
         /// <param name="serialPort"></param>
         private void QueryAndWriterSN()
         {
-            _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
             _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.Open();
+            }
             _serialPort.Write("AT+QCSN?\r\n");
         }
 
         /// <summary>
         /// 测试串口是否通畅,写入的是串口总是返回查询内容的ATE1命令
         /// </summary>
-        private void TestSN()
+        private void TestSN(string [] ports)
         {
-            foreach (string portName in _ports)
+            _portDictionary.Clear();
+            foreach (string portName in ports)
             {
                 try
                 {
                     //TODO:波特率暂时写死
                     SerialPort serialPort = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One);
-                    if (!portName.Equals("COM1"))
-                    {
-                        _portDictionary.Add(portName, serialPort);
+                    _portDictionary.Add(portName,serialPort);
                         serialPort.RtsEnable = true;
                         serialPort.DtrEnable = true;
                         serialPort.Handshake = Handshake.None;
@@ -428,7 +440,9 @@ namespace TestCOM
                         serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedTestCom);
                         serialPort.Open();
                         serialPort.Write("ate1\r\n");
-                    }
+                        Thread.Sleep(100);
+                        serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
+                        serialPort.Close();
                 }
                 catch (Exception e)
                 {
@@ -531,6 +545,7 @@ namespace TestCOM
             }
             catch (Exception e)
             {
+                int error = -1;
             }
             return result;
         }
