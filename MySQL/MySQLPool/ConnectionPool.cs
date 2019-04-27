@@ -183,7 +183,7 @@ namespace HelloCSharp.MySQL.MySQLPool
         {
             try
             {
-                string selectStr = "select * from phonenumber_copy where name = ''";
+                string selectStr = "select * from userinfo where userName = ''";
                 MySqlCommand command = new MySqlCommand(selectStr, connection);
                 
                 MySqlDataReader dataReader = command.ExecuteReader();

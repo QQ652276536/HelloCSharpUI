@@ -100,6 +100,8 @@ namespace TestCOM
         {
             if (_serialPort != null)
             {
+                _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedWriterSN);
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
                 //验证是否符合写入条件
                 CheckDeviceState();
             }
@@ -170,7 +172,7 @@ namespace TestCOM
                 if (_serialPort != null)
                 {
                     _serialPort.Close();
-                    _serialPort = null;
+                    _serialPort.Dispose();
                 }
                 TestSN(tempPorts);
                 Thread.Sleep(100);
@@ -281,41 +283,11 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 接收验证设备所返回的内容
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DataReceivedCheckSN(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialPort tempSerialPort = (SerialPort)sender;
-            string portName = tempSerialPort.PortName;
-            //读取缓冲区所有字节
-            string tempStr = tempSerialPort.ReadExisting();
-            string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-            //查询设备是否符合写入条件(是否以0P和08结尾)
-            if (tempStr.Contains("+EGMR:"))
-            {
-                if (snNumber.EndsWith("0P") || snNumber.EndsWith("08"))
-                {
-                    WriterDele writerDele = new WriterDele(QueryAndWriterSN);
-                    writerDele.Invoke();
-                }
-                //禁止写入
-                else
-                {
-                    TextBoxChangedByDele(3, ref snNumber);
-                    MessageBoxDele messageBoxDele = new MessageBoxDele(DeviceError);
-                    this.Invoke(messageBoxDele);
-                }
-            }
-        }
-
-        /// <summary>
         /// 禁止写入
         /// </summary>
         private bool DeviceError()
         {
-            MessageBox.Show("该设备不符合写入条件,禁止写入!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("该设备COM口未较准,禁止写入!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -326,56 +298,80 @@ namespace TestCOM
         /// <param name="e"></param>
         private void DataReceivedWriterSN(object sender, SerialDataReceivedEventArgs e)
         {
+            //阻塞该线程,以防数据没有读完
+            Thread.Sleep(100);
             SerialPort tempSerialPort = (SerialPort)sender;
             string portName = tempSerialPort.PortName;
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
             string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-            //查询设备的SN所返回的内容
-            if (tempStr.IndexOf("AT+QCSN?") == 0)
+            //查询设备是否符合写入条件(是否以0P和08结尾)
+            if (tempStr.Contains("at+egmr=0,5") && tempStr.Contains("+EGMR:") || tempStr.Contains("at+egmr=0,5") && tempStr.Contains("ERROR"))
             {
-                _overlayIndex = ReadContentByLine(ref snNumber);
-                //该设备已经写过SN
-                if (_overlayIndex > 0)
+                if (snNumber.EndsWith("0P") || snNumber.EndsWith("08"))
                 {
-                    //询问是否覆盖再写入设备
-                    MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
-                    if ((bool)this.Invoke(messageBoxDele))
-                    {
-                        WriterSNA();
-                    }
+                    WriterDele writerDele = new WriterDele(QueryAndWriterSN);
+                    BeginInvoke(writerDele);
                 }
-                //直接写入设备
+                //禁止写入
                 else
                 {
-                    WriterSNA();
+                    TextBoxChangedByDele(3, ref snNumber);
+                    MessageBoxDele messageBoxDele = new MessageBoxDele(DeviceError);
+                    BeginInvoke(messageBoxDele);
+                    return;
                 }
             }
-            //向设备写入SN后返回的内容
-            else if (tempStr.IndexOf("AT+QCSN=") == 0)
+            else
             {
-                //较验一致
-                if (snNumber.Equals(_snNumber))
+                //查询设备的SN所返回的内容
+                if (tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
                 {
-                    //覆盖本地日志
+                    _overlayIndex = ReadContentByLine(ref snNumber);
+                    //该设备已经写过SN
                     if (_overlayIndex > 0)
                     {
-                        OverlayWriterLocalLog(ref _overlayIndex, ref _snNumber);
+                        //询问是否覆盖再写入设备
+                        MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
+                        if ((bool)this.Invoke(messageBoxDele))
+                        {
+                            WriterDele textDele = new WriterDele(WriterSN);
+                            BeginInvoke(textDele);
+                        }
                     }
-                    //写入本地日志
+                    //直接写入设备
                     else
                     {
-                        WriterLocalLog(snNumber);
+                        WriterDele textDele = new WriterDele(WriterSN);
+                        BeginInvoke(textDele);
                     }
-                    TextBoxChangedByDele(1, ref snNumber);
                 }
-                //较验不一致
-                else
+                //向设备写入SN后返回的内容
+                else if (tempStr.IndexOf("AT+QCSN=") == 0)
                 {
-                    TextBoxChangedByDele(2, ref snNumber);
+                    //较验一致
+                    if (snNumber.Equals(_snNumber))
+                    {
+                        //覆盖本地日志
+                        if (_overlayIndex > 0)
+                        {
+                            OverlayWriterLocalLog(ref _overlayIndex, ref _snNumber);
+                        }
+                        //写入本地日志
+                        else
+                        {
+                            WriterLocalLog(snNumber);
+                        }
+                        TextBoxChangedByDele(1, ref snNumber);
+                    }
+                    //较验不一致
+                    else
+                    {
+                        TextBoxChangedByDele(2, ref snNumber);
+                    }
+                    _snNumber = null;
+                    _overlayIndex = 0;
                 }
-                _snNumber = null;
-                _overlayIndex = 0;
             }
         }
 
@@ -450,7 +446,6 @@ namespace TestCOM
         /// </summary>
         private void CheckDeviceState()
         {
-            _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedCheckSN);
             if (!_serialPort.IsOpen)
             {
                 _serialPort.Open();
@@ -464,8 +459,6 @@ namespace TestCOM
         /// <param name="serialPort"></param>
         private void QueryAndWriterSN()
         {
-            _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedCheckSN);
-            _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
             if (!_serialPort.IsOpen)
             {
                 _serialPort.Open();
@@ -507,17 +500,7 @@ namespace TestCOM
         /// <summary>
         /// 向设备写入SN
         /// </summary>
-        /// <param name="param"></param>
-        private void WriterSNA()
-        {
-            WriterDele textDele = new WriterDele(WriterSNB);
-            this.BeginInvoke(textDele);
-        }
-
-        /// <summary>
-        /// 向设备写入SN
-        /// </summary>
-        private void WriterSNB()
+        private void WriterSN()
         {
             string content = "";
             CreateSNNumber(ref content);
@@ -639,7 +622,7 @@ namespace TestCOM
                     textBox1.ScrollToCaret();
                     break;
                 case 3:
-                    textBox1.Text += "写入失败!原因:该设备不符合写入条件!\r\n";
+                    textBox1.Text += "写入失败!原因:COM口未较准!\r\n";
                     textBox1.ForeColor = Color.Red;
                     textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();

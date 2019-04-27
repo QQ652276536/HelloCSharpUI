@@ -1,6 +1,8 @@
 ﻿using HelloCSharp.MySQL;
+using HelloCSharp.MySQL.MySQLPool;
 using HelloCSharp.UI;
 using System;
+using System.IO.Ports;
 using System.Windows.Forms;
 using TestCOM;
 
@@ -18,6 +20,7 @@ namespace HelloCSharp
             Application.SetCompatibleTextRenderingDefault(false);
 
             Application.Run(new TestComWindow());
+            
         }
 
     }
