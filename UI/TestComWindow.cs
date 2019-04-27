@@ -103,16 +103,25 @@ namespace TestCOM
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (_serialPort != null)
+            try
             {
-                _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedWriterSN);
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
-                //验证是否符合写入条件
-                CheckDeviceState();
+                if (_serialPort != null)
+                {
+                    //一定要开启串口,因为每次写入完成都会关闭串口,尽量避免拨掉设备时抛出"资源占用"的异常
+                    _serialPort.Close();
+                    _serialPort.Open();
+                    //验证是否符合写入条件(目前是查看返回的内容是否以0P和08结尾)
+                    _serialPort.Write("at+egmr=0,5\r\n");
+                }
+                else
+                {
+                    MessageBox.Show("写入失败!\r\n请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("写入失败!\r\n请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _serialPort.Close();
+                MessageBox.Show("写入失败!\r\n串口"+_serialPort.PortName+"正在使用中!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -159,31 +168,61 @@ namespace TestCOM
         /// <param name="e"></param>
         private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
         {
+            //Thread.Sleep(500);
             string[] tempPorts = SerialPort.GetPortNames();
             Array.Sort(tempPorts);
+            //串口数量有变动
+            if (_ports.Length != tempPorts.Length)
+            {
+                //首先释放所有串口,尽量避免后面的设备访问不了串口
+                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                Invoke(closePort);
+                //有设备连接
+                if (tempPorts.Length > _ports.Length)
+                {
+                    _portDictionary = TestSN(tempPorts);
+                    if (_serialPort != null)
+                    {
+                        CheckConnStartState(true);
+                    }
+                }
+                //有设备断开
+                else if (tempPorts.Length < _ports.Length)
+                {
+                    //关闭设备的串口
+                    if (_serialPort != null)
+                    {
+                        _serialPort.Close();
+                    }
+                    //设备断开时禁止写入SN
+                    CheckConnStartState(false);
+                }
+                _ports = (string[])tempPorts.Clone();
+            }
+
+            return;
             //串口名有变动
             if (!CompareComNameArray(_ports, tempPorts))
             {
                 _ports = (string[])tempPorts.Clone();
-                Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
-                foreach (SerialPort port in values)
-                {
-                    if (port.IsOpen)
-                    {
-                        port.Close();
-                    }
-                    port.Dispose();
-                }
-                if (_serialPort != null)
-                {
-                    _serialPort.Close();
-                    _serialPort.Dispose();
-                    _serialPort = null;
-                }
-                //CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort());
-                //Invoke(closePort);
-                TestSN(tempPorts);
-                Thread.Sleep(100);
+                //Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
+                //foreach (SerialPort port in values)
+                //{
+                //    if (port.IsOpen)
+                //    {
+                //        port.Close();
+                //    }
+                //    port.Dispose();
+                //}
+                //if (_serialPort != null)
+                //{
+                //    _serialPort.Close();
+                //    _serialPort.Dispose();
+                //    _serialPort = null;
+                //}
+                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                Invoke(closePort);
+                _portDictionary = TestSN(tempPorts);
                 //设备已连接
                 if (_serialPort != null)
                 {
@@ -216,12 +255,11 @@ namespace TestCOM
                 {
                     port.Close();
                 }
-                port.Dispose();
             }
+            _portDictionary.Clear();
             if (_serialPort != null)
             {
                 _serialPort.Close();
-                _serialPort.Dispose();
             }
         }
 
@@ -307,6 +345,10 @@ namespace TestCOM
             {
                 //获取测试通过的串口
                 _serialPort = tempSerialPort;
+                //解绑串口之前的事件
+                _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
+                //给串口绑定新的事件
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
                 LabelTextChangedByDele(true);
             }
         }
@@ -398,6 +440,8 @@ namespace TestCOM
                     {
                         TextBoxChangedByDele(2, ref snNumber);
                     }
+                    CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                    BeginInvoke(closePort);
                     _snNumber = null;
                     _overlayIndex = 0;
                 }
@@ -410,7 +454,7 @@ namespace TestCOM
         private void FirstRunConnState()
         {
             //_serialPort不为null则说明有设备连接
-            TestSN(_ports);
+            _portDictionary = TestSN(_ports);
             Thread.Sleep(100);
             if (_serialPort != null)
             {
@@ -471,50 +515,27 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 验证设备是否符合写入条件
-        /// </summary>
-        private void CheckDeviceState()
-        {
-            try
-            {
-                if (!_serialPort.IsOpen)
-                {
-                    _serialPort.Open();
-                }
-                _serialPort.Write("at+egmr=0,5\r\n");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("写入失败!\r\n请检查设备是否连接正常...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
         /// 查询设备的SN
         /// </summary>
         /// <param name="serialPort"></param>
         private void QueryAndWriterSN()
         {
-            if (!_serialPort.IsOpen)
-            {
-                _serialPort.Open();
-            }
             _serialPort.Write("AT+QCSN?\r\n");
         }
 
         /// <summary>
         /// 测试串口是否通畅,写入的是串口总是返回查询内容的ATE1命令
         /// </summary>
-        private void TestSN(string[] ports)
+        private Dictionary<string, SerialPort> TestSN(string[] ports)
         {
-            _portDictionary.Clear();
+            Dictionary<string, SerialPort> dictionary = new Dictionary<string, SerialPort>();
             foreach (string portName in ports)
             {
+                //TODO:波特率暂时写死
+                SerialPort serialPort = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One);
                 try
                 {
-                    //TODO:波特率暂时写死
-                    SerialPort serialPort = new SerialPort(portName, 115200, Parity.None, 8, StopBits.One);
-                    _portDictionary.Add(portName, serialPort);
+                    dictionary.Add(portName, serialPort);
                     serialPort.RtsEnable = true;
                     serialPort.DtrEnable = true;
                     serialPort.Handshake = Handshake.None;
@@ -528,9 +549,11 @@ namespace TestCOM
                 }
                 catch (Exception e)
                 {
+                    serialPort.Close();
                     int error = -1;
                 }
             }
+            return dictionary;
         }
 
         /// <summary>
@@ -540,12 +563,9 @@ namespace TestCOM
         {
             string content = "";
             CreateSNNumber(ref content);
-            if (!"".Equals(content))
-            {
-                //发送命令之前留痕,用作SN写入成功返回时较验
-                _snNumber = content;
-                _serialPort.Write("AT+QCSN=\"" + content + "\"\r\n");
-            }
+            //发送命令之前留痕,用作SN写入成功返回时较验
+            _snNumber = content;
+            _serialPort.Write("AT+QCSN=\"" + content + "\"\r\n");
         }
 
         /// <summary>
