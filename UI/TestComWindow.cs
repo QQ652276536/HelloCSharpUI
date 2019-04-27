@@ -54,6 +54,11 @@ namespace TestCOM
         private delegate void ButtonDele(bool flag);
 
         /// <summary>
+        /// 释放串口
+        /// </summary>
+        private delegate void CloseIsOpenSerialPortDele();
+
+        /// <summary>
         /// Label控件
         /// </summary>
         /// <param name="flag"></param>
@@ -173,7 +178,10 @@ namespace TestCOM
                 {
                     _serialPort.Close();
                     _serialPort.Dispose();
+                    _serialPort = null;
                 }
+                //CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort());
+                //Invoke(closePort);
                 TestSN(tempPorts);
                 Thread.Sleep(100);
                 //设备已连接
@@ -193,6 +201,27 @@ namespace TestCOM
                     //设备断开时禁止写入SN
                     CheckConnStartState(false);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 释放串口(主线程调用才会起作用)
+        /// </summary>
+        private void CloseIsOpenSerailPort()
+        {
+            Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
+            foreach (SerialPort port in values)
+            {
+                if (port.IsOpen)
+                {
+                    port.Close();
+                }
+                port.Dispose();
+            }
+            if (_serialPort != null)
+            {
+                _serialPort.Close();
+                _serialPort.Dispose();
             }
         }
 
@@ -446,11 +475,18 @@ namespace TestCOM
         /// </summary>
         private void CheckDeviceState()
         {
-            if (!_serialPort.IsOpen)
+            try
             {
-                _serialPort.Open();
+                if (!_serialPort.IsOpen)
+                {
+                    _serialPort.Open();
+                }
+                _serialPort.Write("at+egmr=0,5\r\n");
             }
-            _serialPort.Write("at+egmr=0,5\r\n");
+            catch (Exception e)
+            {
+                MessageBox.Show("写入失败!\r\n请检查设备是否连接正常...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
