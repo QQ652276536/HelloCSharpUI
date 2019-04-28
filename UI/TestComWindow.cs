@@ -354,16 +354,7 @@ namespace TestCOM
         }
 
         /// <summary>
-        /// 禁止写入
-        /// </summary>
-        private bool DeviceError()
-        {
-            MessageBox.Show("该设备COM口未较准,禁止写入!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return false;
-        }
-
-        /// <summary>
-        /// 接收写入SN操作所返回的内容
+        /// 接收写入SN所返回的内容
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -446,6 +437,15 @@ namespace TestCOM
                     _overlayIndex = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// 禁止写入
+        /// </summary>
+        private bool DeviceError()
+        {
+            MessageBox.Show("该设备COM口未较准,禁止写入!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
         }
 
         /// <summary>
