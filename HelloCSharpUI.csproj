@@ -75,8 +75,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\EntityClass.cs" />
-    <Compile Include="Application\GetSms.cs" />
+    <Compile Include="Application\Entity\EntityClass.cs" />
+    <Compile Include="Application\LoginAndRegister\GetSms.cs" />
     <Compile Include="MyControl\HintTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -86,8 +86,8 @@
     <Compile Include="MySQL\MySQLPool\ConnectionInfo.cs" />
     <Compile Include="MySQL\MySQLPool\ConnectionPool.cs" />
     <Compile Include="MySQL\MySQLPool\TestConnectionPool.cs" />
-    <Compile Include="Application\VerifyCode.cs" />
-    <Compile Include="Application\Register.cs" />
+    <Compile Include="Application\LoginAndRegister\VerifyCode.cs" />
+    <Compile Include="Application\LoginAndRegister\Register.cs" />
     <Compile Include="UI\FileBWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,7 +129,13 @@
     </Compile>
     <Compile Include="MainFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Application\VerifyCode2.cs" />
+    <Compile Include="Application\LoginAndRegister\VerifyCode2.cs" />
+    <Compile Include="UI\TestIMEIWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\TestIMEIWindow.designer.cs">
+      <DependentUpon>TestIMEIWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\TestComWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +170,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\TestIMEIWindow.resx">
+      <DependentUpon>TestIMEIWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\TestComWindow.resx">
       <DependentUpon>TestComWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,7 +195,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Test\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Image\GameBack1.png" />

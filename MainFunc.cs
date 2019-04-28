@@ -5,6 +5,7 @@ using System;
 using System.IO.Ports;
 using System.Windows.Forms;
 using TestCOM;
+using TestIMEI;
 
 namespace HelloCSharp
 {
@@ -19,8 +20,9 @@ namespace HelloCSharp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new TestComWindow());
-            
+            //Application.Run(new TestComWindow());
+            Application.Run(new TestIMEIWindow());
+
         }
 
     }
