@@ -168,7 +168,6 @@ namespace TestCOM
         /// <param name="e"></param>
         private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
         {
-            //Thread.Sleep(500);
             string[] tempPorts = SerialPort.GetPortNames();
             Array.Sort(tempPorts);
             //串口数量有变动
