@@ -176,11 +176,6 @@ namespace TestCOM
                 //首先释放所有串口,尽量避免后面的设备访问不了串口
                 CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
                 Invoke(closePort);
-                //关闭设备的串口
-                if (_serialPort != null)
-                {
-                    _serialPort.Close();
-                }
                 //有设备连接
                 if (tempPorts.Length > _ports.Length)
                 {
