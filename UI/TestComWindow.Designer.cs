@@ -114,21 +114,21 @@
             // 串口设置ToolStripMenuItem
             // 
             this.串口设置ToolStripMenuItem.Name = "串口设置ToolStripMenuItem";
-            this.串口设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.串口设置ToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.串口设置ToolStripMenuItem.Text = "串口";
             this.串口设置ToolStripMenuItem.Click += new System.EventHandler(this.串口设置ToolStripMenuItem_Click);
             // 
             // 数据库配置ToolStripMenuItem
             // 
             this.数据库配置ToolStripMenuItem.Name = "数据库配置ToolStripMenuItem";
-            this.数据库配置ToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.数据库配置ToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.数据库配置ToolStripMenuItem.Text = "数据库";
             this.数据库配置ToolStripMenuItem.Click += new System.EventHandler(this.数据库配置ToolStripMenuItem_Click);
             // 
             // 日志路径ToolStripMenuItem
             // 
             this.日志路径ToolStripMenuItem.Name = "日志路径ToolStripMenuItem";
-            this.日志路径ToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+            this.日志路径ToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.日志路径ToolStripMenuItem.Text = "日志";
             this.日志路径ToolStripMenuItem.Click += new System.EventHandler(this.日志路径ToolStripMenuItem_Click);
             // 
@@ -142,7 +142,9 @@
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "TestCOMWindow";
             this.Text = "SN自动写入";
             this.menuStrip1.ResumeLayout(false);

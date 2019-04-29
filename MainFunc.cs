@@ -21,7 +21,7 @@ namespace HelloCSharp
             Application.SetCompatibleTextRenderingDefault(false);
 
             Application.Run(new TestCOMWindow());
-            //Application.Run(new TestIMEIWindow());
+            Application.Run(new TestIMEIWindow());
 
         }
 

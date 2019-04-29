@@ -13,9 +13,9 @@ namespace TestIMEI
 {
     public partial class TestIMEIWindow : Form
     {
-        private string _configFilePath = "E:\\TestIMEIConfig";
+        private string _configFilePath = "..\\TestIMEIConfig";
         bool _isFirstRunTimer = true;
-        private string _logPath = "E:\\TestIMEILog";
+        private string _logPath = "..\\TestIMEILog";
         private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;

@@ -16,7 +16,7 @@ namespace TestCOM
         private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
-        private string _path = "E:\\TestComLog";
+        private string _path = "..\\TestComLog";
         private SerialPort _serialPort;
         private string _snNumber;
         private System.Timers.Timer _timer;

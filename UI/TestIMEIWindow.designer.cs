@@ -161,6 +161,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "TestIMEIWindow";
             this.Text = "IMEI写入工具";
             this.ResumeLayout(false);
