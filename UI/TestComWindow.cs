@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace TestCOM
+namespace TestTools
 {
     public partial class TestCOMWindow : Form
     {
@@ -654,6 +654,16 @@ namespace TestCOM
             textBox1.Invalidate();
         }
 
+        /// <summary>
+        /// 关闭窗体时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TestCOMWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseIsOpenSerailPort();
+        }
+
         private void 串口设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -668,5 +678,6 @@ namespace TestCOM
         {
 
         }
+
     }
 }

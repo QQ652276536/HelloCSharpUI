@@ -41,7 +41,7 @@ namespace TestIMEI
             {
                 Directory.CreateDirectory(_configFilePath);
             }
-            _configFilePath += "\\IMEIConfig(2).txt";
+            _configFilePath += "\\IMEIConfig.txt";
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
@@ -524,6 +524,7 @@ namespace TestIMEI
             catch (Exception ex)
             {
                 int error = -1;
+                MessageBox.Show("写入失败!\r\n找不到外部配置文件", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -641,6 +642,16 @@ namespace TestIMEI
                     break;
             }
             textBox1.Invalidate();
+        }
+
+        /// <summary>
+        /// 关闭窗体时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TestIMEIWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseIsOpenSerailPort();
         }
 
     }

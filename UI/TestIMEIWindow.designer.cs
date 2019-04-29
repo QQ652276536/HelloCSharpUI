@@ -165,6 +165,7 @@
             this.MaximizeBox = false;
             this.Name = "TestIMEIWindow";
             this.Text = "IMEI写入工具";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TestIMEIWindow_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

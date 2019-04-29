@@ -1,4 +1,4 @@
-﻿namespace TestCOM
+﻿namespace TestTools
 {
     partial class TestCOMWindow
     {
@@ -147,6 +147,7 @@
             this.MaximizeBox = false;
             this.Name = "TestCOMWindow";
             this.Text = "SN自动写入";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TestCOMWindow_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
