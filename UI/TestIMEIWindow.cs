@@ -13,12 +13,12 @@ namespace TestIMEI
 {
     public partial class TestIMEIWindow : Form
     {
-        private string _paramFilePath = "E:\\TestIMEIConfig";
+        private string _configFilePath = "E:\\TestIMEIConfig";
         bool _isFirstRunTimer = true;
+        private string _logPath = "E:\\TestIMEILog";
         private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
-        private string _path = "E:\\TestIMEILog";
         private SerialPort _serialPort;
         private string _snNumber = "";
         private System.Timers.Timer _timer;
@@ -27,21 +27,21 @@ namespace TestIMEI
         {
             InitializeComponent();
             //生成本地日志
-            if (!Directory.Exists(_path))
+            if (!Directory.Exists(_logPath))
             {
-                Directory.CreateDirectory(_path);
+                Directory.CreateDirectory(_logPath);
             }
-            _path += "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
-            FileStream fileStream = new FileStream(_path, FileMode.Append, FileAccess.Write);
+            _logPath += "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+            FileStream fileStream = new FileStream(_logPath, FileMode.Append, FileAccess.Write);
             StreamWriter streamWriter = new StreamWriter(fileStream);
             streamWriter.Close();
             fileStream.Close();
             //生成外部文件的目录
-            if (!Directory.Exists(_paramFilePath))
+            if (!Directory.Exists(_configFilePath))
             {
-                Directory.CreateDirectory(_paramFilePath);
+                Directory.CreateDirectory(_configFilePath);
             }
-            _paramFilePath += "\\IMEIConfig(2).txt";
+            _configFilePath += "\\IMEIConfig(2).txt";
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
@@ -83,7 +83,7 @@ namespace TestIMEI
         /// <param name="param">写入状态</param>
         /// <param name="param2"></param>
         /// <param name="param3"></param>
-        private delegate void TextBoxDele(int param, ref string param2, string param3 = null);
+        private delegate void TextBoxDele(int param, ref string param2);
 
         /// <summary>
         /// 向设备写入
@@ -120,6 +120,7 @@ namespace TestIMEI
                     _serialPort.Open();
                     //查询该设备写入
                     WriterIMEI();
+                    _serialPort.Close();
                 }
                 else
                 {
@@ -265,14 +266,13 @@ namespace TestIMEI
             string portName = tempSerialPort.PortName;
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
-            if (tempStr.Contains("") && tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
+            //向设备写入AT+QCSN?命令后返回的内容
+            if (tempStr.Contains("OK") && tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
             {
                 _snNumber = SubTwoStrContent(tempStr, "\"", "\"");
                 LabelTextChangedByDele(true, _snNumber);
                 //解绑串口之前的事件
                 _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
-                //给串口绑定新的事件
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
             }
             //向设备写入ate1命令后返回的内容
             else if (tempStr.Contains("OK"))
@@ -285,72 +285,6 @@ namespace TestIMEI
                     WriterDele writerDele = new WriterDele(QueryAndWriterSN);
                     BeginInvoke(writerDele);
                 }
-            }
-        }
-
-        /// <summary>
-        /// 接收写入SN所返回的内容
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DataReceivedWriterSN(object sender, SerialDataReceivedEventArgs e)
-        {
-            //阻塞该线程,以防数据没有读完
-            Thread.Sleep(100);
-            SerialPort tempSerialPort = (SerialPort)sender;
-            string portName = tempSerialPort.PortName;
-            //读取缓冲区所有字节
-            string tempStr = tempSerialPort.ReadExisting();
-            string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-            //查询设备的SN
-            if (tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
-            {
-                //_overlayIndex = ReadContentByLine(ref snNumber);
-                ////该设备已经写过
-                //if (_overlayIndex > 0)
-                //{
-                //    //询问是否覆盖再写入设备
-                //    MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
-                //    if ((bool)this.Invoke(messageBoxDele))
-                //    {
-                //        WriterDele textDele = new WriterDele(WriterIMEI);
-                //        BeginInvoke(textDele);
-                //    }
-                //}
-                ////直接写入设备
-                //else
-                {
-                    WriterDele textDele = new WriterDele(WriterIMEI);
-                    BeginInvoke(textDele);
-                }
-            }
-            //向设备写入SN后返回的内容
-            else if (tempStr.IndexOf("AT+QCSN=") == 0)
-            {
-                //较验一致
-                if (snNumber.Equals(_snNumber))
-                {
-                    //覆盖本地日志
-                    if (_overlayIndex > 0)
-                    {
-                        OverlayWriterLocalLog(ref _overlayIndex, ref _snNumber);
-                    }
-                    //写入本地日志
-                    else
-                    {
-                        WriterLocalLog(snNumber);
-                    }
-                    TextBoxChangedByDele(1, ref snNumber);
-                }
-                //较验不一致
-                else
-                {
-                    TextBoxChangedByDele(2, ref snNumber);
-                }
-                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
-                BeginInvoke(closePort);
-                _snNumber = null;
-                _overlayIndex = 0;
             }
         }
 
@@ -426,14 +360,15 @@ namespace TestIMEI
         }
 
         /// <summary>
-        /// 覆盖设备原来在本地日志的SN
+        /// 替换该设备在本地日志的记录
         /// </summary>
+        /// <param name="index"></param>
         /// <param name="content"></param>
         private void OverlayWriterLocalLog(ref int index, ref string content)
         {
-            string[] arrayLines = File.ReadAllLines(_path);
+            string[] arrayLines = File.ReadAllLines(_logPath);
             arrayLines[index - 1] = content;
-            File.WriteAllLines(_path, arrayLines);
+            File.WriteAllLines(_logPath, arrayLines);
         }
 
         /// <summary>
@@ -497,45 +432,94 @@ namespace TestIMEI
         {
             try
             {
-                string[] arrayLines = File.ReadAllLines(_paramFilePath, Encoding.UTF8);
-                string[] tempContents = arrayLines[0].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                string imei1 = "";
-                string imei2 = "";
-                string wifimac = "";
-                string btmac = "";
-                //写入设备
-                //IMEI1
-                if (tempContents.Length > 0 && checkBox1.Checked)
+                string[] arrayLines = File.ReadAllLines(_configFilePath, Encoding.UTF8);
+                for (int i = 0; i < arrayLines.Length; i++)
                 {
-                    imei1 = tempContents[0];
-                    _serialPort.Write("at+egmr=1,7,\"" + imei1 + "\"\r\n");
+                    string[] tempContents = arrayLines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (tempContents.Length < 1)
+                    {
+                        if (i == arrayLines.Length - 1)
+                        {
+                            MessageBox.Show("写入失败!\r\n请检查外部配置文件是否已写入完毕", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        string imei1 = "";
+                        string imei2 = "";
+                        string wifimac = "";
+                        string btmac = "";
+                        //写入内容
+                        string content = "";
+                        //IMEI1
+                        if (tempContents.Length > 0 && checkBox1.Checked)
+                        {
+                            imei1 = tempContents[0];
+                        }
+                        //IMEI2
+                        if (tempContents.Length > 1 && checkBox2.Checked)
+                        {
+                            imei2 = tempContents[1];
+                        }
+                        //WIFI-MAC
+                        if (checkBox3.Checked)
+                        {
+                            if (tempContents.Length > 2)
+                            {
+                                wifimac = tempContents[2];
+                                wifimac = Regex.Replace(wifimac, ":", "");
+                            }
+                            else
+                            {
+                                MessageBox.Show("写入失败!\r\n缺少MAC地址", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+                        //BT-MAC
+                        if (checkBox4.Checked)
+                        {
+                            if (tempContents.Length > 3)
+                            {
+                                btmac = tempContents[3];
+                                btmac = Regex.Replace(btmac, ":", "");
+                            }
+                            else
+                            {
+                                MessageBox.Show("写入失败!\r\n缺少MAC地址", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+                        content = _snNumber + " " + imei1 + " " + imei2 + " " + wifimac + " " + btmac;
+                        //如果这台设备已经写入过IMEI、MAC直接覆盖,同样本地日志文件也要覆盖
+                        int tempIndex = ReadContentByLine(ref _snNumber);
+                        if (tempIndex > 0)
+                        {
+                            OverlayWriterLocalLog(ref tempIndex, ref content);
+                        }
+                        //没有则直接写入本地日志
+                        else
+                        {
+                            WriterLocalLog(content);
+                        }
+                        //外部文件的该行记录清空
+                        arrayLines[i] = "";
+                        File.WriteAllLines(_configFilePath, arrayLines, Encoding.UTF8);
+                        //显示在文本框
+                        string content2 = " SN是" + _snNumber + "\tIMEI1是" + imei1 + "\tIMEI2是" + imei2 + "\tWIFI-MAC是" + wifimac + "\tBT-MAC是" + btmac;
+                        TextBoxChangedByDele(4, ref content2);
+                        //本地文件操作无误再进行设备的写入
+                        if (!"".Equals(imei1))
+                            _serialPort.Write("at+egmr=1,7,\"" + imei1 + "\"\r\n");
+                        if (!"".Equals(imei2))
+                            _serialPort.Write("at+egmr=1,10,\"" + imei2 + "\"\r\n");
+                        if (!"".Equals(wifimac))
+                            _serialPort.Write("at+qnvw=4678,0,\"" + wifimac + "\"\r\n");
+                        if (!"".Equals(btmac))
+                            _serialPort.Write("at+qnvw=447,0,\"" + btmac + "\"\r\n");
+                        break;
+                    }
                 }
-                //IMEI2
-                if (tempContents.Length > 1 && checkBox2.Checked)
-                {
-                    imei2 = tempContents[1];
-                    _serialPort.Write("at+egmr=1,10,\"" + imei2 + "\"\r\n");
-                }
-                //WIFI-MAC
-                if (tempContents.Length > 2 && checkBox3.Checked)
-                {
-                    wifimac = tempContents[2];
-                    wifimac = Regex.Replace(wifimac, ":", "");
-                    _serialPort.Write("at+qnvw=4678,0,\"" + wifimac + "\"\r\n");
-                }
-                //BT-MAC
-                if (tempContents.Length > 3 && checkBox4.Checked)
-                {
-                    btmac = tempContents[3];
-                    btmac = Regex.Replace(btmac, ":", "");
-                    _serialPort.Write("at+qnvw=447,0,\"" + btmac + "\"\r\n");
-                }
-                //写入本地日志
-                string content = _snNumber + " " + imei1 + " " + imei2 + " " + wifimac + " " + btmac;
-                WriterLocalLog(content);
-                //清空该行
-                arrayLines[0] = "\r\n";
-                File.WriteAllLines(_path, arrayLines, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -548,7 +532,7 @@ namespace TestIMEI
         /// </summary>
         private void WriterLocalLog(string content)
         {
-            FileStream fileStream = new FileStream(_path, FileMode.Append, FileAccess.Write);
+            FileStream fileStream = new FileStream(_logPath, FileMode.Append, FileAccess.Write);
             StreamWriter streamWriter = new StreamWriter(fileStream);
             streamWriter.WriteLine(content, Encoding.UTF8);
             streamWriter.Close();
@@ -556,13 +540,13 @@ namespace TestIMEI
         }
 
         /// <summary>
-        /// 判断SN在文本中是否存在
+        /// 判断SN在日志中是否存在
         /// </summary>
         /// <param name="snNumber"></param>
         /// <returns></returns>
         private int ReadContentByLine(ref string snNumber)
         {
-            FileStream fileStream = new FileStream(_path, FileMode.Open, FileAccess.Read);
+            FileStream fileStream = new FileStream(_logPath, FileMode.Open, FileAccess.Read);
             StreamReader streamReader = new StreamReader(fileStream);
             streamReader.BaseStream.Seek(0, SeekOrigin.Begin);
             string strLine;
@@ -570,7 +554,8 @@ namespace TestIMEI
             while ((strLine = streamReader.ReadLine()) != null)
             {
                 index++;
-                if (strLine.Equals(snNumber))
+                string[] tempArray = strLine.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                if (tempArray[0].Equals(snNumber))
                 {
                     break;
                 }
@@ -622,14 +607,13 @@ namespace TestIMEI
         /// </summary>
         /// <param name="param"></param>
         /// <param name="param2"></param>
-        /// <param name="param3"></param>
-        private void TextBoxChangedByDele(int param, ref string param2, string param3 = null)
+        private void TextBoxChangedByDele(int param, ref string param2)
         {
             //非UI线程访问该控件时
             if (textBox1.InvokeRequired)
             {
                 //使用委托发出调用
-                textBox1.Invoke(new TextBoxDele(TextBoxChangedByDele), param, param2, param3);
+                textBox1.Invoke(new TextBoxDele(TextBoxChangedByDele), param, param2);
                 return;
             }
             //使用委托发出的TextBoxChanged方法调用会跳到这来执行：在textBox1中显示
@@ -637,25 +621,22 @@ namespace TestIMEI
             {
                 case 0:
                     textBox1.Text += "执行中......\r\n";
-                    textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
                     break;
                 case 1:
                     textBox1.Text += "写入成功!SN:" + param2 + "\r\n";
-                    textBox1.ForeColor = Color.Green;
-                    textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
                     break;
                 case 2:
                     textBox1.Text += "写入失败!原因:SN不一致!\r\n";
-                    textBox1.ForeColor = Color.Red;
-                    textBox1.Select(textBox1.Text.Length, 0);
                     textBox1.ScrollToCaret();
                     break;
                 case 3:
                     textBox1.Text += "写入失败!原因:COM口未较准!\r\n";
-                    textBox1.ForeColor = Color.Red;
-                    textBox1.Select(textBox1.Text.Length, 0);
+                    textBox1.ScrollToCaret();
+                    break;
+                case 4:
+                    textBox1.Text += "写入成功!" + param2 + "\r\n";
                     textBox1.ScrollToCaret();
                     break;
             }

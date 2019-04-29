@@ -42,9 +42,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(1034, 29);
+            this.button1.Location = new System.Drawing.Point(996, 29);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(240, 44);
+            this.button1.Size = new System.Drawing.Size(162, 44);
             this.button1.TabIndex = 0;
             this.button1.Text = "写入IMEI";
             this.button1.UseVisualStyleBackColor = true;
@@ -52,14 +52,14 @@
             // 
             // textBox1
             // 
-            this.textBox1.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox1.ForeColor = System.Drawing.Color.Green;
             this.textBox1.Location = new System.Drawing.Point(26, 99);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(1248, 461);
+            this.textBox1.Size = new System.Drawing.Size(1132, 461);
             this.textBox1.TabIndex = 5;
             // 
             // label1
@@ -79,7 +79,7 @@
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox1.Location = new System.Drawing.Point(648, 42);
+            this.checkBox1.Location = new System.Drawing.Point(610, 42);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(78, 23);
             this.checkBox1.TabIndex = 8;
@@ -92,7 +92,7 @@
             this.checkBox2.Checked = true;
             this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox2.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox2.Location = new System.Drawing.Point(735, 42);
+            this.checkBox2.Location = new System.Drawing.Point(697, 42);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(78, 23);
             this.checkBox2.TabIndex = 9;
@@ -105,7 +105,7 @@
             this.checkBox3.Checked = true;
             this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox3.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox3.Location = new System.Drawing.Point(823, 42);
+            this.checkBox3.Location = new System.Drawing.Point(785, 42);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(108, 23);
             this.checkBox3.TabIndex = 10;
@@ -118,7 +118,7 @@
             this.checkBox4.Checked = true;
             this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox4.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox4.Location = new System.Drawing.Point(940, 42);
+            this.checkBox4.Location = new System.Drawing.Point(902, 42);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(88, 23);
             this.checkBox4.TabIndex = 11;
@@ -127,18 +127,20 @@
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.ForeColor = System.Drawing.Color.Green;
-            this.label2.Location = new System.Drawing.Point(204, 34);
+            this.label2.Font = new System.Drawing.Font("宋体", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.label2.Location = new System.Drawing.Point(189, 34);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(319, 33);
+            this.label2.Size = new System.Drawing.Size(307, 33);
             this.label2.TabIndex = 13;
+            this.label2.Text = "MLAT1A2019428453001";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(547, 43);
+            this.label3.Location = new System.Drawing.Point(509, 43);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 19);
             this.label3.TabIndex = 14;
@@ -149,7 +151,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1301, 583);
+            this.ClientSize = new System.Drawing.Size(1182, 583);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.checkBox4);

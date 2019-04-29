@@ -505,6 +505,7 @@ namespace TestCOM
         /// <summary>
         /// 覆盖设备原来在本地日志的SN
         /// </summary>
+        /// <param name="index"></param>
         /// <param name="content"></param>
         private void OverlayWriterLocalLog(ref int index, ref string content)
         {
