@@ -121,7 +121,7 @@ namespace TestCOM
             catch (Exception ex)
             {
                 _serialPort.Close();
-                MessageBox.Show("写入失败!\r\n串口"+_serialPort.PortName+"正在使用中!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("写入失败!\r\n串口" + _serialPort.PortName + "正在使用中,请重新插入设备或重新程序!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -176,6 +176,11 @@ namespace TestCOM
                 //首先释放所有串口,尽量避免后面的设备访问不了串口
                 CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
                 Invoke(closePort);
+                //关闭设备的串口
+                if (_serialPort != null)
+                {
+                    _serialPort.Close();
+                }
                 //有设备连接
                 if (tempPorts.Length > _ports.Length)
                 {
@@ -197,48 +202,6 @@ namespace TestCOM
                     CheckConnStartState(false);
                 }
                 _ports = (string[])tempPorts.Clone();
-            }
-
-            return;
-            //串口名有变动
-            if (!CompareComNameArray(_ports, tempPorts))
-            {
-                _ports = (string[])tempPorts.Clone();
-                //Dictionary<string, SerialPort>.ValueCollection values = _portDictionary.Values;
-                //foreach (SerialPort port in values)
-                //{
-                //    if (port.IsOpen)
-                //    {
-                //        port.Close();
-                //    }
-                //    port.Dispose();
-                //}
-                //if (_serialPort != null)
-                //{
-                //    _serialPort.Close();
-                //    _serialPort.Dispose();
-                //    _serialPort = null;
-                //}
-                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
-                Invoke(closePort);
-                _portDictionary = TestSN(tempPorts);
-                //设备已连接
-                if (_serialPort != null)
-                {
-                    CheckConnStartState(true);
-                }
-                //设备断开连接
-                else
-                {
-                    //关闭设备的串口
-                    if (_serialPort != null)
-                    {
-                        _serialPort.Close();
-                        _serialPort = null;
-                    }
-                    //设备断开时禁止写入SN
-                    CheckConnStartState(false);
-                }
             }
         }
 
@@ -347,17 +310,17 @@ namespace TestCOM
                 //解绑串口之前的事件
                 _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
                 //给串口绑定新的事件
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriterSN);
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter);
                 LabelTextChangedByDele(true);
             }
         }
 
         /// <summary>
-        /// 接收写入SN所返回的内容
+        /// 接收写入命令后返回的内容
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DataReceivedWriterSN(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceivedWriter(object sender, SerialDataReceivedEventArgs e)
         {
             //阻塞该线程,以防数据没有读完
             Thread.Sleep(100);
@@ -399,6 +362,14 @@ namespace TestCOM
                             WriterDele textDele = new WriterDele(WriterSN);
                             BeginInvoke(textDele);
                         }
+                        //关闭所有串口,将控件上的SN置为空
+                        else
+                        {
+                            CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                            BeginInvoke(closePort);
+                            _snNumber = null;
+                            _overlayIndex = 0;
+                        }
                     }
                     //直接写入设备
                     else
@@ -430,6 +401,7 @@ namespace TestCOM
                     {
                         TextBoxChangedByDele(2, ref snNumber);
                     }
+                    //关闭所有串口,将控件上的SN置为空
                     CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
                     BeginInvoke(closePort);
                     _snNumber = null;
