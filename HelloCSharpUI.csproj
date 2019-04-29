@@ -40,6 +40,13 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ICO_Game_6.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>bin\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -100,7 +107,6 @@
     <Compile Include="UI\FileAWindow.Designer.cs">
       <DependentUpon>FileAWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MySQL\MySqlUtil.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="HTTP\HttpPostUtil.cs" />
     <Compile Include="UI\LoginControl.cs">
@@ -197,6 +203,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ICO_Game_6.ico" />
     <Content Include="Image\GameBack1.png" />
     <Content Include="Image\Logo1.png" />
     <Content Include="Image\Logo10.png" />
