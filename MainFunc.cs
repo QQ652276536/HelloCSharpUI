@@ -1,11 +1,8 @@
-﻿using HelloCSharp.MySQL;
-using HelloCSharp.MySQL.MySQLPool;
-using HelloCSharp.UI;
+﻿using HelloCSharp.UI;
 using System;
-using System.IO.Ports;
 using System.Windows.Forms;
-using TestCOM;
 using TestIMEI;
+using TestTools;
 
 namespace HelloCSharp
 {
@@ -20,8 +17,10 @@ namespace HelloCSharp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new TestCOMWindow());
-            Application.Run(new TestIMEIWindow());
+            Application.Run(new LoginAndRegisterWindow());
+
+            //Application.Run(new TestCOMWindow());
+            //Application.Run(new TestIMEIWindow());
 
         }
 

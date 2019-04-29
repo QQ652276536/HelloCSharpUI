@@ -1,5 +1,6 @@
 ﻿using QRCoder;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -103,5 +104,16 @@ namespace HelloCSharp.UI
             Image image = Image.FromHbitmap(bitmap.GetHbitmap());
             this.pictureBox1.Image = image;
         }
+
+        /// <summary>
+        /// 跳转至我的网站
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("chrome.exe", "http://www.nullpointer.vip");
+        }
+
     }
 }
