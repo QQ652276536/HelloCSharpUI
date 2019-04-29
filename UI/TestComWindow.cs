@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace TestCOM
 {
-    public partial class TestComWindow : Form
+    public partial class TestCOMWindow : Form
     {
         private int _number = 0;
         private int _overlayIndex = 0;
@@ -21,7 +21,7 @@ namespace TestCOM
         private string _snNumber;
         private System.Timers.Timer _timer;
 
-        public TestComWindow()
+        public TestCOMWindow()
         {
             InitializeComponent();
             comboBox1.SelectedIndex = 0;

@@ -136,11 +136,11 @@
     <Compile Include="UI\TestIMEIWindow.designer.cs">
       <DependentUpon>TestIMEIWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\TestComWindow.cs">
+    <Compile Include="UI\TestCOMWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\TestComWindow.designer.cs">
-      <DependentUpon>TestComWindow.cs</DependentUpon>
+    <Compile Include="UI\TestCOMWindow.designer.cs">
+      <DependentUpon>TestCOMWindow.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="UI\FileBWindow.resx">
       <DependentUpon>FileBWindow.cs</DependentUpon>
@@ -173,8 +173,8 @@
     <EmbeddedResource Include="UI\TestIMEIWindow.resx">
       <DependentUpon>TestIMEIWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\TestComWindow.resx">
-      <DependentUpon>TestComWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\TestCOMWindow.resx">
+      <DependentUpon>TestCOMWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

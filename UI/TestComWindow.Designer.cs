@@ -1,6 +1,6 @@
 ﻿namespace TestCOM
 {
-    partial class TestComWindow
+    partial class TestCOMWindow
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -132,7 +132,7 @@
             this.日志路径ToolStripMenuItem.Text = "日志";
             this.日志路径ToolStripMenuItem.Click += new System.EventHandler(this.日志路径ToolStripMenuItem_Click);
             // 
-            // TestComWindow
+            // TestCOMWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -143,7 +143,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "TestComWindow";
+            this.Name = "TestCOMWindow";
             this.Text = "SN自动写入";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

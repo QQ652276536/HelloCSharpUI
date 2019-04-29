@@ -20,8 +20,8 @@ namespace HelloCSharp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Application.Run(new TestComWindow());
-            Application.Run(new TestIMEIWindow());
+            Application.Run(new TestCOMWindow());
+            //Application.Run(new TestIMEIWindow());
 
         }
 
