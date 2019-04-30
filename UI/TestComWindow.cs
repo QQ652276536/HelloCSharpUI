@@ -16,7 +16,7 @@ namespace TestTools
         private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
-        private string _path = "..\\TestComLog";
+        private string _path = "TestComLog";
         private SerialPort _serialPort;
         private string _snNumber;
         private System.Timers.Timer _timer;
@@ -107,6 +107,7 @@ namespace TestTools
             {
                 if (_serialPort != null)
                 {
+                    ButtonStateChanged(false);
                     //一定要开启串口,因为每次写入完成都会关闭串口,尽量避免拨掉设备时抛出"资源占用"的异常
                     _serialPort.Close();
                     _serialPort.Open();
@@ -116,12 +117,14 @@ namespace TestTools
                 else
                 {
                     MessageBox.Show("写入失败!\r\n请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ButtonStateChanged(true);
                 }
             }
             catch (Exception ex)
             {
                 _serialPort.Close();
                 MessageBox.Show("写入失败!\r\n串口" + _serialPort.PortName + "正在使用中,请重新插入设备或重新程序!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ButtonStateChanged(true);
             }
         }
 
@@ -317,7 +320,7 @@ namespace TestTools
         /// <param name="e"></param>
         private void DataReceivedWriter(object sender, SerialDataReceivedEventArgs e)
         {
-            //阻塞该线程,以防数据没有读完
+            //阻塞该线程,以防上一次的数据没有读完
             Thread.Sleep(100);
             SerialPort tempSerialPort = (SerialPort)sender;
             string portName = tempSerialPort.PortName;
@@ -338,6 +341,7 @@ namespace TestTools
                     TextBoxChangedByDele(3, ref snNumber);
                     MessageBoxDele messageBoxDele = new MessageBoxDele(DeviceError);
                     BeginInvoke(messageBoxDele);
+                    ButtonStateChangedByDele(true);
                     return;
                 }
             }
@@ -347,8 +351,8 @@ namespace TestTools
                 if (tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
                 {
                     _overlayIndex = ReadContentByLine(ref snNumber);
-                    //该设备已经写过SN
-                    if (_overlayIndex > 0)
+                    //截取出来的SN有内容就说明之前写过SN,不论写入SN的格式
+                    if (snNumber != null && snNumber.Length > 0)
                     {
                         //询问是否覆盖再写入设备
                         MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
@@ -360,6 +364,7 @@ namespace TestTools
                         //关闭所有串口,将控件上的SN置为空
                         else
                         {
+                            ButtonStateChangedByDele(true);
                             CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
                             BeginInvoke(closePort);
                             _snNumber = null;
@@ -395,7 +400,9 @@ namespace TestTools
                     else
                     {
                         TextBoxChangedByDele(2, ref snNumber);
+                        _overlayIndex = 0;
                     }
+                    ButtonStateChangedByDele(true);
                     //关闭所有串口,将控件上的SN置为空
                     CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
                     BeginInvoke(closePort);

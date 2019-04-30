@@ -45,7 +45,7 @@
             this.button1.Location = new System.Drawing.Point(996, 29);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(162, 44);
-            this.button1.TabIndex = 0;
+            this.button1.TabIndex = 1;
             this.button1.Text = "写入IMEI";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -60,7 +60,7 @@
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(1132, 461);
-            this.textBox1.TabIndex = 5;
+            this.textBox1.TabIndex = 2;
             // 
             // label1
             // 

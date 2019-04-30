@@ -17,10 +17,13 @@ namespace HelloCSharp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new LoginAndRegisterWindow());
+            //Application.Run(new LoginAndRegisterWindow());
+            //Application.Run(new MainWindow());
+            //Application.Run(new FileAWindow());
+            //Application.Run(new FileBWindow());
 
             //Application.Run(new TestCOMWindow());
-            //Application.Run(new TestIMEIWindow());
+            Application.Run(new TestIMEIWindow());
 
         }
 

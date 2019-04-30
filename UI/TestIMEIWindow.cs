@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelloCSharp.Log;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -13,9 +14,9 @@ namespace TestIMEI
 {
     public partial class TestIMEIWindow : Form
     {
-        private string _configFilePath = "..\\TestIMEIConfig";
+        private string _configFilePath = "TestIMEIConfig";
         bool _isFirstRunTimer = true;
-        private string _logPath = "..\\TestIMEILog";
+        private string _logPath = "TestIMEILog";
         private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
@@ -115,22 +116,26 @@ namespace TestIMEI
             {
                 if (_serialPort != null)
                 {
+                    ButtonStateChanged(false);
                     _serialPort.Close();
                     //一定要开启串口,因为每次写入完成都会关闭串口,尽量避免拨掉设备时抛出"资源占用"的异常
                     _serialPort.Open();
                     //查询该设备写入
                     WriterIMEI();
+                    Thread.Sleep(500);
                     _serialPort.Close();
                 }
                 else
                 {
                     MessageBox.Show("写入失败!\r\n请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ButtonStateChanged(true);
                 }
             }
             catch (Exception ex)
             {
                 _serialPort.Close();
                 MessageBox.Show("写入失败!\r\n串口" + _serialPort.PortName + "正在使用中!", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ButtonStateChanged(true);
             }
         }
 
@@ -441,6 +446,7 @@ namespace TestIMEI
                         if (i == arrayLines.Length - 1)
                         {
                             MessageBox.Show("写入失败!\r\n请检查外部配置文件是否已写入完毕", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            ButtonStateChanged(true);
                         }
                         continue;
                     }
@@ -473,6 +479,7 @@ namespace TestIMEI
                             else
                             {
                                 MessageBox.Show("写入失败!\r\n缺少MAC地址", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                ButtonStateChanged(true);
                                 return;
                             }
                         }
@@ -487,6 +494,7 @@ namespace TestIMEI
                             else
                             {
                                 MessageBox.Show("写入失败!\r\n缺少MAC地址", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                ButtonStateChanged(true);
                                 return;
                             }
                         }
@@ -509,22 +517,48 @@ namespace TestIMEI
                         string content2 = " SN是" + _snNumber + "\tIMEI1是" + imei1 + "\tIMEI2是" + imei2 + "\tWIFI-MAC是" + wifimac + "\tBT-MAC是" + btmac;
                         TextBoxChangedByDele(4, ref content2);
                         //本地文件操作无误再进行设备的写入
-                        if (!"".Equals(imei1))
-                            _serialPort.Write("at+egmr=1,7,\"" + imei1 + "\"\r\n");
-                        if (!"".Equals(imei2))
-                            _serialPort.Write("at+egmr=1,10,\"" + imei2 + "\"\r\n");
-                        if (!"".Equals(wifimac))
-                            _serialPort.Write("at+qnvw=4678,0,\"" + wifimac + "\"\r\n");
-                        if (!"".Equals(btmac))
-                            _serialPort.Write("at+qnvw=447,0,\"" + btmac + "\"\r\n");
+                        try
+                        {
+                            if (!"".Equals(imei1))
+                            {
+                                _serialPort.Write("at+egmr=1,7,\"" + imei1 + "\"\r\n");
+                                Logger.Instance.WriteLog("IMEI1命令写入完毕");
+                                Thread.Sleep(50);
+                            }
+                            if (!"".Equals(imei2))
+                            {
+                                _serialPort.Write("at+egmr=1,10,\"" + imei2 + "\"\r\n");
+                                Logger.Instance.WriteLog("IMEI2命令写入完毕");
+                                Thread.Sleep(50);
+                            }
+                            if (!"".Equals(wifimac))
+                            {
+                                _serialPort.Write("at+qnvw=4678,0,\"" + wifimac + "\"\r\n");
+                                Logger.Instance.WriteLog("WIFI-MAC命令写入完毕");
+                                Thread.Sleep(50);
+                            }
+                            if (!"".Equals(btmac))
+                            {
+                                _serialPort.Write("at+qnvw=447,0,\"" + btmac + "\"\r\n");
+                                Logger.Instance.WriteLog("BT-MAC命令写入完毕");
+                                Thread.Sleep(50);
+                            }
+                            ButtonStateChanged(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Instance.WriteException(ex ,"写入IMEI时某个命令有异常");
+                            ButtonStateChanged(true);
+                        }
                         break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                int error = -1;
+                Logger.Instance.WriteException(ex, "写入IMEI命令之前发生异常");
                 MessageBox.Show("写入失败!\r\n找不到外部配置文件", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ButtonStateChanged(true);
             }
         }
 

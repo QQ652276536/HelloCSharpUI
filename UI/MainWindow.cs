@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TestIMEI;
+using TestTools;
 
 namespace HelloCSharp.UI
 {
@@ -60,19 +62,28 @@ namespace HelloCSharp.UI
             }
             switch (panelName)
             {
-                case "panFileA":
+                case "panel1":
                     FileAWindow fileA = new FileAWindow();
-                    this.StartPosition = FormStartPosition.CenterScreen;
+                    this.StartPosition = FormStartPosition.CenterParent;
                     fileA.ShowDialog();
                     break;
-                case "panFileB":
-                    this.StartPosition = FormStartPosition.CenterScreen;
+                case "panel2":
+                    this.StartPosition = FormStartPosition.CenterParent;
                     FileBWindow fileB = new FileBWindow();
                     fileB.ShowDialog();
                     break;
-                case "panFileC":
+                case "panel3":
+                    this.StartPosition = FormStartPosition.CenterParent;
+                    TestCOMWindow testCOMWindow = new TestCOMWindow();
+                    testCOMWindow.ShowDialog();
+                    break;
+                case "panel4":
+                    this.StartPosition = FormStartPosition.CenterParent;
+                    TestIMEIWindow testIMEIWindow = new TestIMEIWindow();
+                    testIMEIWindow.ShowDialog();
                     break;
             }
         }
+
     }
 }
