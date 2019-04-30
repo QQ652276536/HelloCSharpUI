@@ -1,2 +1,2 @@
-# HelloCSharpUI
-This's my first C# UI project
+# HelloCSharp
+This's my first C# project
