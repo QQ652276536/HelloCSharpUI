@@ -5,7 +5,7 @@
 *.suo
 *.user
 
-#过滤文件夹Debug,Release,obj
+#过滤文件夹Debug,Release,obj,.vs
 Debug/
 Release/
 obj/

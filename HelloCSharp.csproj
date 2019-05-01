@@ -100,7 +100,6 @@
     <Compile Include="UI\FileAWindow.Designer.cs">
       <DependentUpon>FileAWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="MySQL\MySqlUtil.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="HTTP\HttpPostUtil.cs" />
     <Compile Include="UI\LoginControl.cs">
