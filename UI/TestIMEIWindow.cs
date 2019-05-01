@@ -114,8 +114,11 @@ namespace TestIMEI
         /// <param name="flag"></param>
         private void ButtonStateChanged(bool flag)
         {
-            button1.Enabled = flag;
-            button1.Invalidate();
+            if (!"该设备未写入SN".Equals(label2.Text) && label2.Text.Length > 2)
+            {
+                button1.Enabled = flag;
+                button1.Invalidate();
+            }
         }
 
         /// <summary>
@@ -306,8 +309,11 @@ namespace TestIMEI
                 label1.ForeColor = Color.Red;
             }
             label1.Invalidate();
-            label2.Text = content;
-            label2.Invalidate();
+            if (content.Length > 2)
+            {
+                label2.Text = content;
+                label2.Invalidate();
+            }
         }
 
         /// <summary>
