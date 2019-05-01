@@ -133,7 +133,6 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(307, 33);
             this.label2.TabIndex = 13;
-            this.label2.Text = "MLAT1A2019428453001";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3

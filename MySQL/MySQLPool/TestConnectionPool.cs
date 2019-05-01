@@ -11,7 +11,7 @@ namespace HelloCSharp.MySQL.MySQLPool
     public class TestConnectionPool
     {
         public string _url = "server=101.132.102.203;user=root;database=springproject;port=3306;password=root;";
-
+                
         public void Test()
         {
             ConnectionPool connectionPool = new ConnectionPool(_url);
@@ -24,7 +24,7 @@ namespace HelloCSharp.MySQL.MySQLPool
                 connectionPool.PutInConnection(tempConnection);
             }
             DateTime afterTime = System.DateTime.Now;
-            Console.WriteLine("使用连接池共耗时:" + afterTime.Subtract(beforeTime).TotalMilliseconds / 1000 + "秒");
+            Console.WriteLine("使用连接池共耗时:" + afterTime.Subtract(beforeTime).TotalMilliseconds / 1000 +"秒");
             beforeTime = System.DateTime.Now;
             for (int i = 0; i < 50; i++)
             {
