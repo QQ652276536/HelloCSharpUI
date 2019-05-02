@@ -97,14 +97,15 @@ namespace HelloCSharp.Log
             {
                 Type exceptionType = exception.GetType();
                 string text = string.Empty;
-                if (!string.IsNullOrEmpty(specialText))
-                {
-                    text = text + specialText + Environment.NewLine;
-                }
                 text = "Exception: " + exceptionType.Name + Environment.NewLine;
                 text += "               " + "Message: " + exception.Message + Environment.NewLine;
                 text += "               " + "Source: " + exception.Source + Environment.NewLine;
                 text += "               " + "StackTrace: " + exception.StackTrace + Environment.NewLine;
+                if (!string.IsNullOrEmpty(specialText))
+                {
+                    specialText = "               " + specialText;
+                    text = text + specialText + Environment.NewLine;
+                }
                 WriteLog(text, LogType.Error);
             }
         }
