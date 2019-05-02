@@ -301,7 +301,8 @@ namespace TestTools
             string portName = tempSerialPort.PortName;
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
-            if (tempStr.Contains("OK"))
+            //向设备写入ate1命令后返回的内容
+            if (tempStr.Contains("ate1") && tempStr.Contains("OK"))
             {
                 //获取测试通过的串口
                 _serialPort = tempSerialPort;
