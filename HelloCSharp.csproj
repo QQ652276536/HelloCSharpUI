@@ -41,7 +41,7 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ICO_C.ico</ApplicationIcon>
+    <ApplicationIcon>ICO_Game_7.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
@@ -199,7 +199,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ICO_C.ico" />
+    <Content Include="ICO_Game_7.ico" />
     <Content Include="Image\GameBack1.png" />
     <Content Include="Image\ICO_A.ico" />
     <Content Include="Image\ICO_B.ico" />
