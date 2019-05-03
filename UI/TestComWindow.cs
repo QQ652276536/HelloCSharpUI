@@ -389,7 +389,7 @@ namespace TestTools
         private void FirstRunConnState()
         {
             //_serialPort不为null则说明有设备连接
-            _portDictionary = TestSN(_ports);
+            _portDictionary = TestDevice(_ports);
             Thread.Sleep(100);
             if (_serialPort != null)
             {
@@ -456,7 +456,7 @@ namespace TestTools
                 //有设备连接
                 if (tempPorts.Length > _ports.Length)
                 {
-                    _portDictionary = TestSN(tempPorts);
+                    _portDictionary = TestDevice(tempPorts);
                     if (_serialPort != null)
                     {
                         CheckConnStartState(true);
@@ -501,7 +501,7 @@ namespace TestTools
         /// <summary>
         /// 测试串口是否通畅,写入的是串口总是返回查询内容的ATE1命令
         /// </summary>
-        private Dictionary<string, SerialPort> TestSN(string[] ports)
+        private Dictionary<string, SerialPort> TestDevice(string[] ports)
         {
             Dictionary<string, SerialPort> dictionary = new Dictionary<string, SerialPort>();
             foreach (string portName in ports)
