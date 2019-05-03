@@ -42,7 +42,7 @@ namespace TestTools
             FirstRunConnState();
             //定时器
             _timer = new System.Timers.Timer(500);
-            _timer.Elapsed += new System.Timers.ElapsedEventHandler(CheckPorts);
+            _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerEvent);
             _timer.AutoReset = true;
             _timer.Start();
         }
@@ -162,45 +162,6 @@ namespace TestTools
             this.BeginInvoke(labelDele, new object[] { flag });
             ButtonDele buttonDele = new ButtonDele(ButtonStateChanged);
             this.BeginInvoke(buttonDele, new object[] { flag });
-        }
-
-        /// <summary>
-        /// 定时检测串口是否有变动
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void CheckPorts(object source, System.Timers.ElapsedEventArgs e)
-        {
-            string[] tempPorts = SerialPort.GetPortNames();
-            Array.Sort(tempPorts);
-            //串口数量有变动
-            if (_ports.Length != tempPorts.Length)
-            {
-                //首先释放所有串口,尽量避免后面的设备访问不了串口
-                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
-                Invoke(closePort);
-                //有设备连接
-                if (tempPorts.Length > _ports.Length)
-                {
-                    _portDictionary = TestSN(tempPorts);
-                    if (_serialPort != null)
-                    {
-                        CheckConnStartState(true);
-                    }
-                }
-                //有设备断开
-                else if (tempPorts.Length < _ports.Length)
-                {
-                    //关闭设备的串口
-                    if (_serialPort != null)
-                    {
-                        _serialPort.Close();
-                    }
-                    //设备断开时禁止写入SN
-                    CheckConnStartState(false);
-                }
-                _ports = (string[])tempPorts.Clone();
-            }
         }
 
         /// <summary>
@@ -475,6 +436,45 @@ namespace TestTools
                 return;
             }
             LabelTextChanged(flag);
+        }
+
+        /// <summary>
+        /// 定时检测串口是否有变动
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void OnTimerEvent(object source, System.Timers.ElapsedEventArgs e)
+        {
+            string[] tempPorts = SerialPort.GetPortNames();
+            Array.Sort(tempPorts);
+            //串口数量有变动
+            if (_ports.Length != tempPorts.Length)
+            {
+                //首先释放所有串口,尽量避免后面的设备访问不了串口
+                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                Invoke(closePort);
+                //有设备连接
+                if (tempPorts.Length > _ports.Length)
+                {
+                    _portDictionary = TestSN(tempPorts);
+                    if (_serialPort != null)
+                    {
+                        CheckConnStartState(true);
+                    }
+                }
+                //有设备断开
+                else if (tempPorts.Length < _ports.Length)
+                {
+                    //关闭设备的串口
+                    if (_serialPort != null)
+                    {
+                        _serialPort.Close();
+                    }
+                    //设备断开时禁止写入SN
+                    CheckConnStartState(false);
+                }
+                _ports = (string[])tempPorts.Clone();
+            }
         }
 
         /// <summary>
