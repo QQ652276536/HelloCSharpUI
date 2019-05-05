@@ -15,7 +15,7 @@ namespace TestIMEI
     public partial class TestIMEIWindow : Form
     {
         private string _configFilePath = "TestIMEIConfig";
-        bool _isFirstRunTimer = true;
+        private bool isFirstRun = false;
         private string _logPath = "TestIMEILog";
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
@@ -100,18 +100,25 @@ namespace TestIMEI
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
+            ButtonStateChanged(false);
             if (_serialPort != null)
             {
-                ButtonStateChanged(false);
+                if ("该设备未写入SN".Equals(_snNumber) || _snNumber.Length < 5)
+                {
+                    MessageBox.Show("请检查该设备SN是否正确", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ButtonStateChanged(true);
+                    return;
+                }
                 //一定要开启串口,因为每次写入完成都会关闭串口,尽量避免拨掉设备时抛出"资源占用"的异常
                 _serialPort.Close();
                 _serialPort.Open();
                 //查询该设备写入
                 WriterIMEI(ref _serialPort);
-                Thread.Sleep(500);
-                ButtonStateChangedByDele(true);
+                Thread.Sleep(1000);
                 //关闭所有串口,将控件上的SN置为空
                 CloseIsOpenSerailPort();
+                //在所有串口关闭以后再将按钮状态置为可用状态,避免
+                ButtonStateChanged(true);
             }
             else
             {
@@ -127,11 +134,8 @@ namespace TestIMEI
         /// <param name="flag"></param>
         private void ButtonStateChanged(bool flag)
         {
-            //if (!"该设备未写入SN".Equals(label2.Text) && label2.Text.Length > 2)
-            {
-                button1.Enabled = flag;
-                button1.Invalidate();
-            }
+            button1.Enabled = flag;
+            button1.Invalidate();
         }
 
         /// <summary>
@@ -153,18 +157,6 @@ namespace TestIMEI
         /// </summary>
         /// <param name="flag"></param>
         private void CheckDeviceState(bool flag)
-        {
-            Label1Dele labelDele = new Label1Dele(Label1TextChanged);
-            this.BeginInvoke(labelDele, new object[] { flag });
-            ButtonDele buttonDele = new ButtonDele(ButtonStateChanged);
-            this.BeginInvoke(buttonDele, new object[] { flag });
-        }
-
-        /// <summary>
-        /// 检测设备连接状态
-        /// </summary>
-        /// <param name="flag"></param>
-        private void CheckConnStartState(bool flag)
         {
             Label1Dele labelDele = new Label1Dele(Label1TextChanged);
             this.BeginInvoke(labelDele, new object[] { flag });
@@ -220,16 +212,18 @@ namespace TestIMEI
                 //读取缓冲区所有字节
                 string tempStr = tempSerialPort.ReadExisting();
                 //向设备写入AT+QCSN?命令后返回的内容
-                if (/*tempStr.Contains("OK") && */tempStr.IndexOf("AT+QCSN?") == 0 /*&& tempStr.Contains("+QCSN:")*/)
+                if (tempStr.Contains("OK") && tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
                 {
                     //解绑串口之前的事件
                     _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
                     _snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-                    if (_snNumber.Equals("") || _snNumber.Length < 2)
+                    if (_snNumber.Length < 5)
                     {
                         _snNumber = "该设备未写入SN";
                     }
-                    Label2TextChangedByDele(_snNumber);
+                    //Label2TextChangedByDele(_snNumber);
+                    Label2Dele labelDele = new Label2Dele(Label2TextChanged);
+                    this.BeginInvoke(labelDele, new object[] { _snNumber });
                 }
             }
             catch (Exception ex)
@@ -290,6 +284,7 @@ namespace TestIMEI
                 Label1TextChanged(false);
                 ButtonStateChanged(false);
             }
+            isFirstRun = true;
         }
 
         /// <summary>
@@ -362,6 +357,14 @@ namespace TestIMEI
         private void Label2TextChanged(string content)
         {
             label2.Text = content;
+            if ("该设备未写入SN".Equals(content) || content.Length < 5)
+            {
+                label2.ForeColor = Color.Red;
+            }
+            else
+            {
+                label2.ForeColor = Color.Green;
+            }
             label2.Invalidate();
         }
 
@@ -389,6 +392,12 @@ namespace TestIMEI
         {
             string[] tempPorts = SerialPort.GetPortNames();
             Array.Sort(tempPorts);
+            if (isFirstRun)
+            {
+                isFirstRun = false;
+                QueryDeviceSNDele queryDele = new QueryDeviceSNDele(QueryDeviceSN);
+                BeginInvoke(queryDele);
+            }
             //串口数量有变动
             if (_ports.Length != tempPorts.Length)
             {
@@ -401,7 +410,7 @@ namespace TestIMEI
                     _portDictionary = TestDevice(tempPorts);
                     if (_serialPort != null)
                     {
-                        CheckConnStartState(true);
+                        CheckDeviceState(true);
                     }
                 }
                 //有设备断开
@@ -413,7 +422,7 @@ namespace TestIMEI
                         _serialPort.Close();
                     }
                     //设备断开时禁止写入SN
-                    CheckConnStartState(false);
+                    CheckDeviceState(false);
                 }
                 _ports = (string[])tempPorts.Clone();
             }
@@ -437,7 +446,13 @@ namespace TestIMEI
         /// <param name="serialPort"></param>
         private void QueryDeviceSN()
         {
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.Open();
+            }
             _serialPort.Write("AT+QCSN?\r\n");
+            //Thread.Sleep(150);
+            //_serialPort.Close();
         }
 
         /// <summary>
