@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelloCSharp.Log;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -12,7 +13,6 @@ namespace TestTools
 {
     public partial class TestCOMWindow : Form
     {
-        private int _number = 0;
         private int _overlayIndex = 0;
         private Dictionary<string, SerialPort> _portDictionary = new Dictionary<string, SerialPort>();
         private string[] _ports;
@@ -112,7 +112,10 @@ namespace TestTools
                     _serialPort.Close();
                     _serialPort.Open();
                     //验证是否符合写入条件(目前是查看返回的内容是否以0P和08结尾)
-                    _serialPort.Write("at+egmr=0,5\r\n");
+                    //_serialPort.Write("at+egmr=0,5\r\n");
+                    _serialPort.Write("AT+QCSN?\r\n");
+                    Thread.Sleep(1000);
+                    ButtonStateChanged(true);
                 }
                 else
                 {
@@ -246,13 +249,12 @@ namespace TestTools
             long currentTicks1 = DateTime.Now.Ticks;
             long currentTicks2 = (currentTicks1 - new DateTime(1970, 1, 1, 0, 0, 0, 0).Ticks) / 10000;
             string tickStr = currentTicks2.ToString();
-            tickStr = tickStr.Substring(tickStr.Length - 3);
-            tickStr += (++_number).ToString("D3");
+            tickStr = tickStr.Substring(tickStr.Length - 6);
             content += tickStr;
         }
 
         /// <summary>
-        /// 接收测试串口是否通畅返回的内容
+        /// 接收写入命令后返回的内容
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -270,7 +272,8 @@ namespace TestTools
                 //解绑串口之前的事件
                 _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
                 //给串口绑定新的事件
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter);
+                //_serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter);
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter_NotCheckSerialPort); 
                 LabelTextChangedByDele(true);
             }
         }
@@ -312,7 +315,6 @@ namespace TestTools
                 //查询设备的SN所返回的内容
                 if (tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
                 {
-                    _overlayIndex = ReadContentByLine(ref snNumber);
                     //截取出来的SN有内容就说明之前写过SN,不论写入SN的格式
                     if (snNumber != null && snNumber.Length > 0)
                     {
@@ -343,6 +345,7 @@ namespace TestTools
                 //向设备写入SN后返回的内容
                 else if (tempStr.IndexOf("AT+QCSN=") == 0)
                 {
+                    _overlayIndex = ReadContentByLine(ref _snNumber);
                     //较验一致
                     if (snNumber.Equals(_snNumber))
                     {
@@ -371,6 +374,84 @@ namespace TestTools
                     _snNumber = null;
                     _overlayIndex = 0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 不验证设备的串口参数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataReceivedWriter_NotCheckSerialPort(object sender, SerialDataReceivedEventArgs e)
+        {
+            //阻塞该线程,以防上一次的数据没有读完
+            Thread.Sleep(100);
+            SerialPort tempSerialPort = (SerialPort)sender;
+            string portName = tempSerialPort.PortName;
+            //读取缓冲区所有字节
+            string tempStr = tempSerialPort.ReadExisting();
+            string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
+            //查询设备的SN所返回的内容
+            if (tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:") || tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("ERROR"))
+            {
+                //截取出来的SN有内容就说明之前写过SN,不论写入SN的格式
+                if (snNumber != null && snNumber.Length > 0)
+                {
+                    //询问是否覆盖再写入设备
+                    MessageBoxDele messageBoxDele = new MessageBoxDele(AskIsOverlay);
+                    if ((bool)this.Invoke(messageBoxDele))
+                    {
+                        WriterDele textDele = new WriterDele(WriterSN);
+                        BeginInvoke(textDele);
+                    }
+                    //关闭所有串口,将控件上的SN置为空
+                    else
+                    {
+                        ButtonStateChangedByDele(true);
+                        CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                        BeginInvoke(closePort);
+                        _snNumber = null;
+                        _overlayIndex = 0;
+                    }
+                }
+                //直接写入设备
+                else
+                {
+                    WriterDele textDele = new WriterDele(WriterSN);
+                    BeginInvoke(textDele);
+                }
+            }
+            //向设备写入SN后返回的内容
+            else if (tempStr.IndexOf("AT+QCSN=") == 0)
+            {
+                _overlayIndex = ReadContentByLine(ref _snNumber);
+                //较验一致
+                if (snNumber.Equals(_snNumber))
+                {
+                    //覆盖本地日志
+                    if (_overlayIndex > 0)
+                    {
+                        OverlayWriterLocalLog(ref _overlayIndex, ref _snNumber);
+                    }
+                    //写入本地日志
+                    else
+                    {
+                        WriterLocalLog(snNumber);
+                    }
+                    TextBoxChangedByDele(1, ref snNumber);
+                }
+                //较验不一致
+                else
+                {
+                    TextBoxChangedByDele(2, ref snNumber);
+                    _overlayIndex = 0;
+                }
+                ButtonStateChangedByDele(true);
+                //关闭所有串口,将控件上的SN置为空
+                CloseIsOpenSerialPortDele closePort = new CloseIsOpenSerialPortDele(CloseIsOpenSerailPort);
+                BeginInvoke(closePort);
+                _snNumber = null;
+                _overlayIndex = 0;
             }
         }
 
@@ -484,9 +565,16 @@ namespace TestTools
         /// <param name="content"></param>
         private void OverlayWriterLocalLog(ref int index, ref string content)
         {
-            string[] arrayLines = File.ReadAllLines(_path);
-            arrayLines[index - 1] = content;
-            File.WriteAllLines(_path, arrayLines);
+            try
+            {
+                string[] arrayLines = File.ReadAllLines(_path);
+                arrayLines[index - 1] = content;
+                File.WriteAllLines(_path, arrayLines);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.WriteException(ex, "覆盖本地日志时发生IO异常");
+            }
         }
 
         /// <summary>
@@ -551,6 +639,7 @@ namespace TestTools
             FileStream fileStream = new FileStream(_path, FileMode.Append, FileAccess.Write);
             StreamWriter streamWriter = new StreamWriter(fileStream);
             streamWriter.WriteLine(content);
+            streamWriter.Flush();
             streamWriter.Close();
             fileStream.Close();
         }
@@ -572,12 +661,12 @@ namespace TestTools
                 index++;
                 if (strLine.Equals(snNumber))
                 {
-                    break;
+                    return index;
                 }
             }
-            fileStream.Close();
             streamReader.Close();
-            return index;
+            fileStream.Close();
+            return 0;
         }
 
         /// <summary>
