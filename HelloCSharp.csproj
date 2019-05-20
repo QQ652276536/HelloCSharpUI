@@ -201,7 +201,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DLL\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
