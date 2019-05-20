@@ -1,6 +1,9 @@
-﻿using HelloCSharp.Log;
+﻿using CodingMouse;
+using HelloCSharp.Log;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
@@ -500,6 +503,37 @@ namespace TestIMEI
                                 return;
                             }
                         }
+                        //写入数据库
+                        //string errorStr = "";
+                        //DataBaseClass dataBaseClass = new DataBaseClass();
+                        ////SIM_IMEI
+                        //string imei1Str = "Update workorder set SIM_IMEI = '" + imei1 + "' where IMEI1 = '" + _snNumber + "'";
+                        //int returnNum = dataBaseClass.RunCommand(imei1Str);
+                        //if (returnNum < 0)
+                        //{
+                        //    errorStr += "SIM_IMEI添加失败，";
+                        //}
+                        ////WIFI_MAC
+                        //string wifiMacStr = "Update workorder set WIFI_MAC = '" + wifimac + "' where IMEI1 = '" + _snNumber + "'";
+                        //returnNum = dataBaseClass.RunCommand(wifiMacStr);
+                        //if (returnNum < 0)
+                        //{
+                        //    errorStr += "WIFI_MAC添加失败，";
+                        //}
+                        ////BT_MAC
+                        //string btMacStr = "Update workorder set BT_MAC = '" + btmac + "' where IMEI1 = '" + _snNumber + "'";
+                        //returnNum = dataBaseClass.RunCommand(btMacStr);
+                        //if (returnNum < 0)
+                        //{
+                        //    errorStr += "BT_MAC添加失败，";
+                        //}
+                        //if (!"".Equals(errorStr))
+                        //{
+                        //    MessageBox.Show(errorStr + "请与联系技术支持人员处理!");
+                        //    ButtonStateChanged(true);
+                        //    return;
+                        //}
+                        //Logger.Instance.WriteLog("数据库的IMEI命令写入完毕");
                         //如果这台设备已经写入过IMEI、MAC直接覆盖,同样本地日志文件也要覆盖
                         int tempIndex = ReadContentByLine(ref _snNumber);
                         string tempStr = content.ToString();
@@ -513,6 +547,7 @@ namespace TestIMEI
                         {
                             WriterLocalLog(tempStr);
                         }
+                        Logger.Instance.WriteLog("本地的IMEI命令写入完毕");
                         //外部文件的该行记录清空
                         arrayLines[i] = "";
                         File.WriteAllLines(_configFilePath, arrayLines, Encoding.UTF8);
@@ -529,7 +564,7 @@ namespace TestIMEI
                             serialPort.Write("at+qnvw=4678,0,\"" + wifimac + "\"\r\n");
                         if (!"".Equals(btmac))
                             serialPort.Write("at+qnvw=447,0,\"" + btmac + "\"\r\n");
-                        Logger.Instance.WriteLog("IMEI命令写入完毕");
+                        Logger.Instance.WriteLog("设备的IMEI命令写入完毕");
                         ButtonStateChanged(true);
                     }
                     break;
@@ -538,7 +573,7 @@ namespace TestIMEI
             catch (Exception ex)
             {
                 Logger.Instance.WriteException(ex, "写入IMEI命令时发生异常");
-                MessageBox.Show("未能找到外部文件IMEIConfig", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("写入IMEI命令时发生异常", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ButtonStateChanged(true);
             }
         }
