@@ -1,7 +1,6 @@
 #过滤数据库文件、sln解决方案文件、配置文件
 *.mdb
 *.ldb
-*.sln
 *.suo
 *.user
 
