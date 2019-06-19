@@ -22,8 +22,8 @@ namespace HelloCSharp
             //Application.Run(new FileAWindow());
             //Application.Run(new FileBWindow());
 
-            Application.Run(new TestCOMWindow());
-            //Application.Run(new TestIMEIWindow());
+            //Application.Run(new TestCOMWindow());
+            Application.Run(new TestIMEIWindow());
 
         }
 
