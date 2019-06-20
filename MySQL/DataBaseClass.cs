@@ -7,9 +7,9 @@ namespace HelloCSharp
 {
     public class DataBaseClass
     {
-        private static readonly string SERVER = "192.168.0.124";
+        private static readonly string SERVER = "127.0.0.1";
         private static readonly string UID = "sa";
-        private static readonly string PWD = "asdf1234";
+        private static readonly string PWD = ".";
         private static readonly string DATABASE = "wande";
 
         public static string str = "server=" + SERVER + ";uid=" + UID + ";pwd=" + PWD + ";database=" + DATABASE;

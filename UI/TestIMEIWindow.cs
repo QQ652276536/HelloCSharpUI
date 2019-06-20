@@ -1,4 +1,5 @@
 ﻿using CodingMouse;
+using HelloCSharp;
 using HelloCSharp.Log;
 using System;
 using System.Collections.Generic;
@@ -85,12 +86,13 @@ namespace TestIMEI
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
-            //定时器,在判断设备是否有连接后启动
+            //程序启动时需要判断是否有设备连接
+            FirstRunConnState();
+            //定时器
             _timer = new System.Timers.Timer(500);
             _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerEvent);
             _timer.AutoReset = true;
-            //程序启动时需要判断是否有设备连接
-            FirstRunConnState();
+            _timer.Start();
         }
 
         /// <summary>
@@ -241,8 +243,6 @@ namespace TestIMEI
             //_serialPort不为null则说明有设备连接
             _portDictionary = TestDevice(_ports);
             Thread.Sleep(200);
-            //程序首次运行完毕后再启动定时器
-            _timer.Start();
         }
 
         /// <summary>
@@ -509,28 +509,31 @@ namespace TestIMEI
                             stringBuilder.Append(", BT_MAC = '" + btmac + "'");
                         }
                         stringBuilder.Append(" where IMEI1 = '" + _snNumber + "'");
-                        int returnNum = dataBaseClass.RunCommand(stringBuilder.ToString());
+                        string sqlStr = stringBuilder.ToString();
+                        int returnNum = dataBaseClass.RunCommand(sqlStr);
                         if (returnNum < 1)
                         {
-                            MessageBox.Show("录入系统失败,请与联系技术支持人员处理!");
+                            Logger.Instance.WriteLog("录入系统失败,生成的SQL语句是:" + sqlStr, LogType.Error);
+                            MessageBox.Show("录入系统失败,请联系技术支持人员处理!");
                             ButtonStateChanged(true);
                             return;
                         }
                         Logger.Instance.WriteLog("数据库的IMEI命令写入完毕");
-                        ////如果这台设备已经写入过IMEI、MAC直接覆盖,同样本地日志文件也要覆盖
-                        //int tempIndex = ReadContentByLine(ref _snNumber);
-                        //string tempStr = content.ToString();
-                        //if (tempIndex > 0)
-                        //{
-                        //    OverlayWriterLocalLog(ref tempIndex, ref tempStr);
-                        //    Thread.Sleep(200);
-                        //}
-                        ////没有则直接写入本地日志
-                        //else
-                        //{
-                        //    WriterLocalLog(tempStr);
-                        //}
-                        //Logger.Instance.WriteLog("本地的IMEI命令写入完毕");
+                        //生成本地日志文件
+                        int tempIndex = ReadContentByLine(ref _snNumber);
+                        string tempStr = content.ToString();
+                        //该设备已经写过IMEI信息,需要在本地日志文件中覆盖
+                        if (tempIndex > 0)
+                        {
+                            OverlayWriterLocalLog(ref tempIndex, ref tempStr);
+                            Thread.Sleep(200);
+                        }
+                        //没有则直接写入本地日志
+                        else
+                        {
+                            WriterLocalLog(tempStr);
+                        }
+                        Logger.Instance.WriteLog("本地的IMEI命令写入完毕");
                         //该行记录清空
                         arrayLines[i] = "";
                         //写回外部文件
