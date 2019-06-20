@@ -86,13 +86,12 @@ namespace TestIMEI
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
-            //程序启动时需要判断是否有设备连接
-            FirstRunConnState();
             //定时器
             _timer = new System.Timers.Timer(500);
             _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerEvent);
             _timer.AutoReset = true;
-            _timer.Start();
+            //程序启动时需要判断是否有设备连接
+            FirstRunConnState();
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace TestIMEI
                 //读取缓冲区所有字节
                 string tempStr = tempSerialPort.ReadExisting();
                 //向设备写入AT+QCSN?命令后返回的内容
-                if (tempStr.Contains("OK") && tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
+                if (tempStr.Contains("OK") && tempStr.Contains("+QCSN:"))
                 {
                     _snNumber = SubTwoStrContent(tempStr, "\"", "\"");
                     if (_snNumber.Length < 8)
@@ -243,6 +242,8 @@ namespace TestIMEI
             //_serialPort不为null则说明有设备连接
             _portDictionary = TestDevice(_ports);
             Thread.Sleep(200);
+            //程序首次运行完毕后再启动定时器
+            _timer.Start();
         }
 
         /// <summary>

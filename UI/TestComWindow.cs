@@ -38,13 +38,12 @@ namespace TestTools
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
-            //程序启动时需要判断是否有设备连接
-            FirstRunConnState();
             //定时器
             _timer = new System.Timers.Timer(500);
             _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerEvent);
             _timer.AutoReset = true;
-            _timer.Start();
+            //程序启动时需要判断是否有设备连接
+            FirstRunConnState();
         }
 
         /// <summary>
@@ -273,7 +272,7 @@ namespace TestTools
                 _serialPort.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedTestCom);
                 //给串口绑定新的事件
                 //_serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter);
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter_NotCheckSerialPort); 
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedWriter_NotCheckSerialPort);
                 LabelTextChangedByDele(true);
             }
         }
@@ -292,9 +291,9 @@ namespace TestTools
             //读取缓冲区所有字节
             string tempStr = tempSerialPort.ReadExisting();
             string snNumber = SubTwoStrContent(tempStr, "\"", "\"");
-            //查询设备是否符合写入条件(是否以0P和08结尾)
             if (tempStr.Contains("at+egmr=0,5") && tempStr.Contains("+EGMR:") || tempStr.Contains("at+egmr=0,5") && tempStr.Contains("ERROR"))
             {
+                //验证设备是否符合写入条件(是否以0P和08结尾)
                 if (snNumber.EndsWith("0P") || snNumber.EndsWith("08"))
                 {
                     WriterDele writerDele = new WriterDele(QueryAndWriterSN);
@@ -483,6 +482,8 @@ namespace TestTools
                 LabelTextChanged(false);
                 ButtonStateChanged(false);
             }
+            //程序首次运行完毕后再启动定时器
+            _timer.Start();
         }
 
         /// <summary>
