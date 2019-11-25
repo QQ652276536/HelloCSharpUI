@@ -1,9 +1,8 @@
 ﻿using CodingMouse;
+using HelloCSharp;
 using HelloCSharp.Log;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
@@ -87,7 +86,7 @@ namespace TestIMEI
             //获取所有串口名
             _ports = SerialPort.GetPortNames();
             Array.Sort(_ports);
-            //定时器,在判断设备是否有连接后启动
+            //定时器
             _timer = new System.Timers.Timer(500);
             _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimerEvent);
             _timer.AutoReset = true;
@@ -202,7 +201,7 @@ namespace TestIMEI
                 //读取缓冲区所有字节
                 string tempStr = tempSerialPort.ReadExisting();
                 //向设备写入AT+QCSN?命令后返回的内容
-                if (tempStr.Contains("OK") && tempStr.IndexOf("AT+QCSN?") == 0 && tempStr.Contains("+QCSN:"))
+                if (tempStr.Contains("OK") && tempStr.Contains("+QCSN:"))
                 {
                     _snNumber = SubTwoStrContent(tempStr, "\"", "\"");
                     if (_snNumber.Length < 8)
@@ -433,21 +432,26 @@ namespace TestIMEI
         {
             try
             {
+                //按行读取所有内容
                 string[] arrayLines = File.ReadAllLines(_configFilePath, Encoding.UTF8);
                 for (int i = 0; i < arrayLines.Length; i++)
                 {
+                    //从上往下获取第一个有内容的行
                     string[] tempContents = arrayLines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     if (tempContents.Length < 1)
                     {
                         if (i == arrayLines.Length - 1)
                         {
-                            MessageBox.Show("写入失败!\r\n请检查外部配置文件是否已写入完毕", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("写入失败!\r\n请检查外部配置文件是否已读取完毕", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             ButtonStateChanged(true);
                         }
                         continue;
                     }
                     else
                     {
+                        //错误信息
+                        string errorStr = "";
+                        DataBaseClass dataBaseClass = new DataBaseClass();
                         string imei1 = "";
                         string imei2 = "";
                         string wifimac = "";
@@ -470,73 +474,56 @@ namespace TestIMEI
                             content.Append(imei2);
                         }
                         //WIFI-MAC
-                        if (checkBox3.Checked)
+                        if (tempContents.Length > 2 && checkBox3.Checked)
                         {
-                            if (tempContents.Length > 2)
-                            {
-                                wifimac = tempContents[2];
-                                wifimac = Regex.Replace(wifimac, ":", "");
-                                content.Append(" ");
-                                content.Append(wifimac);
-                            }
-                            else
-                            {
-                                MessageBox.Show("写入失败!\r\n缺少MAC地址", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                ButtonStateChanged(true);
-                                return;
-                            }
+                            wifimac = tempContents[2];
+                            wifimac = Regex.Replace(wifimac, ":", "");
+                            content.Append(" ");
+                            content.Append(wifimac);
                         }
                         //BT-MAC
-                        if (checkBox4.Checked)
+                        if (tempContents.Length > 3 && checkBox4.Checked)
                         {
-                            if (tempContents.Length > 3)
-                            {
-                                btmac = tempContents[3];
-                                btmac = Regex.Replace(btmac, ":", "");
-                                content.Append(" ");
-                                content.Append(btmac);
-                            }
-                            else
-                            {
-                                MessageBox.Show("写入失败!\r\n缺少MAC地址", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                ButtonStateChanged(true);
-                                return;
-                            }
+                            btmac = tempContents[3];
+                            btmac = Regex.Replace(btmac, ":", "");
+                            content.Append(" ");
+                            content.Append(btmac);
                         }
-                        //写入数据库
-                        //string errorStr = "";
-                        //DataBaseClass dataBaseClass = new DataBaseClass();
-                        ////SIM_IMEI
-                        //string imei1Str = "Update workorder set SIM_IMEI = '" + imei1 + "' where IMEI1 = '" + _snNumber + "'";
-                        //int returnNum = dataBaseClass.RunCommand(imei1Str);
-                        //if (returnNum < 0)
-                        //{
-                        //    errorStr += "SIM_IMEI添加失败，";
-                        //}
-                        ////WIFI_MAC
-                        //string wifiMacStr = "Update workorder set WIFI_MAC = '" + wifimac + "' where IMEI1 = '" + _snNumber + "'";
-                        //returnNum = dataBaseClass.RunCommand(wifiMacStr);
-                        //if (returnNum < 0)
-                        //{
-                        //    errorStr += "WIFI_MAC添加失败，";
-                        //}
-                        ////BT_MAC
-                        //string btMacStr = "Update workorder set BT_MAC = '" + btmac + "' where IMEI1 = '" + _snNumber + "'";
-                        //returnNum = dataBaseClass.RunCommand(btMacStr);
-                        //if (returnNum < 0)
-                        //{
-                        //    errorStr += "BT_MAC添加失败，";
-                        //}
-                        //if (!"".Equals(errorStr))
-                        //{
-                        //    MessageBox.Show(errorStr + "请与联系技术支持人员处理!");
-                        //    ButtonStateChanged(true);
-                        //    return;
-                        //}
-                        //Logger.Instance.WriteLog("数据库的IMEI命令写入完毕");
-                        //如果这台设备已经写入过IMEI、MAC直接覆盖,同样本地日志文件也要覆盖
+                        if (!"".Equals(errorStr))
+                        {
+                        }
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.Append("Update workorder set ");
+                        if (!"".Equals(imei1))
+                        {
+                            stringBuilder.Append("SIM_IMEI = '" + imei1 + "'");
+                        }
+                        if (!"".Equals(imei2))
+                        {
+                        }
+                        if (!"".Equals(wifimac))
+                        {
+                            stringBuilder.Append(", WIFI_MAC = '" + wifimac + "'");
+                        }
+                        if (!"".Equals(btmac))
+                        {
+                            stringBuilder.Append(", BT_MAC = '" + btmac + "'");
+                        }
+                        stringBuilder.Append(" where IMEI1 = '" + _snNumber + "'");
+                        string sqlStr = stringBuilder.ToString();
+                        int returnNum = dataBaseClass.RunCommand(sqlStr);
+                        if (returnNum < 1)
+                        {
+                            Logger.Instance.WriteLog("录入系统失败,生成的SQL语句是:" + sqlStr, LogType.Error);
+                            MessageBox.Show("录入系统失败,请联系技术支持人员处理!");
+                            ButtonStateChanged(true);
+                            return;
+                        }
+                        Logger.Instance.WriteLog("数据库的IMEI命令写入完毕");
+                        //生成本地日志文件
                         int tempIndex = ReadContentByLine(ref _snNumber);
                         string tempStr = content.ToString();
+                        //该设备已经写过IMEI信息,需要在本地日志文件中覆盖
                         if (tempIndex > 0)
                         {
                             OverlayWriterLocalLog(ref tempIndex, ref tempStr);
@@ -548,14 +535,15 @@ namespace TestIMEI
                             WriterLocalLog(tempStr);
                         }
                         Logger.Instance.WriteLog("本地的IMEI命令写入完毕");
-                        //外部文件的该行记录清空
+                        //该行记录清空
                         arrayLines[i] = "";
+                        //写回外部文件
                         File.WriteAllLines(_configFilePath, arrayLines, Encoding.UTF8);
                         Thread.Sleep(200);
                         //显示在文本框
                         string content2 = " SN是" + _snNumber + "\tIMEI1是" + imei1 + "\tIMEI2是" + imei2 + "\tWIFI-MAC是" + wifimac + "\tBT-MAC是" + btmac;
                         TextBoxChanged(4, ref content2);
-                        //本地文件操作无误再进行设备的写入
+                        //最后进行设备的写入
                         if (!"".Equals(imei1))
                             serialPort.Write("at+egmr=1,7,\"" + imei1 + "\"\r\n");
                         if (!"".Equals(imei2))

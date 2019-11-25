@@ -96,6 +96,7 @@
     <Compile Include="MySQL\MySQLPool\TestConnectionPool.cs" />
     <Compile Include="Application\LoginAndRegister\VerifyCode.cs" />
     <Compile Include="Application\LoginAndRegister\Register.cs" />
+    <Compile Include="SQLServer\SQLServerConnectionTool.cs" />
     <Compile Include="UI\FileBWindow.cs">
       <SubType>Form</SubType>
     </Compile>
