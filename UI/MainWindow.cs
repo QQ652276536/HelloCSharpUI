@@ -58,7 +58,7 @@ namespace HelloCSharp.UI
             if (typeName.Equals("Label"))
             {
                 panelName = control.Parent.Name;
-                Console.WriteLine("啊~~~~~~");
+                Console.WriteLine("啊~~~~~~" + panelName);
             }
             switch (panelName)
             {
