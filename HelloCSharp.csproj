@@ -123,6 +123,12 @@
     <Compile Include="UI\MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MH1902.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MH1902.Designer.cs">
+      <DependentUpon>MH1902.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\RegisterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -161,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MH1902.resx">
+      <DependentUpon>MH1902.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\RegisterControl.resx">
       <DependentUpon>RegisterControl.cs</DependentUpon>
