@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -22,10 +23,69 @@ namespace HelloCSharp.UI
         private readonly string STEP1 = "7F7F7F7F7F7F7F7F7F7F";
         private readonly string STEP2 = "7C7C7C7C7C7C7C7C7C7C";
 
+        private delegate void RichTextBoxDele(string str);
+
         public MH1902()
         {
             InitializeComponent();
             InitData();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        private void RichTextBoxChangedByDele(string str)
+        {
+            //非UI线程访问控件时
+            if (richTextBox1.InvokeRequired)
+            {
+                richTextBox1.Invoke(new RichTextBoxDele(RichTextBoxChangedByDele), str);
+            }
+            else
+            {
+                richTextBox1.AppendText("\r\n" + str);
+            }
+        }
+
+        /// <summary>
+        /// 异步接收Com返回的内容
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ReceivedComData(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort tempSerialPort = (SerialPort)sender;
+            string portName = tempSerialPort.PortName;
+            //读取缓冲区所有字节
+            string str = tempSerialPort.ReadExisting();
+            RichTextBoxChangedByDele(str);
+        }
+
+        /// <summary>
+        /// 建立连接过程的数据包，向芯片端发送10个7C
+        /// </summary>
+        /// <returns></returns>
+        private string Step2()
+        {
+            richTextBox1.AppendText("\r\n【Step2】发送10个7C");
+            _serialPort.Write(STEP2);
+            string receiveStr = _serialPort.ReadExisting();
+            richTextBox1.AppendText("\r\n【Step2】收到：" + receiveStr);
+            return "";
+        }
+
+        /// <summary>
+        /// 建立连接过程的数据包，向芯片端发送10个7F表示需要下载
+        /// </summary>
+        /// <returns></returns>
+        private String Step1()
+        {
+            richTextBox1.AppendText("\r\n【Step1】发送10个7F");
+            _serialPort.Write(STEP1);
+            string receiveStr = _serialPort.ReadExisting();
+            richTextBox1.AppendText("\r\n【Step1】收到：" + receiveStr);
+            return "";
         }
 
         private void InitData()
@@ -98,7 +158,27 @@ namespace HelloCSharp.UI
             _baudRate = Convert.ToInt32(comboBox2.SelectedValue as string);
             _dataBit = Convert.ToInt32(comboBox3.SelectedValue as string);
             _serialPort = new SerialPort(_portName, _baudRate, Parity.None, _dataBit, StopBits.One);
-            _serialPort.Open();
+            try
+            {
+                if (!_serialPort.IsOpen)
+                {
+                    richTextBox1.AppendText("已打开：" + _portName);
+                    _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
+                    _serialPort.Open();
+                    richTextBox1.AppendText("\r\n正在连接...");
+                    //Step1();
+                    //Step2();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                string content = richTextBox1.Text.ToString();
+                richTextBox1.AppendText("\r\n" + ex.ToString());
+                string str = ex.ToString();
+                richTextBox1.Select(content.Length, str.Length);
+                richTextBox1.SelectionColor = Color.Red;
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -109,7 +189,10 @@ namespace HelloCSharp.UI
         private void button5_Click(object sender, EventArgs e)
         {
             if (_serialPort != null)
+            {
                 _serialPort.Close();
+                richTextBox1.AppendText("\r\n已关闭：" + _portName);
+            }
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -146,34 +229,6 @@ namespace HelloCSharp.UI
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-        }
-
-        /// <summary>
-        /// 建立连接过程的数据包，向芯片端发送10个7C
-        /// </summary>
-        /// <returns></returns>
-        private string Step2()
-        {
-            richTextBox1.AppendText("\r\n--------------------【Step2】向芯片端发送10个7C--------------------");
-            _serialPort.Write(STEP2);
-            string receiveStr = _serialPort.ReadExisting();
-            richTextBox1.AppendText("\r\n--------------------【Step2】收到芯片端发送过来的数据--------------------");
-            richTextBox1.AppendText(receiveStr);
-            return "";
-        }
-
-        /// <summary>
-        /// 建立连接过程的数据包，向芯片端发送10个7F表示需要下载
-        /// </summary>
-        /// <returns></returns>
-        private String Step1()
-        {
-            richTextBox1.AppendText("--------------------【Step1】向芯片端发送10个7F表示需要下载--------------------");
-            _serialPort.Write(STEP1);
-            string receiveStr = _serialPort.ReadExisting();
-            richTextBox1.AppendText("\r\n--------------------【Step1】收到芯片端发送过来的数据--------------------");
-            richTextBox1.AppendText(receiveStr);
-            return "";
         }
     }
 }
