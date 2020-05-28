@@ -52,24 +52,25 @@ namespace HelloCSharp.UI
                 switch (_step)
                 {
                     case 1:
+                        _step = 2;
                         _step1Thread.Abort();
-                        richTextBox1.AppendText("\r\n【Step1】收到：" + str);
-                        richTextBox1.AppendText("\r\n【Step2】正在持续发送7C...");
+                        richTextBox1.AppendText("【Step1】收到：" + str + "\r\n");
+                        richTextBox1.AppendText("【Step2】正在持续发送7C..." + "\r\n");
                         _step2Thread = new Thread(Step2);
-                        //_step2Thread.Start();
+                        _step2Thread.Start();
                         break;
                     case 2:
                         _step2Thread.Abort();
-                        richTextBox1.AppendText("\r\n【Step2】收到：" + str);
+                        richTextBox1.AppendText("【Step2】收到：" + str + "\r\n");
                         break;
                     case 3:
-                        richTextBox1.AppendText("\r\n【Step3】收到：" + str);
+                        richTextBox1.AppendText("【Step3】收到：" + str + "\r\n");
                         break;
                     case 4:
-                        richTextBox1.AppendText("\r\n【Step4】收到：" + str);
+                        richTextBox1.AppendText("【Step4】收到：" + str + "\r\n");
                         break;
                     case 5:
-                        richTextBox1.AppendText("\r\n【Step5】收到：" + str);
+                        richTextBox1.AppendText("【Step5】收到：" + str + "\r\n");
                         break;
                 }
             }
@@ -83,16 +84,20 @@ namespace HelloCSharp.UI
         private void ReceivedComData(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort tempSerialPort = (SerialPort)sender;
-            string portName = tempSerialPort.PortName;
+            if (tempSerialPort == null || !tempSerialPort.IsOpen)
+            {
+                return;
+            }
             //读取缓冲区所有字节
-            byte[] byteArray = new byte[1024];
-            tempSerialPort.Read(byteArray,0,byteArray.Length);
+            int len = tempSerialPort.BytesToRead;
+            byte[] byteArray = new byte[len];
+            tempSerialPort.Read(byteArray, 0, byteArray.Length);
             string str = MyConvertUtil.BytesToString(byteArray);
             if (string.IsNullOrEmpty(str))
             {
                 return;
             }
-            //_logger.WriteLog("收到的数据（Hex）：" + str);
+            _logger.WriteLog("收到的数据（Hex）：" + str);
             Console.WriteLine("收到的数据（Hex）：" + str);
             RichTextBoxChangedByDele(str);
         }
@@ -196,13 +201,15 @@ namespace HelloCSharp.UI
 
         private void button5_Click(object sender, EventArgs e)
         {
+            //重置Step
+            _step = 1;
             if (_step1Thread != null)
                 _step1Thread.Abort();
             if (_step2Thread != null)
                 _step2Thread.Abort();
             if (_serialPort != null)
                 _serialPort.Close();
-            richTextBox1.AppendText("\r\n已关闭：" + _portName);
+            richTextBox1.AppendText("已关闭：" + _portName + "\r\n");
             button3.Enabled = true;
         }
 
@@ -221,23 +228,23 @@ namespace HelloCSharp.UI
                 if (!_serialPort.IsOpen)
                 {
                     button3.Enabled = false;
-                    richTextBox1.AppendText("已打开：" + _portName);
+                    richTextBox1.AppendText("已打开：" + _portName + "\r\n");
                     _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
                     _serialPort.Open();
-                    richTextBox1.AppendText("\r\n正在连接...");
+                    richTextBox1.AppendText("正在连接..." + "\r\n");
                     _step = 1;
-                    richTextBox1.AppendText("\r\n【Step1】正在持续发送7F...");
+                    richTextBox1.AppendText("【Step1】正在持续发送7F..." + "\r\n");
                     _step1Thread = new Thread(Step1);
                     _step1Thread.Start();
                 }
             }
             catch (Exception ex)
             {
-                //_logger.WriteLog(ex.ToString());
+                _logger.WriteLog(ex.ToString());
                 Console.WriteLine(ex.ToString());
                 string content = richTextBox1.Text.ToString();
                 string exStr = ex.ToString();
-                richTextBox1.AppendText("\r\n" + exStr);
+                richTextBox1.AppendText(exStr + "\r\n");
                 richTextBox1.Select(content.Length, exStr.Length);
                 richTextBox1.SelectionColor = Color.Red;
             }
