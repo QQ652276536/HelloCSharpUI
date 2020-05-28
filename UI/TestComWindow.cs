@@ -574,7 +574,7 @@ namespace TestTools
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteException(ex, "覆盖本地日志时发生IO异常");
+                MyLogger.Instance.WriteException(ex, "覆盖本地日志时发生IO异常");
             }
         }
 

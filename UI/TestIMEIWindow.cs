@@ -123,7 +123,7 @@ namespace TestIMEI
             }
             else
             {
-                Logger.Instance.WriteLog("对象_serialPort为Null。。。");
+                MyLogger.Instance.WriteLog("对象_serialPort为Null。。。");
                 MessageBox.Show("写入失败!\r\n请与管理员联系...", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ButtonStateChanged(true);
             }
@@ -221,7 +221,7 @@ namespace TestIMEI
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteException(ex, "在接收AT+QCSN?命令时发生异常,串口名:" + portName);
+                MyLogger.Instance.WriteException(ex, "在接收AT+QCSN?命令时发生异常,串口名:" + portName);
             }
         }
 
@@ -268,7 +268,7 @@ namespace TestIMEI
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.WriteException(ex, "实例化串口" + portName + "时发生异常");
+                    MyLogger.Instance.WriteException(ex, "实例化串口" + portName + "时发生异常");
                     serialPort.Close();
                 }
             }
@@ -418,7 +418,7 @@ namespace TestIMEI
                 catch (Exception ex)
                 {
                     serialPort.Close();
-                    Logger.Instance.WriteException(ex, "实例化串口时发生异常");
+                    MyLogger.Instance.WriteException(ex, "实例化串口时发生异常");
                 }
             }
             return dictionary;
@@ -514,12 +514,12 @@ namespace TestIMEI
                         int returnNum = dataBaseClass.RunCommand(sqlStr);
                         if (returnNum < 1)
                         {
-                            Logger.Instance.WriteLog("录入系统失败,生成的SQL语句是:" + sqlStr, LogType.Error);
+                            MyLogger.Instance.WriteLog("录入系统失败,生成的SQL语句是:" + sqlStr, LogType.Error);
                             MessageBox.Show("录入系统失败,请联系技术支持人员处理!");
                             ButtonStateChanged(true);
                             return;
                         }
-                        Logger.Instance.WriteLog("数据库的IMEI命令写入完毕");
+                        MyLogger.Instance.WriteLog("数据库的IMEI命令写入完毕");
                         //生成本地日志文件
                         int tempIndex = ReadContentByLine(ref _snNumber);
                         string tempStr = content.ToString();
@@ -534,7 +534,7 @@ namespace TestIMEI
                         {
                             WriterLocalLog(tempStr);
                         }
-                        Logger.Instance.WriteLog("本地的IMEI命令写入完毕");
+                        MyLogger.Instance.WriteLog("本地的IMEI命令写入完毕");
                         //该行记录清空
                         arrayLines[i] = "";
                         //写回外部文件
@@ -552,7 +552,7 @@ namespace TestIMEI
                             serialPort.Write("at+qnvw=4678,0,\"" + wifimac + "\"\r\n");
                         if (!"".Equals(btmac))
                             serialPort.Write("at+qnvw=447,0,\"" + btmac + "\"\r\n");
-                        Logger.Instance.WriteLog("设备的IMEI命令写入完毕");
+                        MyLogger.Instance.WriteLog("设备的IMEI命令写入完毕");
                         ButtonStateChanged(true);
                     }
                     break;
@@ -560,7 +560,7 @@ namespace TestIMEI
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteException(ex, "写入IMEI命令时发生异常");
+                MyLogger.Instance.WriteException(ex, "写入IMEI命令时发生异常");
                 MessageBox.Show("写入IMEI命令时发生异常", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ButtonStateChanged(true);
             }
@@ -636,7 +636,7 @@ namespace TestIMEI
             }
             catch (Exception ex)
             {
-                Logger.Instance.WriteException(ex, "截取字符串时发生异常");
+                MyLogger.Instance.WriteException(ex, "截取字符串时发生异常");
             }
             return result;
         }

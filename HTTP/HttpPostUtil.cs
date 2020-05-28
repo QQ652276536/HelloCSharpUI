@@ -31,7 +31,7 @@ namespace HelloCSharp.HTTP
             }
             catch (WebException e)
             {
-                Logger.Instance.WriteException(e);
+                MyLogger.Instance.WriteException(e);
                 return null;
             }
         }
@@ -71,7 +71,7 @@ namespace HelloCSharp.HTTP
             }
             catch (WebException e)
             {
-                Logger.Instance.WriteException(e);
+                MyLogger.Instance.WriteException(e);
                 return null;
             }
         }

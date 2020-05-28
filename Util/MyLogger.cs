@@ -15,28 +15,28 @@ namespace HelloCSharp.Log
         Error
     }
 
-    public class Logger
+    public class MyLogger
     {
         #region Instance
         private static object logLock;
 
-        private static Logger logger;
+        private static MyLogger logger;
 
         private static string logFileName;
-        private Logger()
+        private MyLogger()
         {
         }
 
         /// <summary>
-        /// Logger instance
+        /// MyLogger instance
         /// </summary>
-        public static Logger Instance
+        public static MyLogger Instance
         {
             get
             {
                 if (logger == null)
                 {
-                    logger = new Logger();
+                    logger = new MyLogger();
                     logLock = new object();
                     logFileName = Guid.NewGuid() + ".log";
                 }
