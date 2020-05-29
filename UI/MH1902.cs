@@ -16,18 +16,25 @@ namespace HelloCSharp.UI
 {
     public partial class MH1902 : Form
     {
-        private readonly int[] BAUDRATE_ARRAY = new int[] { 115200, 57600, 56000, 38400, 19200, 9600, 4800, 2400, 1200 };
+        private readonly int[] BAUDRATE_ARRAY = new int[] { 115200, 57600, 56000, 38400, 19200,
+            9600, 4800, 2400, 1200 };
         private readonly int[] DATABIT_ARRAY = new int[] { 8, 7, 6, 5, 4 };
-        private readonly byte[] STEP1 = MyConvertUtil.StringToBytes("7F");
-        private readonly byte[] STEP2 = MyConvertUtil.StringToBytes("7C");
+        private readonly byte[] STEP1 = MyConvertUtil.StringToBytes("7F7F7F7F7F7F7F7F7F7F");
+        private readonly byte[] STEP2 = MyConvertUtil.StringToBytes("7C7C7C7C7C7C7C7C7C7C");
+        private readonly byte[] STEP3 = MyConvertUtil.StringToBytes("01330600030046DB");
 
         private SerialPort _serialPort;
-        private string _secretKeyPath = "", _updatePath = "", _portName = "";
-        private string[] _portNameArray;
-        private int _baudRate = 0, _dataBit = 8, _step = 1;
+        //波特率、数据位、当前步骤、步骤1的数据长度、步骤2的数据长度、步骤3的数据长度、步骤4的数据长度、步骤5的数据长度、数据的长度（不包含最后两位校验码）
+        private int _baudRate = 0, _dataBit = 8, _step = 1, _step1Len = 0, _step2Len = 0, _step3Len = 0, _step4Len = 0, _step5Len = 0, _dataLen = 0;
+        //密钥文件路径、升级文件路径、串口名、本包内容
+        private string _secretKeyPath = "", _updatePath = "", _portName = "", _packageStr = "";
         private Thread _step1Thread, _step2Thread;
         private MyLogger _logger = MyLogger.Instance;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str">文本内容</param>
         private delegate void RichTextBoxDele(string str);
 
         public MH1902()
@@ -52,16 +59,22 @@ namespace HelloCSharp.UI
                 switch (_step)
                 {
                     case 1:
-                        _step = 2;
                         _step1Thread.Abort();
                         richTextBox1.AppendText("【Step1】收到：" + str + "\r\n");
                         richTextBox1.AppendText("【Step2】正在持续发送7C..." + "\r\n");
                         _step2Thread = new Thread(Step2);
                         _step2Thread.Start();
+                        _step = 2;
                         break;
                     case 2:
                         _step2Thread.Abort();
                         richTextBox1.AppendText("【Step2】收到：" + str + "\r\n");
+                        if (_serialPort != null && _serialPort.IsOpen)
+                        {
+                            _serialPort.Write(STEP3, 0, STEP3.Length);
+                            richTextBox1.AppendText("【Step3】指令已发送..." + "\r\n");
+                        }
+                        _step = 3;
                         break;
                     case 3:
                         richTextBox1.AppendText("【Step3】收到：" + str + "\r\n");
@@ -78,6 +91,7 @@ namespace HelloCSharp.UI
 
         /// <summary>
         /// 异步接收Com返回的内容
+        /// 注意，收到数据就会触发该方法，每次收到的数据不一定是完整的，需要校对
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -88,18 +102,39 @@ namespace HelloCSharp.UI
             {
                 return;
             }
-            //读取缓冲区所有字节
-            int len = tempSerialPort.BytesToRead;
-            byte[] byteArray = new byte[len];
+            //本次收到的数据长度，只是用于按字节读取，不能当作本包的数据长度
+            int byteLen = tempSerialPort.BytesToRead;
+            byte[] byteArray = new byte[byteLen];
             tempSerialPort.Read(byteArray, 0, byteArray.Length);
             string str = MyConvertUtil.BytesToString(byteArray);
             if (string.IsNullOrEmpty(str))
             {
                 return;
             }
-            _logger.WriteLog("收到的数据（Hex）：" + str);
-            Console.WriteLine("收到的数据（Hex）：" + str);
-            RichTextBoxChangedByDele(str);
+            _logger.WriteLog("收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            Console.WriteLine("收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            _packageStr += str;
+            //每隔两位插入一个空格，用以分割成数组，方便使用下标进行判断
+            string[] receivedDataArray = MyConvertUtil.StrAddCharacter(_packageStr, 2, ",").Split(',');
+            //1、必须是AA打头，否则就说明是上一包没读完的数据
+            //2、下标为2和3的数据是数据长度（不包含最后两位校验码，低位在前），长度不一致说明这一包数据不完整
+            //防止下标越界，同时避免本次包连“数据长度”都没有
+            if (_packageStr.StartsWith("AA") && _packageStr.Length >= 4)
+            {
+                //数据内容的长度
+                _dataLen = MyConvertUtil.HexStrToInt(receivedDataArray[3] + receivedDataArray[2]);
+                //完整包
+                if (_packageStr.Length == _dataLen + 2)
+                {
+                    RichTextBoxChangedByDele(_packageStr);
+                    _packageStr = "";
+                }
+                else
+                {
+                    _logger.WriteLog("本次包数据不完整");
+                    Console.WriteLine("本次包数据不完整");
+                }
+            }
         }
 
         /// <summary>
@@ -130,10 +165,10 @@ namespace HelloCSharp.UI
         private void InitData()
         {
             //串口Combox赋值
-            _portNameArray = SerialPort.GetPortNames();
+            string[] portNameArray = SerialPort.GetPortNames();
             DataTable dataTable1 = new DataTable();
             dataTable1.Columns.Add("value");
-            foreach (string temp in _portNameArray)
+            foreach (string temp in portNameArray)
             {
                 DataRow dataRow = dataTable1.NewRow();
                 dataRow[0] = temp;

@@ -13,7 +13,38 @@ namespace HelloCSharp.Util
         }
 
         /// <summary>
-        /// 字符串转字节数组
+        /// HexStr转Int
+        /// </summary>
+        /// <param name="hextr"></param>
+        /// <returns></returns>
+        public static int HexStrToInt(string hexStr)
+        {
+            return Int32.Parse(hexStr, System.Globalization.NumberStyles.AllowHexSpecifier);
+        }
+
+        /// <summary>
+        /// 每隔n个字符插入一个字符
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="interval"></param>
+        /// <param name="character"></param>
+        /// <returns></returns>
+        public static string StrAddCharacter(string input, int interval, string character)
+        {
+            for (int i = interval; i < input.Length; i += interval + 1)
+                input = input.Insert(i, character);
+            return input;
+        }
+
+        public static string CharAt(string input, int index)
+        {
+            if ((index >= input.Length) || (index < 0))
+                return "";
+            return input.Substring(index, 1);
+        }
+
+        /// <summary>
+        /// str转byte[]
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -36,18 +67,18 @@ namespace HelloCSharp.Util
         }
 
         /// <summary>
-        /// 字节数组转字符串
+        /// byte[]转str
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static string BytesToString(byte[] input)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             foreach (byte b in input)
             {
-                sb.Append(b.ToString("X2"));
+                stringBuilder.Append(b.ToString("X2"));
             }
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
 
     }
