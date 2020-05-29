@@ -1,4 +1,5 @@
 ﻿using HelloCSharp.UI;
+using HelloCSharp.Util;
 using System;
 using System.Windows.Forms;
 using TestIMEI;
@@ -25,7 +26,6 @@ namespace HelloCSharp
             //Application.Run(new TestCOMWindow());
             //Application.Run(new TestIMEIWindow());
             Application.Run(new MH1902());
-
         }
 
     }
