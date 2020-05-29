@@ -102,7 +102,7 @@ namespace HelloCSharp.UI
             {
                 return;
             }
-            //本次收到的数据长度，只是用于按字节读取，不能当作本包的数据长度
+            //本次收到的数据长度，只是用于按字节读取
             int byteLen = tempSerialPort.BytesToRead;
             byte[] byteArray = new byte[byteLen];
             tempSerialPort.Read(byteArray, 0, byteArray.Length);
