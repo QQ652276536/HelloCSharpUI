@@ -44,11 +44,42 @@ namespace HelloCSharp.Util
         }
 
         /// <summary>
+        /// HexStr转Str
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string HexStrToStr(string input)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            while (input.Length > 0)
+            {
+                stringBuilder.Append(Convert.ToChar(Convert.ToUInt32(input.Substring(0, 2), 16)).ToString());
+                input = input.Substring(2);
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// str转hexStr
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string StrToHexStr(string input)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            foreach (char chr in input)
+            {
+                stringBuilder.Append(String.Format("{0:X2}", Convert.ToInt32(chr)));
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
         /// str转byte[]
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static byte[] StringToBytes(string input)
+        public static byte[] StrToBytes(string input)
         {
             int len = input.Length;
             if (len % 2 != 0)
@@ -71,7 +102,7 @@ namespace HelloCSharp.Util
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string BytesToString(byte[] input)
+        public static string BytesToStr(byte[] input)
         {
             StringBuilder stringBuilder = new StringBuilder();
             foreach (byte b in input)
@@ -80,6 +111,5 @@ namespace HelloCSharp.Util
             }
             return stringBuilder.ToString();
         }
-
     }
 }
