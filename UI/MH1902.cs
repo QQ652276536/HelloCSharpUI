@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,9 @@ namespace HelloCSharp.UI
         private readonly int[] BAUDRATE_ARRAY = new int[] { 115200, 57600, 56000, 38400, 19200,
             9600, 4800, 2400, 1200 };
         private readonly int[] DATABIT_ARRAY = new int[] { 8, 7, 6, 5, 4 };
-        private readonly byte[] STEP1 = MyConvertUtil.StringToBytes("7F7F7F7F7F7F7F7F7F7F");
-        private readonly byte[] STEP2 = MyConvertUtil.StringToBytes("7C7C7C7C7C7C7C7C7C7C");
-        private readonly byte[] STEP3 = MyConvertUtil.StringToBytes("01330600030046DB");
+        private readonly byte[] STEP1 = MyConvertUtil.StrToBytes("7F7F7F7F7F7F7F7F7F7F");
+        private readonly byte[] STEP2 = MyConvertUtil.StrToBytes("7C7C7C7C7C7C7C7C7C7C");
+        private readonly byte[] STEP3 = MyConvertUtil.StrToBytes("01330600030046DB");
 
         private SerialPort _serialPort;
         //波特率、数据位、当前步骤、步骤1的数据长度、步骤2的数据长度、步骤3的数据长度、步骤4的数据长度、步骤5的数据长度、数据的长度（不包含最后两位校验码）
@@ -106,13 +107,13 @@ namespace HelloCSharp.UI
             int byteLen = tempSerialPort.BytesToRead;
             byte[] byteArray = new byte[byteLen];
             tempSerialPort.Read(byteArray, 0, byteArray.Length);
-            string str = MyConvertUtil.BytesToString(byteArray);
+            string str = MyConvertUtil.BytesToStr(byteArray);
             if (string.IsNullOrEmpty(str))
             {
                 return;
             }
-            _logger.WriteLog("收到的数据（Hex）：" + str + "，长度：" + byteLen);
-            Console.WriteLine("收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            _logger.WriteLog(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            Console.WriteLine(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
             _packageStr += str;
             //每隔两位插入一个空格，用以分割成数组，方便使用下标进行判断
             string[] receivedDataArray = MyConvertUtil.StrAddCharacter(_packageStr, 2, ",").Split(',');
@@ -228,10 +229,18 @@ namespace HelloCSharp.UI
 
         private void button7_Click(object sender, EventArgs e)
         {
+            byte[] data = MyConvertUtil.StrToBytes("3F070000002039A9");
+            Thread thread1 = new Thread(new ParameterizedThreadStart(WriteBytes));
+            thread1.Start(data);
+            richTextBox1.AppendText("已请求进入下载模式...\r\n");
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
+            byte[] data = MyConvertUtil.StrToBytes("3F07000000017A9D");
+            Thread thread = new Thread(new ParameterizedThreadStart(WriteBytes));
+            thread.Start(data);
+            richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -299,8 +308,331 @@ namespace HelloCSharp.UI
             }
         }
 
+        private void WriteBytes(object obj)
+        {
+            byte[] data = obj as byte[];
+            if (_serialPort.IsOpen)
+            {
+                _serialPort.Write(data, 0, data.Length);
+                _logger.WriteLog("已发送数据...");
+                Console.WriteLine("已发送数据...");
+            }
+        }
+
+        /// <summary>
+        /// 计算2位校验码
+        /// </summary>
+        /// <param name="byteArray"></param>
+        /// <param name="isLowInBefore">低字节在前/后</param>
+        /// <returns></returns>
+        private string CalculateCRC(byte[] byteArray, bool isLowInBefore)
+        {
+            int crc = 0;
+            foreach (byte tempByte in byteArray)
+            {
+                // 0x80 = 128
+                for (int i = 0x80; i != 0; i /= 2)
+                {
+                    crc *= 2;
+                    // 0x10000 = 65536
+                    if ((crc & 0x10000) != 0)
+                        // 0x11021 = 69665
+                        crc ^= 0x11021;
+                    if ((tempByte & i) != 0)
+                        // 0x1021 = 4129
+                        crc ^= 0x1021;
+                }
+            }
+            string crcStr = crc.ToString("x2");
+            string[] tempArray = MyConvertUtil.StrAddCharacter(crcStr, 2, " ").Split(' ');
+            if (tempArray.Length == 1)
+            {
+                return "00" + tempArray[0];
+            }
+            if (isLowInBefore)
+            {
+                if (MyConvertUtil.HexStrToInt(tempArray[0]) > MyConvertUtil.HexStrToInt(tempArray[1]))
+                {
+                    string temp = tempArray[1];
+                    tempArray[1] = tempArray[0];
+                    tempArray[0] = temp;
+                }
+            }
+            else
+            {
+                if (MyConvertUtil.HexStrToInt(tempArray[0]) < MyConvertUtil.HexStrToInt(tempArray[1]))
+                {
+                    string temp = tempArray[1];
+                    tempArray[1] = tempArray[0];
+                    tempArray[0] = temp;
+                }
+            }
+            //补零
+            if (tempArray[0].Length < 2)
+                tempArray[0] = "0" + tempArray[0];
+            if (tempArray[1].Length < 2)
+                tempArray[1] = "0" + tempArray[1];
+            return tempArray[0] + tempArray[1];
+        }
+
+        /// <summary>
+        /// 从数组中截取一部分成新的数组
+        /// </summary>
+        /// <param name="source">原数组</param>
+        /// <param name="startIndex">原数组的起始位置</param>
+        /// <param name="endIndex">原数组的截止位置</param>
+        /// <returns></returns>
+        public byte[] SplitArray(byte[] source, int startIndex, int endIndex)
+        {
+            try
+            {
+                byte[] result = new byte[endIndex - startIndex + 1];
+                for (int i = 0; i <= endIndex - startIndex; i++)
+                    result[i] = source[i + startIndex];
+                return result;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 合并数组
+        /// </summary>
+        /// <param name="first">第一个数组</param>
+        /// <param name="second">第二个数组</param>
+        /// <returns></returns>
+        public byte[] MergerArray(byte[] first, byte[] second)
+        {
+            byte[] result = new byte[first.Length + second.Length];
+            first.CopyTo(result, 0);
+            second.CopyTo(result, first.Length);
+            return result;
+        }
+
+        /// <summary>
+        /// Str的前面/后面补零
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="length"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        private string SupplementZero(string input, int length, bool flag)
+        {
+            string zero = "";
+            for (int i = 0; i < length - input.Length; i++)
+            {
+                zero += "0";
+            }
+            if (flag)
+                return zero + input;
+            else
+                return input + zero;
+        }
+
+        /// <summary>
+        /// Str[]排序
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        private string SortStringArray(string[] array, bool flag)
+        {
+            //从小到大
+            if (flag)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    for (int j = 0; j < array.Length; j++)
+                    {
+                        if (MyConvertUtil.HexStrToInt(array[i]) < MyConvertUtil.HexStrToInt(array[j]))
+                        {
+                            string temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                    }
+                }
+            }
+            //从大到小
+            else
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    for (int j = 0; j < array.Length; j++)
+                    {
+                        if (MyConvertUtil.HexStrToInt(array[i]) > MyConvertUtil.HexStrToInt(array[j]))
+                        {
+                            string temp = array[i];
+                            array[i] = array[j];
+                            array[j] = temp;
+                        }
+                    }
+                }
+            }
+            string result = "";
+            foreach (string tempStr in array)
+            {
+                result += tempStr;
+            }
+            return result;
+        }
+
+        int _count = 0;
         private void button1_Click(object sender, EventArgs e)
         {
+            _portName = comboBox1.SelectedValue as string;
+            _baudRate = Convert.ToInt32(comboBox2.SelectedValue as string);
+            _dataBit = Convert.ToInt32(comboBox3.SelectedValue as string);
+            if (_serialPort == null)
+            {
+                _serialPort = new SerialPort(_portName, _baudRate, Parity.None, _dataBit, StopBits.One);
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
+                richTextBox1.AppendText("已打开：" + _portName + "\r\n");
+                _serialPort.Open();
+            }
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.Open();
+            }
+            //查看固件信息
+            if (button1.Text.Equals("签名"))
+            {
+                byte[] data = MyConvertUtil.StrToBytes("3F07000000017A9D");
+                Thread thread = new Thread(new ParameterizedThreadStart(WriteBytes));
+                thread.Start(data);
+                richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
+                button1.Text = "下载";
+            }
+            //请求进入下载模式
+            else if (button1.Text.Equals("下载"))
+            {
+                byte[] data = MyConvertUtil.StrToBytes("3F070000002039A9");
+                Thread thread1 = new Thread(new ParameterizedThreadStart(WriteBytes));
+                thread1.Start(data);
+                richTextBox1.AppendText("已请求进入下载模式...\r\n");
+                button1.Text = "升级";
+            }
+            //开始升级
+            else if (button1.Text.Equals("升级"))
+            {
+                button1.Enabled = false;
+                //发送固件数据包
+                int fileLen = 0;
+                byte[] fileData;
+                try
+                {
+                    //fileData = File.ReadAllBytes(_updatePath);
+                    fileData = File.ReadAllBytes("C:\\Users\\zistone\\Desktop\\固件下载工具包V1.1_20200601\\kernel.bin");
+                    fileLen = fileData.Length;
+                    string fileStr1 = MyConvertUtil.BytesToStr(fileData);
+                    int a = 1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    return;
+                }
+                //每包固定的长度（除包头外）=包长度（2字节）+包属性（2字节）+命令码（1字节）+固件名字（16字节）+固件总长度（3字节）+当前块号（2字节）+校验码（2字节）=28字节
+                int everyPackageFixedLen = 28;
+                //包属性
+                string packageProperty = "4012";
+                //固件名字，将高字节放在前面
+                string blockName = MyConvertUtil.StrToHexStr("kernel.bin").PadRight(32, '0');
+                //固件总长度，将高字节放在前面
+                string dataTotalLenHexStr = fileLen.ToString("x6");
+                string[] tempTotalLenArray = MyConvertUtil.StrAddCharacter(dataTotalLenHexStr, 2, " ").Split(' ');
+                dataTotalLenHexStr = SortStringArray(tempTotalLenArray, false);
+                //将固件数据分包，每包的长度
+                int dataMax = 900;
+                if (fileLen < dataMax)
+                {
+                    MessageBox.Show("该升级包小于分包");
+                    return;
+                }
+                //包长度，不包含包头=固件数据分包+每包固定长度，将高字节放在前面
+                int everyPackageLenNotLast = dataMax + everyPackageFixedLen;
+                string everyPackageLenNotLastHexStr = everyPackageLenNotLast.ToString("x4");
+                string[] everyPackageLenNotLastHexStrArray = MyConvertUtil.StrAddCharacter(everyPackageLenNotLastHexStr, 2, " ").Split(' ');
+                everyPackageLenNotLastHexStr = SortStringArray(everyPackageLenNotLastHexStrArray, false);
+                //包数
+                double packageNum = Math.Ceiling((double)fileLen / dataMax);
+                //最后一个包的长度
+                int surplusLen = fileLen % dataMax;
+                //每次截取升级文件字节数组时的结束下标
+                int splitArrayEndIndex = 0;
+                for (int i = 0; i < packageNum; i++)
+                {
+                    _count++;
+                    //当前块号，将高字节放在前面
+                    int blockNo = i + 1;
+                    string blockNoHexStr = blockNo.ToString("x4");
+                    string[] blockNoHexStrArray = MyConvertUtil.StrAddCharacter(blockNoHexStr, 2, " ").Split(' ');
+                    blockNoHexStr = SortStringArray(blockNoHexStrArray, false);
+                    if (i != packageNum - 1)
+                    {
+                        //包内容，不包含固件数据和校验码
+                        string cmdx = "3F" + everyPackageLenNotLastHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
+                        byte[] tempBytes1 = MyConvertUtil.StrToBytes(cmdx);
+                        //要截取的数组的结束下标，不是长度
+                        splitArrayEndIndex = (i + 1) * dataMax - 1;
+                        //固件数据
+                        byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex);
+                        string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
+                        //包内容，不包含校验码
+                        byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
+                        string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
+                        //计算2位校验码，低字节在前
+                        string crcStr = CalculateCRC(tempBytes3, true);
+                        byte[] tempBytes4 = MyConvertUtil.StrToBytes(crcStr);
+                        //完整的包内容
+                        byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
+                        string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
+                        new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
+                        richTextBox1.AppendText("发送第" + blockNo + "包数据..." + "\r\n");
+                        //设置光标的位置到文本尾   
+                        richTextBox1.Select(richTextBox1.TextLength, 0);
+                        //滚动到控件光标处   
+                        richTextBox1.ScrollToCaret();
+                    }
+                    else
+                    {
+                        if (surplusLen == 0)
+                        {
+                            return;
+                        }
+                        //高字节在前
+                        string surplusLenHexStr = ((int)surplusLen).ToString("x4");
+                        string[] tempArray = MyConvertUtil.StrAddCharacter(surplusLenHexStr, 2, " ").Split(' ');
+                        surplusLenHexStr = SortStringArray(tempArray, false);
+                        //包内容，不包含固件数据和校验码
+                        string cmdx = "3F" + surplusLenHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
+                        byte[] tempBytes1 = MyConvertUtil.StrToBytes(cmdx);
+                        //固件数据
+                        byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex + (int)surplusLen);
+                        string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
+                        //包内容，不包含校验码
+                        byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
+                        string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
+                        //计算2位校验码，低字节在前
+                        string crcStr = CalculateCRC(tempBytes3, true);
+                        byte[] tempBytes4 = MyConvertUtil.StrToBytes(crcStr);
+                        //完整的包内容
+                        byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
+                        string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
+                        new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
+                        richTextBox1.AppendText("发送第" + (i + 1) + "包数据..." + "\r\n");
+                        //设置光标的位置到文本尾   
+                        richTextBox1.Select(richTextBox1.TextLength, 0);
+                        //滚动到控件光标处   
+                        richTextBox1.ScrollToCaret();
+                    }
+                    Thread.Sleep(500);
+                }
+                richTextBox1.AppendText("升级包发送完毕!\r\n");
+                button1.Enabled = true;
+            }
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
