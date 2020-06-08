@@ -78,11 +78,11 @@ namespace HelloCSharp.Util
         }
 
         /// <summary>
-        /// str转byte[]
+        /// HexStr转byte[]
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static byte[] StrToBytes(string input)
+        public static byte[] HexStrToBytes(string input)
         {
             int len = input.Length;
             if (len % 2 != 0)

@@ -229,7 +229,7 @@ namespace HelloCSharp.UI
 
         private void button7_Click(object sender, EventArgs e)
         {
-            byte[] data = MyConvertUtil.StrToBytes("3F070000002039A9");
+            byte[] data = MyConvertUtil.HexStrToBytes("3F070000002039A9");
             Thread thread1 = new Thread(new ParameterizedThreadStart(WriteBytes));
             thread1.Start(data);
             richTextBox1.AppendText("已请求进入下载模式...\r\n");
@@ -237,7 +237,7 @@ namespace HelloCSharp.UI
 
         private void button6_Click(object sender, EventArgs e)
         {
-            byte[] data = MyConvertUtil.StrToBytes("3F07000000017A9D");
+            byte[] data = MyConvertUtil.HexStrToBytes("3F07000000017A9D");
             Thread thread = new Thread(new ParameterizedThreadStart(WriteBytes));
             thread.Start(data);
             richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
@@ -499,7 +499,7 @@ namespace HelloCSharp.UI
             //查看固件信息
             if (button1.Text.Equals("签名"))
             {
-                byte[] data = MyConvertUtil.StrToBytes("3F07000000017A9D");
+                byte[] data = MyConvertUtil.HexStrToBytes("3F07000000017A9D");
                 Thread thread = new Thread(new ParameterizedThreadStart(WriteBytes));
                 thread.Start(data);
                 richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
@@ -508,7 +508,7 @@ namespace HelloCSharp.UI
             //请求进入下载模式
             else if (button1.Text.Equals("下载"))
             {
-                byte[] data = MyConvertUtil.StrToBytes("3F070000002039A9");
+                byte[] data = MyConvertUtil.HexStrToBytes("3F070000002039A9");
                 Thread thread1 = new Thread(new ParameterizedThreadStart(WriteBytes));
                 thread1.Start(data);
                 richTextBox1.AppendText("已请求进入下载模式...\r\n");
@@ -574,7 +574,7 @@ namespace HelloCSharp.UI
                     {
                         //包内容，不包含固件数据和校验码
                         string cmdx = "3F" + everyPackageLenNotLastHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
-                        byte[] tempBytes1 = MyConvertUtil.StrToBytes(cmdx);
+                        byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
                         //要截取的数组的结束下标，不是长度
                         splitArrayEndIndex = (i + 1) * dataMax - 1;
                         //固件数据
@@ -585,7 +585,7 @@ namespace HelloCSharp.UI
                         string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
                         //计算2位校验码，低字节在前
                         string crcStr = CalculateCRC(tempBytes3, true);
-                        byte[] tempBytes4 = MyConvertUtil.StrToBytes(crcStr);
+                        byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
                         //完整的包内容
                         byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
                         string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
@@ -608,7 +608,7 @@ namespace HelloCSharp.UI
                         surplusLenHexStr = SortStringArray(tempArray, false);
                         //包内容，不包含固件数据和校验码
                         string cmdx = "3F" + surplusLenHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
-                        byte[] tempBytes1 = MyConvertUtil.StrToBytes(cmdx);
+                        byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
                         //固件数据
                         byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex + (int)surplusLen);
                         string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
@@ -617,7 +617,7 @@ namespace HelloCSharp.UI
                         string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
                         //计算2位校验码，低字节在前
                         string crcStr = CalculateCRC(tempBytes3, true);
-                        byte[] tempBytes4 = MyConvertUtil.StrToBytes(crcStr);
+                        byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
                         //完整的包内容
                         byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
                         string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
