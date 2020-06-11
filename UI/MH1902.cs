@@ -26,9 +26,9 @@ namespace HelloCSharp.UI
 
         private SerialPort _serialPort;
         //波特率、数据位、当前步骤、步骤1的数据长度、步骤2的数据长度、步骤3的数据长度、步骤4的数据长度、步骤5的数据长度、数据的长度（不包含最后两位校验码）
-        private int _baudRate = 0, _dataBit = 8, _step = 1, _step1Len = 0, _step2Len = 0, _step3Len = 0, _step4Len = 0, _step5Len = 0, _dataLen = 0;
+        private int _baudRate = 0, _dataBit = 8, _step = 1, _step1Len = 0, _step2Len = 0, _step3Len = 0, _step4Len = 0, _step5Len = 0, _dataLen = 0, _count = 0;
         //密钥文件路径、升级文件路径、串口名、本包内容
-        private string _secretKeyPath = "", _updatePath = "", _portName = "", _packageStr = "";
+        private string _secretKeyPath = "", _portName = "", _packageStr = "";
         private Thread _step1Thread, _step2Thread;
         private MyLogger _logger = MyLogger.Instance;
 
@@ -208,6 +208,194 @@ namespace HelloCSharp.UI
             }
         }
 
+        private void button15_Click(object sender, EventArgs e)
+        {
+            _portName = comboBox1.SelectedValue as string;
+            _baudRate = Convert.ToInt32(comboBox2.SelectedValue as string);
+            _dataBit = Convert.ToInt32(comboBox3.SelectedValue as string);
+            if (_serialPort == null)
+            {
+                _serialPort = new SerialPort(_portName, _baudRate, Parity.None, _dataBit, StopBits.One);
+                _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
+                richTextBox1.AppendText("已打开：" + _portName + "\r\n");
+                _serialPort.Open();
+            }
+            if (!_serialPort.IsOpen)
+            {
+                _serialPort.Open();
+            }
+        }
+
+        /// <summary>
+        /// 选择文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button14_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            //是否允许选择多个文件
+            openFileDialog.Multiselect = false;
+            openFileDialog.Title = "请选择升级文件";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //返回文件的完整路径
+                textBox7.Text = openFileDialog.FileName;
+            }
+        }
+
+        /// <summary>
+        /// 查询基本参数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button13_Click(object sender, EventArgs e)
+        {
+            byte[] data = MyConvertUtil.HexStrToBytes("3F07000000017A9D");
+            Thread thread = new Thread(new ParameterizedThreadStart(WriteBytes));
+            thread.Start(data);
+            richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
+
+        }
+
+        /// <summary>
+        /// 请求下载
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button12_Click(object sender, EventArgs e)
+        {
+            byte[] data = MyConvertUtil.HexStrToBytes("3F070000002039A9");
+            Thread thread1 = new Thread(new ParameterizedThreadStart(WriteBytes));
+            thread1.Start(data);
+            richTextBox1.AppendText("已请求进入下载模式...\r\n");
+        }
+
+        /// <summary>
+        /// 发送本地文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button11_Click(object sender, EventArgs e)
+        {
+            int fileLen = 0;
+            byte[] fileData;
+            try
+            {
+                fileData = File.ReadAllBytes(textBox6.Text.ToString());
+                fileLen = fileData.Length;
+                string fileStr1 = MyConvertUtil.BytesToStr(fileData);
+                int a = 1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            //每包固定的长度（除包头外）=包长度（2字节）+包属性（2字节）+命令码（1字节）+固件名字（16字节）+固件总长度（3字节）+当前块号（2字节）+校验码（2字节）=28字节
+            int everyPackageFixedLen = 28;
+            //包属性
+            string packageProperty = "4012";
+            //固件名字，将高字节放在前面
+            string blockName = MyConvertUtil.StrToHexStr("kernel.bin").PadRight(32, '0');
+            //固件总长度，将高字节放在前面
+            string dataTotalLenHexStr = fileLen.ToString("x6");
+            string[] tempTotalLenArray = MyConvertUtil.StrAddCharacter(dataTotalLenHexStr, 2, " ").Split(' ');
+            dataTotalLenHexStr = SortStringArray(tempTotalLenArray, false);
+            //将固件数据分包，每包的长度
+            int dataMax = 900;
+            if (fileLen < dataMax)
+            {
+                MessageBox.Show("该升级包小于分包");
+                return;
+            }
+            //包长度，不包含包头=固件数据分包+每包固定长度，将高字节放在前面
+            int everyPackageLenNotLast = dataMax + everyPackageFixedLen;
+            string everyPackageLenNotLastHexStr = everyPackageLenNotLast.ToString("x4");
+            string[] everyPackageLenNotLastHexStrArray = MyConvertUtil.StrAddCharacter(everyPackageLenNotLastHexStr, 2, " ").Split(' ');
+            everyPackageLenNotLastHexStr = SortStringArray(everyPackageLenNotLastHexStrArray, false);
+            //包数
+            double packageNum = Math.Ceiling((double)fileLen / dataMax);
+            //最后一个包的长度
+            int surplusLen = fileLen % dataMax;
+            //每次截取升级文件字节数组时的结束下标
+            int splitArrayEndIndex = 0;
+            for (int i = 0; i < packageNum; i++)
+            {
+                _count++;
+                //当前块号，将高字节放在前面
+                int blockNo = i + 1;
+                string blockNoHexStr = blockNo.ToString("x4");
+                string[] blockNoHexStrArray = MyConvertUtil.StrAddCharacter(blockNoHexStr, 2, " ").Split(' ');
+                blockNoHexStr = SortStringArray(blockNoHexStrArray, false);
+                if (i != packageNum - 1)
+                {
+                    //包内容，不包含固件数据和校验码
+                    string cmdx = "3F" + everyPackageLenNotLastHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
+                    byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
+                    //要截取的数组的结束下标，不是长度
+                    splitArrayEndIndex = (i + 1) * dataMax - 1;
+                    //固件数据
+                    byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex);
+                    string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
+                    //包内容，不包含校验码
+                    byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
+                    string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
+                    //计算2位校验码，低字节在前
+                    string crcStr = CalculateCRC(tempBytes3, true);
+                    byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
+                    //完整的包内容
+                    byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
+                    string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
+                    new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
+                    richTextBox1.AppendText("发送第" + blockNo + "包数据..." + "\r\n");
+                    //设置光标的位置到文本尾   
+                    richTextBox1.Select(richTextBox1.TextLength, 0);
+                    //滚动到控件光标处   
+                    richTextBox1.ScrollToCaret();
+                }
+                else
+                {
+                    if (surplusLen == 0)
+                    {
+                        return;
+                    }
+                    //高字节在前
+                    string surplusLenHexStr = ((int)surplusLen).ToString("x4");
+                    string[] tempArray = MyConvertUtil.StrAddCharacter(surplusLenHexStr, 2, " ").Split(' ');
+                    surplusLenHexStr = SortStringArray(tempArray, false);
+                    //包内容，不包含固件数据和校验码
+                    string cmdx = "3F" + surplusLenHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
+                    byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
+                    //固件数据
+                    byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex + (int)surplusLen);
+                    string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
+                    //包内容，不包含校验码
+                    byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
+                    string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
+                    //计算2位校验码，低字节在前
+                    string crcStr = CalculateCRC(tempBytes3, true);
+                    byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
+                    //完整的包内容
+                    byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
+                    string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
+                    new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
+                    richTextBox1.AppendText("发送第" + (i + 1) + "包数据..." + "\r\n");
+                    //设置光标的位置到文本尾   
+                    richTextBox1.Select(richTextBox1.TextLength, 0);
+                    //滚动到控件光标处   
+                    richTextBox1.ScrollToCaret();
+                }
+                Thread.Sleep(500);
+            }
+            richTextBox1.AppendText("升级包发送完毕!\r\n");
+            button1.Enabled = true;
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+        }
+
         private void button9_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
@@ -303,9 +491,12 @@ namespace HelloCSharp.UI
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 //返回文件的完整路径
-                _updatePath = openFileDialog.FileName;
-                textBox6.Text = _updatePath;
+                textBox6.Text = openFileDialog.FileName;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
         }
 
         private void WriteBytes(object obj)
@@ -477,161 +668,6 @@ namespace HelloCSharp.UI
                 result += tempStr;
             }
             return result;
-        }
-
-        int _count = 0;
-        private void button1_Click(object sender, EventArgs e)
-        {
-            _portName = comboBox1.SelectedValue as string;
-            _baudRate = Convert.ToInt32(comboBox2.SelectedValue as string);
-            _dataBit = Convert.ToInt32(comboBox3.SelectedValue as string);
-            if (_serialPort == null)
-            {
-                _serialPort = new SerialPort(_portName, _baudRate, Parity.None, _dataBit, StopBits.One);
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
-                richTextBox1.AppendText("已打开：" + _portName + "\r\n");
-                _serialPort.Open();
-            }
-            if (!_serialPort.IsOpen)
-            {
-                _serialPort.Open();
-            }
-            //查看固件信息
-            if (button1.Text.Equals("签名"))
-            {
-                byte[] data = MyConvertUtil.HexStrToBytes("3F07000000017A9D");
-                Thread thread = new Thread(new ParameterizedThreadStart(WriteBytes));
-                thread.Start(data);
-                richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
-                button1.Text = "下载";
-            }
-            //请求进入下载模式
-            else if (button1.Text.Equals("下载"))
-            {
-                byte[] data = MyConvertUtil.HexStrToBytes("3F070000002039A9");
-                Thread thread1 = new Thread(new ParameterizedThreadStart(WriteBytes));
-                thread1.Start(data);
-                richTextBox1.AppendText("已请求进入下载模式...\r\n");
-                button1.Text = "升级";
-            }
-            //开始升级
-            else if (button1.Text.Equals("升级"))
-            {
-                button1.Enabled = false;
-                //发送固件数据包
-                int fileLen = 0;
-                byte[] fileData;
-                try
-                {
-                    fileData = File.ReadAllBytes(_updatePath);
-                    fileLen = fileData.Length;
-                    string fileStr1 = MyConvertUtil.BytesToStr(fileData);
-                    int a = 1;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                //每包固定的长度（除包头外）=包长度（2字节）+包属性（2字节）+命令码（1字节）+固件名字（16字节）+固件总长度（3字节）+当前块号（2字节）+校验码（2字节）=28字节
-                int everyPackageFixedLen = 28;
-                //包属性
-                string packageProperty = "4012";
-                //固件名字，将高字节放在前面
-                string blockName = MyConvertUtil.StrToHexStr("kernel.bin").PadRight(32, '0');
-                //固件总长度，将高字节放在前面
-                string dataTotalLenHexStr = fileLen.ToString("x6");
-                string[] tempTotalLenArray = MyConvertUtil.StrAddCharacter(dataTotalLenHexStr, 2, " ").Split(' ');
-                dataTotalLenHexStr = SortStringArray(tempTotalLenArray, false);
-                //将固件数据分包，每包的长度
-                int dataMax = 900;
-                if (fileLen < dataMax)
-                {
-                    MessageBox.Show("该升级包小于分包");
-                    return;
-                }
-                //包长度，不包含包头=固件数据分包+每包固定长度，将高字节放在前面
-                int everyPackageLenNotLast = dataMax + everyPackageFixedLen;
-                string everyPackageLenNotLastHexStr = everyPackageLenNotLast.ToString("x4");
-                string[] everyPackageLenNotLastHexStrArray = MyConvertUtil.StrAddCharacter(everyPackageLenNotLastHexStr, 2, " ").Split(' ');
-                everyPackageLenNotLastHexStr = SortStringArray(everyPackageLenNotLastHexStrArray, false);
-                //包数
-                double packageNum = Math.Ceiling((double)fileLen / dataMax);
-                //最后一个包的长度
-                int surplusLen = fileLen % dataMax;
-                //每次截取升级文件字节数组时的结束下标
-                int splitArrayEndIndex = 0;
-                for (int i = 0; i < packageNum; i++)
-                {
-                    _count++;
-                    //当前块号，将高字节放在前面
-                    int blockNo = i + 1;
-                    string blockNoHexStr = blockNo.ToString("x4");
-                    string[] blockNoHexStrArray = MyConvertUtil.StrAddCharacter(blockNoHexStr, 2, " ").Split(' ');
-                    blockNoHexStr = SortStringArray(blockNoHexStrArray, false);
-                    if (i != packageNum - 1)
-                    {
-                        //包内容，不包含固件数据和校验码
-                        string cmdx = "3F" + everyPackageLenNotLastHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
-                        byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
-                        //要截取的数组的结束下标，不是长度
-                        splitArrayEndIndex = (i + 1) * dataMax - 1;
-                        //固件数据
-                        byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex);
-                        string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
-                        //包内容，不包含校验码
-                        byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
-                        string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
-                        //计算2位校验码，低字节在前
-                        string crcStr = CalculateCRC(tempBytes3, true);
-                        byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
-                        //完整的包内容
-                        byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
-                        string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
-                        new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
-                        richTextBox1.AppendText("发送第" + blockNo + "包数据..." + "\r\n");
-                        //设置光标的位置到文本尾   
-                        richTextBox1.Select(richTextBox1.TextLength, 0);
-                        //滚动到控件光标处   
-                        richTextBox1.ScrollToCaret();
-                    }
-                    else
-                    {
-                        if (surplusLen == 0)
-                        {
-                            return;
-                        }
-                        //高字节在前
-                        string surplusLenHexStr = ((int)surplusLen).ToString("x4");
-                        string[] tempArray = MyConvertUtil.StrAddCharacter(surplusLenHexStr, 2, " ").Split(' ');
-                        surplusLenHexStr = SortStringArray(tempArray, false);
-                        //包内容，不包含固件数据和校验码
-                        string cmdx = "3F" + surplusLenHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
-                        byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
-                        //固件数据
-                        byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex + (int)surplusLen);
-                        string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
-                        //包内容，不包含校验码
-                        byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
-                        string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
-                        //计算2位校验码，低字节在前
-                        string crcStr = CalculateCRC(tempBytes3, true);
-                        byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
-                        //完整的包内容
-                        byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
-                        string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
-                        new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
-                        richTextBox1.AppendText("发送第" + (i + 1) + "包数据..." + "\r\n");
-                        //设置光标的位置到文本尾   
-                        richTextBox1.Select(richTextBox1.TextLength, 0);
-                        //滚动到控件光标处   
-                        richTextBox1.ScrollToCaret();
-                    }
-                    Thread.Sleep(500);
-                }
-                richTextBox1.AppendText("升级包发送完毕!\r\n");
-                button1.Enabled = true;
-            }
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
