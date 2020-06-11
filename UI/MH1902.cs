@@ -45,122 +45,6 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="str"></param>
-        private void RichTextBoxChangedByDele(string str)
-        {
-            //非UI线程访问控件时
-            if (richTextBox1.InvokeRequired)
-            {
-                richTextBox1.Invoke(new RichTextBoxDele(RichTextBoxChangedByDele), str);
-            }
-            else
-            {
-                switch (_step)
-                {
-                    case 1:
-                        _step1Thread.Abort();
-                        richTextBox1.AppendText("【Step1】收到：" + str + "\r\n");
-                        richTextBox1.AppendText("【Step2】正在持续发送7C..." + "\r\n");
-                        _step2Thread = new Thread(Step2);
-                        _step2Thread.Start();
-                        _step = 2;
-                        break;
-                    case 2:
-                        _step2Thread.Abort();
-                        richTextBox1.AppendText("【Step2】收到：" + str + "\r\n");
-                        if (_serialPort != null && _serialPort.IsOpen)
-                        {
-                            _serialPort.Write(STEP3, 0, STEP3.Length);
-                            richTextBox1.AppendText("【Step3】指令已发送..." + "\r\n");
-                        }
-                        _step = 3;
-                        break;
-                    case 3:
-                        richTextBox1.AppendText("【Step3】收到：" + str + "\r\n");
-                        break;
-                    case 4:
-                        richTextBox1.AppendText("【Step4】收到：" + str + "\r\n");
-                        break;
-                    case 5:
-                        richTextBox1.AppendText("【Step5】收到：" + str + "\r\n");
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 异步接收Com返回的内容
-        /// 注意，收到数据就会触发该方法，每次收到的数据不一定是完整的，需要校对
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ReceivedComData(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialPort tempSerialPort = (SerialPort)sender;
-            if (tempSerialPort == null || !tempSerialPort.IsOpen)
-            {
-                return;
-            }
-            //本次收到的数据长度，只是用于按字节读取
-            int byteLen = tempSerialPort.BytesToRead;
-            byte[] byteArray = new byte[byteLen];
-            tempSerialPort.Read(byteArray, 0, byteArray.Length);
-            string str = MyConvertUtil.BytesToStr(byteArray);
-            if (string.IsNullOrEmpty(str))
-            {
-                return;
-            }
-            _logger.WriteLog(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
-            Console.WriteLine(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
-            _packageStr += str;
-            //每隔两位插入一个空格，用以分割成数组，方便使用下标进行判断
-            string[] receivedDataArray = MyConvertUtil.StrAddCharacter(_packageStr, 2, ",").Split(',');
-            //1、必须是AA打头，否则就说明是上一包没读完的数据
-            //2、下标为2和3的数据是数据长度（不包含最后两位校验码，低位在前），长度不一致说明这一包数据不完整
-            //防止下标越界，同时避免本次包连“数据长度”都没有
-            if (_packageStr.StartsWith("AA") && _packageStr.Length >= 4)
-            {
-                //数据内容的长度
-                _dataLen = MyConvertUtil.HexStrToInt(receivedDataArray[3] + receivedDataArray[2]);
-                //完整包
-                if (_packageStr.Length == _dataLen + 2)
-                {
-                    RichTextBoxChangedByDele(_packageStr);
-                    _packageStr = "";
-                }
-                else
-                {
-                    _logger.WriteLog("本次包数据不完整");
-                    Console.WriteLine("本次包数据不完整");
-                }
-            }
-        }
-
-        /// <summary>
-        /// 建立连接过程的数据包，向芯片端持续发送7C
-        /// </summary>
-        private void Step2()
-        {
-            while (true && _serialPort.IsOpen)
-            {
-                _serialPort.Write(STEP2, 0, STEP2.Length);
-            }
-        }
-
-        /// <summary>
-        /// 建立连接过程的数据包，向芯片端持续发送7F表示需要下载
-        /// </summary>
-        private void Step1()
-        {
-            while (true && _serialPort.IsOpen)
-            {
-                _serialPort.Write(STEP1, 0, STEP1.Length);
-            }
-        }
-
-        /// <summary>
         /// 初始化控件需要的数据
         /// </summary>
         private void InitData()
@@ -499,6 +383,134 @@ namespace HelloCSharp.UI
         {
         }
 
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        private void RichTextBoxChangedByDele(string str)
+        {
+            //非UI线程访问控件时
+            if (richTextBox1.InvokeRequired)
+            {
+                richTextBox1.Invoke(new RichTextBoxDele(RichTextBoxChangedByDele), str);
+            }
+            else
+            {
+                switch (_step)
+                {
+                    case 1:
+                        _step1Thread.Abort();
+                        richTextBox1.AppendText("【Step1】收到：" + str + "\r\n");
+                        richTextBox1.AppendText("【Step2】正在持续发送7C..." + "\r\n");
+                        _step2Thread = new Thread(Step2);
+                        _step2Thread.Start();
+                        _step = 2;
+                        break;
+                    case 2:
+                        _step2Thread.Abort();
+                        richTextBox1.AppendText("【Step2】收到：" + str + "\r\n");
+                        if (_serialPort != null && _serialPort.IsOpen)
+                        {
+                            _serialPort.Write(STEP3, 0, STEP3.Length);
+                            richTextBox1.AppendText("【Step3】指令已发送..." + "\r\n");
+                        }
+                        _step = 3;
+                        break;
+                    case 3:
+                        richTextBox1.AppendText("【Step3】收到：" + str + "\r\n");
+                        break;
+                    case 4:
+                        richTextBox1.AppendText("【Step4】收到：" + str + "\r\n");
+                        break;
+                    case 5:
+                        richTextBox1.AppendText("【Step5】收到：" + str + "\r\n");
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 异步接收Com返回的内容
+        /// 注意，收到数据就会触发该方法，每次收到的数据不一定是完整的，需要校对
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ReceivedComData(object sender, SerialDataReceivedEventArgs e)
+        {
+            SerialPort tempSerialPort = (SerialPort)sender;
+            if (tempSerialPort == null || !tempSerialPort.IsOpen)
+            {
+                return;
+            }
+            //本次收到的数据长度，只是用于按字节读取
+            int byteLen = tempSerialPort.BytesToRead;
+            byte[] byteArray = new byte[byteLen];
+            tempSerialPort.Read(byteArray, 0, byteArray.Length);
+            string str = MyConvertUtil.BytesToStr(byteArray);
+            if (string.IsNullOrEmpty(str))
+            {
+                return;
+            }
+            _logger.WriteLog(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            Console.WriteLine(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            _packageStr += str;
+            //每隔两位插入一个空格，用以分割成数组，方便使用下标进行判断
+            string[] receivedDataArray = MyConvertUtil.StrAddCharacter(_packageStr, 2, ",").Split(',');
+            //1、必须是AA打头，否则就说明是上一包没读完的数据
+            //2、下标为2和3的数据是数据长度（不包含最后两位校验码，低位在前），长度不一致说明这一包数据不完整
+            //防止下标越界，同时避免本次包连“数据长度”都没有
+            if (_packageStr.StartsWith("AA") && _packageStr.Length >= 4)
+            {
+                //数据内容的长度
+                _dataLen = MyConvertUtil.HexStrToInt(receivedDataArray[3] + receivedDataArray[2]);
+                //完整包
+                if (_packageStr.Length == _dataLen + 2)
+                {
+                    RichTextBoxChangedByDele(_packageStr);
+                    _packageStr = "";
+                }
+                else
+                {
+                    _logger.WriteLog("本次包数据不完整");
+                    Console.WriteLine("本次包数据不完整");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 建立连接过程的数据包，向芯片端持续发送7C
+        /// </summary>
+        private void Step2()
+        {
+            while (true && _serialPort.IsOpen)
+            {
+                _serialPort.Write(STEP2, 0, STEP2.Length);
+            }
+        }
+
+        /// <summary>
+        /// 建立连接过程的数据包，向芯片端持续发送7F表示需要下载
+        /// </summary>
+        private void Step1()
+        {
+            while (true && _serialPort.IsOpen)
+            {
+                _serialPort.Write(STEP1, 0, STEP1.Length);
+            }
+        }
+
         private void WriteBytes(object obj)
         {
             byte[] data = obj as byte[];
@@ -668,18 +680,6 @@ namespace HelloCSharp.UI
                 result += tempStr;
             }
             return result;
-        }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
         }
     }
 }
