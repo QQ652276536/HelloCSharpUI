@@ -20,9 +20,9 @@ namespace HelloCSharp.UI
         private readonly int[] BAUDRATE_ARRAY = new int[] { 115200, 57600, 56000, 38400, 19200,
             9600, 4800, 2400, 1200 };
         private readonly int[] DATABIT_ARRAY = new int[] { 8, 7, 6, 5, 4 };
-        private readonly byte[] STEP1 = MyConvertUtil.StrToBytes("7F7F7F7F7F7F7F7F7F7F");
-        private readonly byte[] STEP2 = MyConvertUtil.StrToBytes("7C7C7C7C7C7C7C7C7C7C");
-        private readonly byte[] STEP3 = MyConvertUtil.StrToBytes("01330600030046DB");
+        private readonly byte[] STEP1 = MyConvertUtil.HexStrToBytes("7F7F7F7F7F7F7F7F7F7F");
+        private readonly byte[] STEP2 = MyConvertUtil.HexStrToBytes("7C7C7C7C7C7C7C7C7C7C");
+        private readonly byte[] STEP3 = MyConvertUtil.HexStrToBytes("01330600030046DB");
 
         private SerialPort _serialPort;
         //波特率、数据位、当前步骤、步骤1的数据长度、步骤2的数据长度、步骤3的数据长度、步骤4的数据长度、步骤5的数据长度、数据的长度（不包含最后两位校验码）
@@ -523,15 +523,14 @@ namespace HelloCSharp.UI
                 byte[] fileData;
                 try
                 {
-                    //fileData = File.ReadAllBytes(_updatePath);
-                    fileData = File.ReadAllBytes("C:\\Users\\zistone\\Desktop\\固件下载工具包V1.1_20200601\\kernel.bin");
+                    fileData = File.ReadAllBytes(_updatePath);
                     fileLen = fileData.Length;
                     string fileStr1 = MyConvertUtil.BytesToStr(fileData);
                     int a = 1;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    MessageBox.Show(ex.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 //每包固定的长度（除包头外）=包长度（2字节）+包属性（2字节）+命令码（1字节）+固件名字（16字节）+固件总长度（3字节）+当前块号（2字节）+校验码（2字节）=28字节

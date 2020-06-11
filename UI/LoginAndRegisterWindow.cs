@@ -9,14 +9,14 @@ namespace HelloCSharp.UI
     public partial class LoginAndRegisterWindow : Form
     {
         public int _nowPage = 0;
-        public RegisterControl _registerControl = null;
-        public LoginControl _loginControl = null;
+        public ControlRegister _registerControl = null;
+        public ControlLogin _loginControl = null;
 
         public LoginAndRegisterWindow()
         {
             InitializeComponent();
-            _loginControl = new LoginControl();
-            _registerControl = new RegisterControl();
+            _loginControl = new ControlLogin();
+            _registerControl = new ControlRegister();
             this.panel2.Controls.Add(_loginControl);
             this.panel2.Controls.Add(_registerControl);
             CreateQRCode();
