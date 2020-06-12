@@ -23,10 +23,25 @@ namespace HelloCSharp.UI
         private readonly byte[] STEP1 = MyConvertUtil.HexStrToBytes("7F7F7F7F7F7F7F7F7F7F");
         private readonly byte[] STEP2 = MyConvertUtil.HexStrToBytes("7C7C7C7C7C7C7C7C7C7C");
         private readonly byte[] STEP3 = MyConvertUtil.HexStrToBytes("01330600030046DB");
+        private readonly Dictionary<int, string> DEVICEINFODICTIONARY = new Dictionary<int, string> {
+            {1,"TAG_KEY_SUCCESS"},
+            {2,"TAG_KEY_FAIL"},
+            {3,"TAG_KEY_SN"},
+            {4,"TAG_KEY_MODEL_ID"},
+            {5,"TAG_KEY_DEVICE_ID"},
+            {6,"TAG_KEY_DESK_KEY"},
+            {7,"TAG_KEY_PIN_KEY"},
+            {8,"TAG_KEY_TK_DESK"},
+            {9,"TAG_KEY_TK_PIN"},
+            {10,"TAG_KEY_SOFT_VER"},
+            {11,"TAG_KEY_HARDWARE_VER"},
+            {12,"TAG_KEY_SECURITY_1" },
+            {31,"TAG_BOOT_MODE"}
+        };
 
         private SerialPort _serialPort;
         //波特率、数据位、当前步骤、步骤1的数据长度、步骤2的数据长度、步骤3的数据长度、步骤4的数据长度、步骤5的数据长度、数据的长度（不包含最后两位校验码）
-        private int _baudRate = 0, _dataBit = 8, _step = 1, _step1Len = 0, _step2Len = 0, _step3Len = 0, _step4Len = 0, _step5Len = 0, _dataLen = 0, _count = 0;
+        private int _baudRate = 0, _dataBit = 8, _step = 1, _step1Len = 0, _step2Len = 0, _step3Len = 0, _step4Len = 0, _step5Len = 0, _dataLen = 0;
         //密钥文件路径、升级文件路径、串口名、本包内容
         private string _secretKeyPath = "", _portName = "", _packageStr = "";
         private Thread _step1Thread, _step2Thread;
@@ -206,7 +221,6 @@ namespace HelloCSharp.UI
             int splitArrayEndIndex = 0;
             for (int i = 0; i < packageNum; i++)
             {
-                _count++;
                 //当前块号，将高字节放在前面
                 int blockNo = i + 1;
                 string blockNoHexStr = blockNo.ToString("x4");
@@ -408,36 +422,37 @@ namespace HelloCSharp.UI
             }
             else
             {
-                switch (_step)
-                {
-                    case 1:
-                        _step1Thread.Abort();
-                        richTextBox1.AppendText("【Step1】收到：" + str + "\r\n");
-                        richTextBox1.AppendText("【Step2】正在持续发送7C..." + "\r\n");
-                        _step2Thread = new Thread(Step2);
-                        _step2Thread.Start();
-                        _step = 2;
-                        break;
-                    case 2:
-                        _step2Thread.Abort();
-                        richTextBox1.AppendText("【Step2】收到：" + str + "\r\n");
-                        if (_serialPort != null && _serialPort.IsOpen)
-                        {
-                            _serialPort.Write(STEP3, 0, STEP3.Length);
-                            richTextBox1.AppendText("【Step3】指令已发送..." + "\r\n");
-                        }
-                        _step = 3;
-                        break;
-                    case 3:
-                        richTextBox1.AppendText("【Step3】收到：" + str + "\r\n");
-                        break;
-                    case 4:
-                        richTextBox1.AppendText("【Step4】收到：" + str + "\r\n");
-                        break;
-                    case 5:
-                        richTextBox1.AppendText("【Step5】收到：" + str + "\r\n");
-                        break;
-                }
+                richTextBox1.AppendText("收到：" + str);
+                //switch (_step)
+                //{
+                //    case 1:
+                //        _step1Thread.Abort();
+                //        richTextBox1.AppendText("【Step1】收到：" + str + "\r\n");
+                //        richTextBox1.AppendText("【Step2】正在持续发送7C..." + "\r\n");
+                //        _step2Thread = new Thread(Step2);
+                //        _step2Thread.Start();
+                //        _step = 2;
+                //        break;
+                //    case 2:
+                //        _step2Thread.Abort();
+                //        richTextBox1.AppendText("【Step2】收到：" + str + "\r\n");
+                //        if (_serialPort != null && _serialPort.IsOpen)
+                //        {
+                //            _serialPort.Write(STEP3, 0, STEP3.Length);
+                //            richTextBox1.AppendText("【Step3】指令已发送..." + "\r\n");
+                //        }
+                //        _step = 3;
+                //        break;
+                //    case 3:
+                //        richTextBox1.AppendText("【Step3】收到：" + str + "\r\n");
+                //        break;
+                //    case 4:
+                //        richTextBox1.AppendText("【Step4】收到：" + str + "\r\n");
+                //        break;
+                //    case 5:
+                //        richTextBox1.AppendText("【Step5】收到：" + str + "\r\n");
+                //        break;
+                //}
             }
         }
 
@@ -463,28 +478,98 @@ namespace HelloCSharp.UI
             {
                 return;
             }
-            _logger.WriteLog(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
-            Console.WriteLine(_count + "收到的数据（Hex）：" + str + "，长度：" + byteLen);
             _packageStr += str;
+            _logger.WriteLog("收到的数据（Hex）：" + str + "，长度：" + byteLen);
+            Console.WriteLine("收到的数据（Hex）：" + str + "，长度：" + byteLen);
             //每隔两位插入一个空格，用以分割成数组，方便使用下标进行判断
             string[] receivedDataArray = MyConvertUtil.StrAddCharacter(_packageStr, 2, ",").Split(',');
-            //1、必须是AA打头，否则就说明是上一包没读完的数据
-            //2、下标为2和3的数据是数据长度（不包含最后两位校验码，低位在前），长度不一致说明这一包数据不完整
-            //防止下标越界，同时避免本次包连“数据长度”都没有
-            if (_packageStr.StartsWith("AA") && _packageStr.Length >= 4)
+            string head = receivedDataArray[0];
+            //1、必须是3F打头，否则就说明是上一包没读完的数据
+            //2、下标为1和2的数据是数据长度（不包含最后两位校验码，高位在前），长度不一致说明这一包数据不完整
+            //防止下标越界，同时避免该包连“数据长度”都没有
+            if (head.Equals("3F") && _packageStr.Length >= 3)
             {
                 //数据内容的长度
-                _dataLen = MyConvertUtil.HexStrToInt(receivedDataArray[3] + receivedDataArray[2]);
-                //完整包
-                if (_packageStr.Length == _dataLen + 2)
+                _dataLen = MyConvertUtil.HexStrToInt(receivedDataArray[2] + receivedDataArray[1]);
+                //完整包，命令头3F不算在内
+                if ((_packageStr.Length - 2) / 2 == _dataLen)
                 {
-                    RichTextBoxChangedByDele(_packageStr);
+                    string type = receivedDataArray[5];
+                    string result = receivedDataArray[6];
+                    string txt = "";
+                    switch (type)
+                    {
+                        //基本参数
+                        case "01":
+                            if (result.Equals("00"))
+                            {
+                                txt = "\r\n数据正确\r\n";
+                                //解析的时候不算1个字节的命令头和2个字节的校验码
+                                string[] data = SplitArray(receivedDataArray, 7, receivedDataArray.Length - 1 - 2);
+                                int t;
+                                int l;
+                                string v;
+                                for (int i = 0; i < data.Length; i++)
+                                {
+                                    //T
+                                    t = MyConvertUtil.HexStrToInt(data[i]);
+                                    string tStr;
+                                    DEVICEINFODICTIONARY.TryGetValue(t, out tStr);
+                                    txt += tStr + " ";
+                                    //L
+                                    l = MyConvertUtil.HexStrToInt(data[++i]);
+                                    txt += l + " ";
+                                    //V
+                                    string[] vArray = SplitArray(data, i + 1, i + l);
+                                    v = string.Join("", vArray);
+                                    if (t == 3 || t == 5 || t == 10)
+                                    {
+                                        txt += MyConvertUtil.HexStrToStr(v) + "\r\n";
+                                    }
+                                    else
+                                    {
+                                        txt += MyConvertUtil.HexStrToInt(v) + "\r\n";
+                                    }
+                                    i += l;
+                                }
+                            }
+                            else
+                            {
+                                txt += _packageStr + "\r\n数据有误\r\n";
+                            }
+                            break;
+                        //请求下载
+                        case "20":
+                            if (result.Equals("00") || result.Equals("01"))
+                            {
+                                txt = _packageStr + "\r\n已进入下载模式！\r\n";
+                            }
+                            else
+                            {
+                                txt = _packageStr + "\r\n下载模式请求失败！\r\n";
+                            }
+                            break;
+                        //固件升级包
+                        case "21":
+                            if (result.Equals("00"))
+                            {
+                                txt = _packageStr + "\r\n该包数据正确！\r\n";
+                            }
+                            else
+                            {
+                                txt = _packageStr + "\r\n该包数据错误！\r\n";
+                            }
+                            break;
+                    }
+                    RichTextBoxChangedByDele(_packageStr + txt);
+                    _logger.WriteLog(_packageStr + txt);
+                    Console.WriteLine(_packageStr + txt);
                     _packageStr = "";
                 }
                 else
                 {
-                    _logger.WriteLog("本次包数据不完整");
-                    Console.WriteLine("本次包数据不完整");
+                    _logger.WriteLog("该包数据不完整，已缓存，等待下一包数据...");
+                    Console.WriteLine("该包数据不完整，已缓存，等待下一包数据...");
                 }
             }
         }
@@ -590,6 +675,20 @@ namespace HelloCSharp.UI
             try
             {
                 byte[] result = new byte[endIndex - startIndex + 1];
+                for (int i = 0; i <= endIndex - startIndex; i++)
+                    result[i] = source[i + startIndex];
+                return result;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public string[] SplitArray(string[] source, int startIndex, int endIndex)
+        {
+            try
+            {
+                string[] result = new string[endIndex - startIndex + 1];
                 for (int i = 0; i <= endIndex - startIndex; i++)
                     result[i] = source[i + startIndex];
                 return result;
