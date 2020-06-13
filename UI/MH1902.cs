@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -57,6 +58,15 @@ namespace HelloCSharp.UI
         {
             InitializeComponent();
             InitData();
+            InitView();
+        }
+
+        /// <summary>
+        /// 初始化控件
+        /// </summary>
+        private void InitView()
+        {
+            EnableButton(false);
         }
 
         /// <summary>
@@ -107,26 +117,61 @@ namespace HelloCSharp.UI
             }
         }
 
+        private void EnableButton(bool flag)
+        {
+            button1.Enabled = flag;
+            button2.Enabled = flag;
+            button3.Enabled = flag;
+            button4.Enabled = flag;
+            button5.Enabled = flag;
+            button6.Enabled = flag;
+            button7.Enabled = flag;
+            button8.Enabled = flag;
+            button11.Enabled = flag;
+            button12.Enabled = flag;
+            button13.Enabled = flag;
+            button14.Enabled = flag;
+        }
+
+        /// <summary>
+        /// 开启/关闭串口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button15_Click(object sender, EventArgs e)
         {
-            _portName = comboBox1.SelectedValue as string;
-            _baudRate = Convert.ToInt32(comboBox2.SelectedValue as string);
-            _dataBit = Convert.ToInt32(comboBox3.SelectedValue as string);
-            if (_serialPort == null)
+            if (button15.Text.ToString().Equals("打开串口"))
             {
-                _serialPort = new SerialPort(_portName, _baudRate, Parity.None, _dataBit, StopBits.One);
-                _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
-                richTextBox1.AppendText("已打开：" + _portName + "\r\n");
-                _serialPort.Open();
+                button15.Text = "关闭串口";
+                _portName = comboBox1.SelectedValue as string;
+                _baudRate = Convert.ToInt32(comboBox2.SelectedValue as string);
+                _dataBit = Convert.ToInt32(comboBox3.SelectedValue as string);
+                if (_serialPort == null)
+                {
+                    _serialPort = new SerialPort(_portName, _baudRate, Parity.None, _dataBit, StopBits.One);
+                    _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
+                    richTextBox1.AppendText("已打开：" + _portName + "\r\n");
+                    _serialPort.Open();
+                }
+                if (!_serialPort.IsOpen)
+                {
+                    _serialPort.Open();
+                }
+                EnableButton(true);
             }
-            if (!_serialPort.IsOpen)
+            else
             {
-                _serialPort.Open();
+                if (_serialPort != null)
+                {
+                    _serialPort.Close();
+                    richTextBox1.AppendText("已关闭：" + _portName + "\r\n");
+                }
+                EnableButton(false);
             }
         }
 
         /// <summary>
-        /// 选择文件
+        /// 【tabPage1】选择文件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -144,7 +189,7 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
-        /// 查询基本参数
+        /// 【tabPage1】查询基本参数
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -158,7 +203,7 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
-        /// 请求下载
+        /// 【tabPage1】请求下载
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -171,7 +216,7 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
-        /// 发送本地文件
+        /// 【tabPage1】发送固件数据包
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -290,15 +335,21 @@ namespace HelloCSharp.UI
             button1.Enabled = true;
         }
 
-        private void button10_Click(object sender, EventArgs e)
-        {
-        }
-
+        /// <summary>
+        /// 清除RichTextBox1的内容
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button9_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
         }
 
+        /// <summary>
+        /// 【tabPage2】浏览
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button8_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -313,6 +364,11 @@ namespace HelloCSharp.UI
             }
         }
 
+        /// <summary>
+        /// 【tabPage2】加载配置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button7_Click(object sender, EventArgs e)
         {
             byte[] data = MyConvertUtil.HexStrToBytes("3F070000002039A9");
@@ -321,6 +377,11 @@ namespace HelloCSharp.UI
             richTextBox1.AppendText("已请求进入下载模式...\r\n");
         }
 
+        /// <summary>
+        /// 【tabPage2】编辑
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
             byte[] data = MyConvertUtil.HexStrToBytes("3F07000000017A9D");
@@ -329,6 +390,11 @@ namespace HelloCSharp.UI
             richTextBox1.AppendText("查询POS机基本参数..." + "\r\n");
         }
 
+        /// <summary>
+        /// 【tabPage2】终止
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button5_Click(object sender, EventArgs e)
         {
             //重置Step
@@ -343,10 +409,20 @@ namespace HelloCSharp.UI
             button3.Enabled = true;
         }
 
+        /// <summary>
+        /// 【tabPage2】下载
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
         }
 
+        /// <summary>
+        /// 【tabPage2】连接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
             _portName = comboBox1.SelectedValue as string;
@@ -380,6 +456,11 @@ namespace HelloCSharp.UI
             }
         }
 
+        /// <summary>
+        /// 【tabPage2】选择本地升级文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -393,6 +474,11 @@ namespace HelloCSharp.UI
             }
         }
 
+        /// <summary>
+        /// 【tabPage2】签名
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
         }
@@ -561,6 +647,7 @@ namespace HelloCSharp.UI
                             }
                             break;
                     }
+                    //txt = Regex.Match(txt, "[A-Za-z0-9\u4e00-\u9fa5-]+").Value;
                     RichTextBoxChangedByDele(_packageStr + txt);
                     _logger.WriteLog(_packageStr + txt);
                     Console.WriteLine(_packageStr + txt);

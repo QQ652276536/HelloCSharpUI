@@ -17,6 +17,10 @@ namespace HelloCSharp
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
 
+            if (1 > 0)
+            {
+                return;
+            }
             string str = "3F4300801001000B01650A1520797A70746573745F76312E315F32303035333000030AFFFFFFFFFFFFFFFFFFFF04016C0510FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE868";
             string[] strs = MyConvertUtil.StrAddCharacter(str, 2, ",").Split(',');
             string[] data = SplitArray(strs, 7, strs.Length - 1 - 2);
