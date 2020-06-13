@@ -292,7 +292,7 @@ namespace HelloCSharp.UI
                     string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
                     new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
                     richTextBox1.AppendText("发送第" + blockNo + "包数据..." + "\r\n");
-                    //设置光标的位置到文本尾   
+                    //设置光标的位置到文本尾
                     richTextBox1.Select(richTextBox1.TextLength, 0);
                     //滚动到控件光标处   
                     richTextBox1.ScrollToCaret();
@@ -590,7 +590,7 @@ namespace HelloCSharp.UI
                             if (result.Equals("00"))
                             {
                                 txt = "\r\n数据正确\r\n";
-                                //解析的时候不算1个字节的命令头和2个字节的校验码
+                                //解析的时候不算1个字节的命令头、2个字节的长度、2个字节的包属性、1个字节的命令码、1个字节的结果、2个字节的校验码
                                 string[] data = SplitArray(receivedDataArray, 7, receivedDataArray.Length - 1 - 2);
                                 int t;
                                 int l;
@@ -771,6 +771,7 @@ namespace HelloCSharp.UI
                 throw new Exception(ex.Message);
             }
         }
+
         public string[] SplitArray(string[] source, int startIndex, int endIndex)
         {
             try
