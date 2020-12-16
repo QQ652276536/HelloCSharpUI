@@ -16,8 +16,10 @@ using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
+
     public partial class MH1902 : Form
     {
+
         private readonly int[] BAUDRATE_ARRAY = new int[] { 115200, 57600, 56000, 38400, 19200,
             9600, 4800, 2400, 1200 };
         private readonly int[] DATABIT_ARRAY = new int[] { 8, 7, 6, 5, 4 };
@@ -245,7 +247,7 @@ namespace HelloCSharp.UI
             //固件总长度，将高字节放在前面
             string dataTotalLenHexStr = fileLen.ToString("x6");
             string[] tempTotalLenArray = MyConvertUtil.StrAddCharacter(dataTotalLenHexStr, 2, " ").Split(' ');
-            dataTotalLenHexStr = SortStringArray(tempTotalLenArray, false);
+            dataTotalLenHexStr = MyConvertUtil.SortStringArray(tempTotalLenArray, false);
             //将固件数据分包，每包的长度
             int dataMax = 900;
             if (fileLen < dataMax)
@@ -257,7 +259,7 @@ namespace HelloCSharp.UI
             int everyPackageLenNotLast = dataMax + everyPackageFixedLen;
             string everyPackageLenNotLastHexStr = everyPackageLenNotLast.ToString("x4");
             string[] everyPackageLenNotLastHexStrArray = MyConvertUtil.StrAddCharacter(everyPackageLenNotLastHexStr, 2, " ").Split(' ');
-            everyPackageLenNotLastHexStr = SortStringArray(everyPackageLenNotLastHexStrArray, false);
+            everyPackageLenNotLastHexStr = MyConvertUtil.SortStringArray(everyPackageLenNotLastHexStrArray, false);
             //包数
             double packageNum = Math.Ceiling((double)fileLen / dataMax);
             //最后一个包的长度
@@ -270,7 +272,7 @@ namespace HelloCSharp.UI
                 int blockNo = i + 1;
                 string blockNoHexStr = blockNo.ToString("x4");
                 string[] blockNoHexStrArray = MyConvertUtil.StrAddCharacter(blockNoHexStr, 2, " ").Split(' ');
-                blockNoHexStr = SortStringArray(blockNoHexStrArray, false);
+                blockNoHexStr = MyConvertUtil.SortStringArray(blockNoHexStrArray, false);
                 if (i != packageNum - 1)
                 {
                     //包内容，不包含固件数据和校验码
@@ -279,16 +281,16 @@ namespace HelloCSharp.UI
                     //要截取的数组的结束下标，不是长度
                     splitArrayEndIndex = (i + 1) * dataMax - 1;
                     //固件数据
-                    byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex);
+                    byte[] tempBytes2 = MyConvertUtil.SplitArray(fileData, i * dataMax, splitArrayEndIndex);
                     string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
                     //包内容，不包含校验码
-                    byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
+                    byte[] tempBytes3 = MyConvertUtil.MergerArray(tempBytes1, tempBytes2);
                     string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
                     //计算2位校验码，低字节在前
-                    string crcStr = CalculateCRC(tempBytes3, true);
+                    string crcStr = MyConvertUtil.CalculateCRC(tempBytes3, true);
                     byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
                     //完整的包内容
-                    byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
+                    byte[] tempBytes5 = MyConvertUtil.MergerArray(tempBytes3, tempBytes4);
                     string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
                     new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
                     richTextBox1.AppendText("发送第" + blockNo + "包数据..." + "\r\n");
@@ -306,21 +308,21 @@ namespace HelloCSharp.UI
                     //高字节在前
                     string surplusLenHexStr = ((int)surplusLen).ToString("x4");
                     string[] tempArray = MyConvertUtil.StrAddCharacter(surplusLenHexStr, 2, " ").Split(' ');
-                    surplusLenHexStr = SortStringArray(tempArray, false);
+                    surplusLenHexStr = MyConvertUtil.SortStringArray(tempArray, false);
                     //包内容，不包含固件数据和校验码
                     string cmdx = "3F" + surplusLenHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
                     byte[] tempBytes1 = MyConvertUtil.HexStrToBytes(cmdx);
                     //固件数据
-                    byte[] tempBytes2 = SplitArray(fileData, i * dataMax, splitArrayEndIndex + (int)surplusLen);
+                    byte[] tempBytes2 = MyConvertUtil.SplitArray(fileData, i * dataMax, splitArrayEndIndex + (int)surplusLen);
                     string tempStr11111111111111111111111111111111111111111111111111111111 = MyConvertUtil.BytesToStr(tempBytes2);
                     //包内容，不包含校验码
-                    byte[] tempBytes3 = MergerArray(tempBytes1, tempBytes2);
+                    byte[] tempBytes3 = MyConvertUtil.MergerArray(tempBytes1, tempBytes2);
                     string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
                     //计算2位校验码，低字节在前
-                    string crcStr = CalculateCRC(tempBytes3, true);
+                    string crcStr = MyConvertUtil.CalculateCRC(tempBytes3, true);
                     byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
                     //完整的包内容
-                    byte[] tempBytes5 = MergerArray(tempBytes3, tempBytes4);
+                    byte[] tempBytes5 = MyConvertUtil.MergerArray(tempBytes3, tempBytes4);
                     string tempStr33333333333333333333333333333333333333333333333333333333 = MyConvertUtil.BytesToStr(tempBytes5);
                     new Thread(new ParameterizedThreadStart(WriteBytes)).Start(tempBytes5);
                     richTextBox1.AppendText("发送第" + (i + 1) + "包数据..." + "\r\n");
@@ -591,7 +593,7 @@ namespace HelloCSharp.UI
                             {
                                 txt = "\r\n数据正确\r\n";
                                 //解析的时候不算1个字节的命令头、2个字节的长度、2个字节的包属性、1个字节的命令码、1个字节的结果、2个字节的校验码
-                                string[] data = SplitArray(receivedDataArray, 7, receivedDataArray.Length - 1 - 2);
+                                string[] data = MyConvertUtil.SplitArray(receivedDataArray, 7, receivedDataArray.Length - 1 - 2);
                                 int t;
                                 int l;
                                 string v;
@@ -606,7 +608,7 @@ namespace HelloCSharp.UI
                                     l = MyConvertUtil.HexStrToInt(data[++i]);
                                     txt += l + " ";
                                     //V
-                                    string[] vArray = SplitArray(data, i + 1, i + l);
+                                    string[] vArray = MyConvertUtil.SplitArray(data, i + 1, i + l);
                                     v = string.Join("", vArray);
                                     if (t == 3 || t == 5 || t == 10)
                                     {
@@ -693,180 +695,6 @@ namespace HelloCSharp.UI
                 Console.WriteLine("已发送数据...");
             }
         }
-
-        /// <summary>
-        /// 计算2位校验码
-        /// </summary>
-        /// <param name="byteArray"></param>
-        /// <param name="isLowInBefore">低字节在前/后</param>
-        /// <returns></returns>
-        private string CalculateCRC(byte[] byteArray, bool isLowInBefore)
-        {
-            int crc = 0;
-            foreach (byte tempByte in byteArray)
-            {
-                // 0x80 = 128
-                for (int i = 0x80; i != 0; i /= 2)
-                {
-                    crc *= 2;
-                    // 0x10000 = 65536
-                    if ((crc & 0x10000) != 0)
-                        // 0x11021 = 69665
-                        crc ^= 0x11021;
-                    if ((tempByte & i) != 0)
-                        // 0x1021 = 4129
-                        crc ^= 0x1021;
-                }
-            }
-            string crcStr = crc.ToString("x2");
-            string[] tempArray = MyConvertUtil.StrAddCharacter(crcStr, 2, " ").Split(' ');
-            if (tempArray.Length == 1)
-            {
-                return "00" + tempArray[0];
-            }
-            if (isLowInBefore)
-            {
-                if (MyConvertUtil.HexStrToInt(tempArray[0]) > MyConvertUtil.HexStrToInt(tempArray[1]))
-                {
-                    string temp = tempArray[1];
-                    tempArray[1] = tempArray[0];
-                    tempArray[0] = temp;
-                }
-            }
-            else
-            {
-                if (MyConvertUtil.HexStrToInt(tempArray[0]) < MyConvertUtil.HexStrToInt(tempArray[1]))
-                {
-                    string temp = tempArray[1];
-                    tempArray[1] = tempArray[0];
-                    tempArray[0] = temp;
-                }
-            }
-            //补零
-            if (tempArray[0].Length < 2)
-                tempArray[0] = "0" + tempArray[0];
-            if (tempArray[1].Length < 2)
-                tempArray[1] = "0" + tempArray[1];
-            return tempArray[0] + tempArray[1];
-        }
-
-        /// <summary>
-        /// 从数组中截取一部分成新的数组
-        /// </summary>
-        /// <param name="source">原数组</param>
-        /// <param name="startIndex">原数组的起始位置</param>
-        /// <param name="endIndex">原数组的截止位置</param>
-        /// <returns></returns>
-        public byte[] SplitArray(byte[] source, int startIndex, int endIndex)
-        {
-            try
-            {
-                byte[] result = new byte[endIndex - startIndex + 1];
-                for (int i = 0; i <= endIndex - startIndex; i++)
-                    result[i] = source[i + startIndex];
-                return result;
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public string[] SplitArray(string[] source, int startIndex, int endIndex)
-        {
-            try
-            {
-                string[] result = new string[endIndex - startIndex + 1];
-                for (int i = 0; i <= endIndex - startIndex; i++)
-                    result[i] = source[i + startIndex];
-                return result;
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// 合并数组
-        /// </summary>
-        /// <param name="first">第一个数组</param>
-        /// <param name="second">第二个数组</param>
-        /// <returns></returns>
-        public byte[] MergerArray(byte[] first, byte[] second)
-        {
-            byte[] result = new byte[first.Length + second.Length];
-            first.CopyTo(result, 0);
-            second.CopyTo(result, first.Length);
-            return result;
-        }
-
-        /// <summary>
-        /// Str的前面/后面补零
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="length"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
-        private string SupplementZero(string input, int length, bool flag)
-        {
-            string zero = "";
-            for (int i = 0; i < length - input.Length; i++)
-            {
-                zero += "0";
-            }
-            if (flag)
-                return zero + input;
-            else
-                return input + zero;
-        }
-
-        /// <summary>
-        /// Str[]排序
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
-        private string SortStringArray(string[] array, bool flag)
-        {
-            //从小到大
-            if (flag)
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    for (int j = 0; j < array.Length; j++)
-                    {
-                        if (MyConvertUtil.HexStrToInt(array[i]) < MyConvertUtil.HexStrToInt(array[j]))
-                        {
-                            string temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                        }
-                    }
-                }
-            }
-            //从大到小
-            else
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    for (int j = 0; j < array.Length; j++)
-                    {
-                        if (MyConvertUtil.HexStrToInt(array[i]) > MyConvertUtil.HexStrToInt(array[j]))
-                        {
-                            string temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                        }
-                    }
-                }
-            }
-            string result = "";
-            foreach (string tempStr in array)
-            {
-                result += tempStr;
-            }
-            return result;
-        }
     }
+
 }

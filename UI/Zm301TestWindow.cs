@@ -34,20 +34,73 @@ namespace HelloCSharp.UI
         /// <param name="str">文本内容</param>
         private delegate void LogTxtDele(string str);
 
-        private readonly int[] RATE_ARRAY = new int[] { 115200, 57600, 56000, 38400, 19200,
-            9600, 4800, 2400, 1200 };
+        /// <summary>
+        /// 开锁一，校验码已提前算好
+        /// </summary>
+        private const string OPEN_DOOR1 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 34 E5 16";
+        private readonly byte[] OPEN_DOOR1_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR1);
+
+        /// <summary>
+        /// 开锁二，校验码已提前算好
+        /// </summary>
+        private const string OPEN_DOOR2 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 35 E6 16";
+        private readonly byte[] OPEN_DOOR2_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR2);
+
+        /// <summary>
+        /// 开锁三，校验码已提前算好
+        /// </summary>
+        private const string OPEN_DOOR3 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 36 E7 16";
+        private readonly byte[] OPEN_DOOR3_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR3);
+
+        /// <summary>
+        /// 开全部锁，校验码已提前算好
+        /// </summary>
+        private const string OPEN_DOOR_ALL = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 37 E8 16";
+        private readonly byte[] OPEN_DOOR_ALL_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR_ALL);
+
+        /// <summary>
+        /// 读取工号，校验码已提前算好
+        /// </summary>
+        private const string READ_WORK = "FE FE FE FE 68 22 23 01 56 34 00 68 0B 00 AB 16";
+        private readonly byte[] READ_WORK_BYTE = MyConvertUtil.HexStrToBytes(READ_WORK);
+
+        /// <summary>
+        /// 读取表箱号，校验码已提前算好
+        /// </summary>
+        private const string READ_BOX = "";
+        private readonly byte[] READ_BOX_BYTE = MyConvertUtil.HexStrToBytes(READ_BOX);
+
+        /// <summary>
+        /// 读取GPS位置，校验码已提前算好
+        /// </summary>
+        private const string READ_GPS = "FE FE FE FE 68 22 23 01 56 34 00 68 0A 00 AA 16";
+        private readonly byte[] READ_GPS_BYTE = MyConvertUtil.HexStrToBytes(READ_GPS);
+
+        /// <summary>
+        /// 波特率
+        /// </summary>
+        private readonly int[] RATE_ARRAY = new int[] { 1200, 2400, 4800, 9600, 19200, 38400, 56000, 57600, 115200 };
+
+        /// <summary>
+        /// 数据位
+        /// </summary>
         private readonly int[] DATA_ARRAY = new int[] { 8, 7, 6, 5, 4 };
+
+        /// <summary>
+        /// 校验位
+        /// </summary>
         private readonly string[] PARITY_ARRAY = new string[] { "None", "Odd", "Even", "Mark", "Space" };
 
         private MyLogger _logger = MyLogger.Instance;
         private SerialPort _serialPort;
         private Thread _thread;
         private string[] _portNameArray;
+        private string _receivedStr = "";
 
         //串口名
         private string _portName = "";
         //波特率、数据位
-        private int _rate = 115200, _data = 8;
+        private int _rate = 1200, _data = 8;
         //校验位
         private Parity _parity = Parity.None;
 
@@ -101,11 +154,13 @@ namespace HelloCSharp.UI
             {
                 if ("打开串口".Equals(btn_open.Text.ToString()))
                 {
-                    _serialPort = new SerialPort(_portName, _rate, _parity, _data, StopBits.One);
-                    _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
+                    if (null == _serialPort)
+                    {
+                        _serialPort = new SerialPort(_portName, _rate, _parity, _data, StopBits.One);
+                        _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
+                    }
                     _serialPort.Open();
                     txt_log.AppendText("已打开：" + _portName + "\r\n");
-                    _serialPort.Open();
                     EnableButton(true);
                     btn_open.Text = "关闭串口";
                 }
@@ -119,7 +174,7 @@ namespace HelloCSharp.UI
             }
             catch (Exception ex)
             {
-                txt_log.AppendText("串口" + _portName + "打开/关闭失败，" + ex.ToString() + "\r\n");
+                txt_log.AppendText("串口" + _portName + "打开/关闭失败，原因：" + ex.ToString() + "\r\n");
             }
         }
 
@@ -130,7 +185,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock1_Click(object sender, EventArgs e)
         {
-
+            _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
+            txt_log.AppendText("发送开锁一指令：" + OPEN_DOOR1 + "\r\n");
         }
 
         /// <summary>
@@ -140,7 +196,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock2_Click(object sender, EventArgs e)
         {
-
+            _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
+            txt_log.AppendText("发送开锁二指令：" + OPEN_DOOR2 + "\r\n");
         }
 
         /// <summary>
@@ -150,7 +207,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock3_Click(object sender, EventArgs e)
         {
-
+            _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
+            txt_log.AppendText("发送开锁三指令：" + OPEN_DOOR3 + "\r\n");
         }
 
         /// <summary>
@@ -160,7 +218,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock_all_Click(object sender, EventArgs e)
         {
-
+            _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
+            txt_log.AppendText("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n");
         }
 
         /// <summary>
@@ -237,6 +296,8 @@ namespace HelloCSharp.UI
             else
             {
                 txt_log.AppendText(str);
+                //重置
+                _receivedStr = "";
             }
         }
 
@@ -337,90 +398,30 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void ReceivedComData(object sender, SerialDataReceivedEventArgs e)
         {
-            SerialPort tempSerialPort = (SerialPort)sender;
-            if (tempSerialPort == null || !tempSerialPort.IsOpen)
+            if (null == _serialPort || !_serialPort.IsOpen)
             {
                 return;
             }
-            //本次收到的数据长度，只是用于按字节读取
-            int byteLen = tempSerialPort.BytesToRead;
+            //待读字节长度
+            int byteLen = _serialPort.BytesToRead;
+            _logger.WriteLog("本次待读字节长度：" + byteLen);
+            Console.WriteLine("本次待读字节长度：" + byteLen);
             byte[] byteArray = new byte[byteLen];
-            tempSerialPort.Read(byteArray, 0, byteArray.Length);
+            _serialPort.Read(byteArray, 0, byteArray.Length);
             string str = MyConvertUtil.BytesToStr(byteArray);
-            if (string.IsNullOrEmpty(str))
+            _logger.WriteLog("本次收到字节（Hex）：" + str);
+            Console.WriteLine("本次收到字节（Hex）：" + str);
+            _receivedStr += str;
+            _logger.WriteLog("累计收到字节（Hex）：" + _receivedStr);
+            Console.WriteLine("累计收到字节（Hex）：" + _receivedStr);
+            if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
             {
-                return;
+                int len = _receivedStr.Length;
+                _logger.WriteLog("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
+                Console.WriteLine("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
+                _receivedStr = MyConvertUtil.StrAddCharacter(_receivedStr, 2, " ");
+                LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n");
             }
-        }
-
-        /// <summary>
-        /// 发送
-        /// </summary>
-        /// <param name="obj"></param>
-        private void WriteBytes(object obj)
-        {
-            byte[] data = obj as byte[];
-            if (_serialPort.IsOpen)
-            {
-                _serialPort.Write(data, 0, data.Length);
-                _logger.WriteLog("已发送数据...");
-            }
-        }
-
-        /// <summary>
-        /// 计算2位校验码
-        /// </summary>
-        /// <param name="byteArray"></param>
-        /// <param name="isLowInBefore">低字节在前/后</param>
-        /// <returns></returns>
-        private string CalculateCRC(byte[] byteArray, bool isLowInBefore)
-        {
-            int crc = 0;
-            foreach (byte tempByte in byteArray)
-            {
-                // 0x80 = 128
-                for (int i = 0x80; i != 0; i /= 2)
-                {
-                    crc *= 2;
-                    // 0x10000 = 65536
-                    if ((crc & 0x10000) != 0)
-                        // 0x11021 = 69665
-                        crc ^= 0x11021;
-                    if ((tempByte & i) != 0)
-                        // 0x1021 = 4129
-                        crc ^= 0x1021;
-                }
-            }
-            string crcStr = crc.ToString("x2");
-            string[] tempArray = MyConvertUtil.StrAddCharacter(crcStr, 2, " ").Split(' ');
-            if (tempArray.Length == 1)
-            {
-                return "00" + tempArray[0];
-            }
-            if (isLowInBefore)
-            {
-                if (MyConvertUtil.HexStrToInt(tempArray[0]) > MyConvertUtil.HexStrToInt(tempArray[1]))
-                {
-                    string temp = tempArray[1];
-                    tempArray[1] = tempArray[0];
-                    tempArray[0] = temp;
-                }
-            }
-            else
-            {
-                if (MyConvertUtil.HexStrToInt(tempArray[0]) < MyConvertUtil.HexStrToInt(tempArray[1]))
-                {
-                    string temp = tempArray[1];
-                    tempArray[1] = tempArray[0];
-                    tempArray[0] = temp;
-                }
-            }
-            //补零
-            if (tempArray[0].Length < 2)
-                tempArray[0] = "0" + tempArray[0];
-            if (tempArray[1].Length < 2)
-                tempArray[1] = "0" + tempArray[1];
-            return tempArray[0] + tempArray[1];
         }
 
         /// <summary>

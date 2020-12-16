@@ -261,6 +261,7 @@ namespace HelloCSharp.Util
         /// <returns></returns>
         public static byte[] HexStrToBytes(string input)
         {
+            input = input.Replace(" ", "");
             int len = input.Length;
             if (len % 2 != 0)
             {
