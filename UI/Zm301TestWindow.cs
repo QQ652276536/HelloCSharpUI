@@ -61,24 +61,24 @@ namespace HelloCSharp.UI
         private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
         {
             _portName = _portNameArray[cbx_port.SelectedIndex];
-            txt_log.AppendText("串口名称：" + _portName + "\n");
+            txt_log.AppendText("串口名称：" + _portName + "\r\n");
         }
 
         private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
         {
             _rate = RATE_ARRAY[cbx_rate.SelectedIndex];
-            txt_log.AppendText("波特率：" + _rate + "\n");
+            txt_log.AppendText("波特率：" + _rate + "\r\n");
         }
 
         private void cbx_data_SelectedIndexChanged(object sender, EventArgs e)
         {
             _data = DATA_ARRAY[cbx_data.SelectedIndex];
-            txt_log.AppendText("数据位：" + _data + "\n");
+            txt_log.AppendText("数据位：" + _data + "\r\n");
         }
 
         private void cbx_parity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string str = PARITY_ARRAY[cbx_data.SelectedIndex];
+            string str = PARITY_ARRAY[cbx_parity.SelectedIndex];
             switch (str)
             {
                 case "None": _parity = Parity.None; break;
@@ -87,7 +87,7 @@ namespace HelloCSharp.UI
                 case "Mark": _parity = Parity.Mark; break;
                 case "Space": _parity = Parity.Space; break;
             }
-            txt_log.AppendText("校验位：" + _data + "\n");
+            txt_log.AppendText("校验位：" + _parity + "\r\n");
         }
 
         /// <summary>
@@ -97,30 +97,29 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_open_Click(object sender, EventArgs e)
         {
-            if (btn_open.Text.ToString().Equals("打开串口"))
+            try
             {
-                btn_open.Text = "关闭串口";
-                if (_serialPort == null)
+                if ("打开串口".Equals(btn_open.Text.ToString()))
                 {
-                    _serialPort = new SerialPort(_portName, _rate, _parity, _data, StopBits.None);
+                    _serialPort = new SerialPort(_portName, _rate, _parity, _data, StopBits.One);
                     _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
-                    txt_log.AppendText("已打开：" + _portName + "\n");
                     _serialPort.Open();
-                }
-                if (!_serialPort.IsOpen)
-                {
+                    txt_log.AppendText("已打开：" + _portName + "\r\n");
                     _serialPort.Open();
+                    EnableButton(true);
+                    btn_open.Text = "关闭串口";
                 }
-                EnableButton(true);
-            }
-            else
-            {
-                if (_serialPort != null)
+                else
                 {
                     _serialPort.Close();
-                    txt_log.AppendText("已关闭：" + _portName + "\n");
+                    txt_log.AppendText("已关闭：" + _portName + "\r\n");
+                    EnableButton(false);
+                    btn_open.Text = "打开串口";
                 }
-                EnableButton(false);
+            }
+            catch (Exception ex)
+            {
+                txt_log.AppendText("串口" + _portName + "打开/关闭失败，" + ex.ToString() + "\r\n");
             }
         }
 
@@ -305,6 +304,11 @@ namespace HelloCSharp.UI
                 DataRow dataRow = dataParity.NewRow();
                 dataRow[0] = temp;
                 dataParity.Rows.Add(dataRow);
+            }
+            if (dataParity.Rows.Count > 0)
+            {
+                cbx_parity.DataSource = dataParity;
+                cbx_parity.ValueMember = "value";
             }
         }
 
