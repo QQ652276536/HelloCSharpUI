@@ -12,7 +12,7 @@ namespace HelloCSharp.UI
         private void button1_Click(object sender, EventArgs e)
         {
             this.StartPosition = FormStartPosition.CenterParent;
-            new MH1902().ShowDialog();
+            new Zm301TestWidnow().ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)

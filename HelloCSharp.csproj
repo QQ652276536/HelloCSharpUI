@@ -97,6 +97,12 @@
     <Compile Include="Application\LoginAndRegister\VerifyCode.cs" />
     <Compile Include="Application\LoginAndRegister\Register.cs" />
     <Compile Include="SQLServer\SQLServerConnectionTool.cs" />
+    <Compile Include="UI\Zm301TestWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Zm301TestWindow.Designer.cs">
+      <DependentUpon>Zm301TestWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util\MyConvertUtil.cs" />
     <Compile Include="Util\MyLogger.cs" />
     <Compile Include="HTTP\HttpPostUtil.cs" />
@@ -175,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\WriteSN.resx">
       <DependentUpon>WriteSN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Zm301TestWindow.resx">
+      <DependentUpon>Zm301TestWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
