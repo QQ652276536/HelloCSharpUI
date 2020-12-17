@@ -34,11 +34,8 @@
             this.btn_clear = new System.Windows.Forms.Button();
             this.txt_log = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.btn_gps = new System.Windows.Forms.Button();
-            this.txt_gps_lot = new System.Windows.Forms.TextBox();
-            this.txt_gps_lat = new System.Windows.Forms.TextBox();
+            this.txt_gps = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btn_box_write = new System.Windows.Forms.Button();
             this.btn_box_read = new System.Windows.Forms.Button();
@@ -80,7 +77,7 @@
             this.tabControl1.Location = new System.Drawing.Point(16, 89);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(768, 600);
+            this.tabControl1.Size = new System.Drawing.Size(768, 700);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -104,14 +101,14 @@
             this.groupBox6.Controls.Add(this.txt_log);
             this.groupBox6.Location = new System.Drawing.Point(8, 322);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(746, 246);
+            this.groupBox6.Size = new System.Drawing.Size(746, 346);
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "日志";
             // 
             // btn_clear
             // 
-            this.btn_clear.Location = new System.Drawing.Point(665, 220);
+            this.btn_clear.Location = new System.Drawing.Point(665, 320);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(75, 23);
             this.btn_clear.TabIndex = 0;
@@ -127,40 +124,19 @@
             this.txt_log.Name = "txt_log";
             this.txt_log.ReadOnly = true;
             this.txt_log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_log.Size = new System.Drawing.Size(734, 194);
+            this.txt_log.Size = new System.Drawing.Size(734, 294);
             this.txt_log.TabIndex = 1;
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.label5);
-            this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.btn_gps);
-            this.groupBox5.Controls.Add(this.txt_gps_lot);
-            this.groupBox5.Controls.Add(this.txt_gps_lat);
+            this.groupBox5.Controls.Add(this.txt_gps);
             this.groupBox5.Location = new System.Drawing.Point(8, 250);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(746, 53);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "GPS位置";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(165, 25);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(29, 12);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "纬度";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 25);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 12);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "经度";
             // 
             // btn_gps
             // 
@@ -172,25 +148,15 @@
             this.btn_gps.UseVisualStyleBackColor = true;
             this.btn_gps.Click += new System.EventHandler(this.btn_gps_Click);
             // 
-            // txt_gps_lot
+            // txt_gps
             // 
-            this.txt_gps_lot.BackColor = System.Drawing.Color.Silver;
-            this.txt_gps_lot.Enabled = false;
-            this.txt_gps_lot.Location = new System.Drawing.Point(200, 20);
-            this.txt_gps_lot.Name = "txt_gps_lot";
-            this.txt_gps_lot.ReadOnly = true;
-            this.txt_gps_lot.Size = new System.Drawing.Size(100, 21);
-            this.txt_gps_lot.TabIndex = 1;
-            // 
-            // txt_gps_lat
-            // 
-            this.txt_gps_lat.BackColor = System.Drawing.Color.Silver;
-            this.txt_gps_lat.Enabled = false;
-            this.txt_gps_lat.Location = new System.Drawing.Point(41, 20);
-            this.txt_gps_lat.Name = "txt_gps_lat";
-            this.txt_gps_lat.ReadOnly = true;
-            this.txt_gps_lat.Size = new System.Drawing.Size(100, 21);
-            this.txt_gps_lat.TabIndex = 2;
+            this.txt_gps.BackColor = System.Drawing.Color.Silver;
+            this.txt_gps.Enabled = false;
+            this.txt_gps.Location = new System.Drawing.Point(6, 20);
+            this.txt_gps.Name = "txt_gps";
+            this.txt_gps.ReadOnly = true;
+            this.txt_gps.Size = new System.Drawing.Size(343, 21);
+            this.txt_gps.TabIndex = 2;
             // 
             // groupBox4
             // 
@@ -442,7 +408,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 700);
+            this.ClientSize = new System.Drawing.Size(800, 800);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -493,15 +459,12 @@
         private System.Windows.Forms.Button btn_work_write;
         private System.Windows.Forms.Button btn_work_read;
         private System.Windows.Forms.Button btn_gps;
-        private System.Windows.Forms.TextBox txt_gps_lot;
-        private System.Windows.Forms.TextBox txt_gps_lat;
+        private System.Windows.Forms.TextBox txt_gps;
         private System.Windows.Forms.Button btn_box_write;
         private System.Windows.Forms.Button btn_box_read;
         private System.Windows.Forms.TextBox txt_box_id;
         private System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.ComboBox cbx_parity;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
     }
 }

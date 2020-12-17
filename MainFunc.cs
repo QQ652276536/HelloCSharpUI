@@ -17,6 +17,8 @@ namespace HelloCSharp
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Zm301TestWidnow());
 
+            //Console.WriteLine((Convert.ToInt32("F2", 16) - 33).ToString("x"));
+
             //string testStr = "68 53 01 80 01 01 00 68 8A 16 33 36 7B 49 46 45 53 33 33 33 33 33 33 33 33 6E 33 33 33 33 33 47";
             //testStr = testStr.Replace(" ", "");
             //string[] strs = MyConvertUtil.StrSplitInterval(testStr, 2);

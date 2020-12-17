@@ -18,16 +18,16 @@ namespace HelloCSharp.UI
         private delegate void WorkIdTxtDele(string str);
 
         /// <summary>
-        /// 表箱文本框委托
+        /// 表箱号文本框委托
         /// </summary>
         /// <param name="str">文本内容</param>
-        private delegate void BoxTxtDele(string str);
+        private delegate void BoxIdTxtDele(string str);
 
         /// <summary>
         /// 位置文本框委托
         /// </summary>
         /// <param name="str">文本内容</param>
-        private delegate void LatTxtDele(string str);
+        private delegate void GpsTxtDele(string str);
 
         /// <summary>
         /// 日志文本框委托
@@ -68,7 +68,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 读取表箱号，校验码已提前算好
         /// </summary>
-        private const string READ_BOX = "FE FE FE FE 68 22 23 01 56 34 00 68 06 00 9E 16";
+        private const string READ_BOX = "FE FE FE FE 68 22 23 01 56 34 00 68 06 00 A6 16";
         private readonly byte[] READ_BOX_BYTE = MyConvertUtil.HexStrToBytes(READ_BOX);
 
         /// <summary>
@@ -102,6 +102,8 @@ namespace HelloCSharp.UI
         private Thread _thread;
         private string[] _portNameArray;
         private string _receivedStr = "";
+        //标示具体操作
+        private string _operation = "";
 
         //串口名
         private string _portName = "";
@@ -194,6 +196,7 @@ namespace HelloCSharp.UI
         private void btn_lock1_Click(object sender, EventArgs e)
         {
             _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
+            _operation = "开锁一";
             txt_log.AppendText("发送开锁一指令：" + OPEN_DOOR1 + "\r\n");
         }
 
@@ -205,6 +208,7 @@ namespace HelloCSharp.UI
         private void btn_lock2_Click(object sender, EventArgs e)
         {
             _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
+            _operation = "开锁二";
             txt_log.AppendText("发送开锁二指令：" + OPEN_DOOR2 + "\r\n");
         }
 
@@ -216,6 +220,7 @@ namespace HelloCSharp.UI
         private void btn_lock3_Click(object sender, EventArgs e)
         {
             _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
+            _operation = "开锁三";
             txt_log.AppendText("发送开锁三指令：" + OPEN_DOOR3 + "\r\n");
         }
 
@@ -227,6 +232,7 @@ namespace HelloCSharp.UI
         private void btn_lock_all_Click(object sender, EventArgs e)
         {
             _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
+            _operation = "开锁全部";
             txt_log.AppendText("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n");
         }
 
@@ -238,6 +244,7 @@ namespace HelloCSharp.UI
         private void btn_work_read_Click(object sender, EventArgs e)
         {
             _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
+            _operation = "读取工号";
             txt_log.AppendText("发送读取工号指令：" + READ_WORK + "\r\n");
         }
 
@@ -271,6 +278,7 @@ namespace HelloCSharp.UI
                 comStr = "FE FE FE FE " + comStr;
                 byte[] comByte = MyConvertUtil.HexStrToBytes(comStr);
                 _serialPort.Write(comByte, 0, comByte.Length);
+                _operation = "设置工号";
                 txt_log.AppendText("发送设置工号指令：" + comStr + "\r\n");
             }
         }
@@ -283,6 +291,7 @@ namespace HelloCSharp.UI
         private void btn_box_read_Click(object sender, EventArgs e)
         {
             _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
+            _operation = "读取表箱号";
             txt_log.AppendText("发送读取表箱号指令：" + READ_BOX + "\r\n");
         }
 
@@ -293,9 +302,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_box_write_Click(object sender, EventArgs e)
         {
-            string comStr = "68 53 01 80 01 01 00 68 06 08";
-            string input = txt_work_id.Text;
-            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{8}");
+            string comStr = "68 22 23 01 56 34 00 68 06 06";
+            string input = txt_box_id.Text;
+            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{6}");
             if (flag)
             {
                 String str = "";
@@ -309,13 +318,15 @@ namespace HelloCSharp.UI
                     str += temp;
                 }
                 String[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
-                comStr += " " + strArray[0] + " " + strArray[1] + " " + strArray[2] + " " + strArray[3] + " " + strArray[4] + " " + strArray[5] + " " + strArray[6] + " " + strArray[7];
+                comStr += " " + strArray[0] + " " + strArray[1] + " " + strArray[2] + " " + strArray[3] + " " + strArray[4] + " " + strArray[5];
                 string crcStr = MyConvertUtil.CalcZM301CRC(comStr);
                 Print("计算出的校验码（Hex）：" + crcStr);
                 comStr += " " + crcStr + " 16";
+                comStr = "FE FE FE FE " + comStr;
                 byte[] comByte = MyConvertUtil.HexStrToBytes(comStr);
                 _serialPort.Write(comByte, 0, comByte.Length);
-                txt_log.AppendText("发送设置工号指令：" + comStr + "\r\n");
+                _operation = "设置表箱号";
+                txt_log.AppendText("发送设置表箱号指令：" + comStr + "\r\n");
             }
         }
 
@@ -348,6 +359,57 @@ namespace HelloCSharp.UI
         {
             _logger.WriteLog(str);
             Console.WriteLine(str);
+        }
+
+        /// <summary>
+        /// 修改GPS文本框内容
+        /// </summary>
+        /// <param name="str"></param>
+        private void GpsTxtChangedByDele(string str)
+        {
+            //非UI线程访问控件时
+            if (txt_gps.InvokeRequired)
+            {
+                txt_gps.Invoke(new GpsTxtDele(GpsTxtChangedByDele), str);
+            }
+            else
+            {
+                txt_gps.Text = str;
+            }
+        }
+
+        /// <summary>
+        /// 修改表箱号文本框内容
+        /// </summary>
+        /// <param name="str"></param>
+        private void BoxIdTxtChangedByDele(string str)
+        {
+            //非UI线程访问控件时
+            if (txt_box_id.InvokeRequired)
+            {
+                txt_box_id.Invoke(new BoxIdTxtDele(BoxIdTxtChangedByDele), str);
+            }
+            else
+            {
+                txt_box_id.Text = str;
+            }
+        }
+
+        /// <summary>
+        /// 修改工号文本框的内容
+        /// </summary>
+        /// <param name="str"></param>
+        private void WorkIdTxtChangedByDele(string str)
+        {
+            //非UI线程访问控件时
+            if (txt_work_id.InvokeRequired)
+            {
+                txt_work_id.Invoke(new WorkIdTxtDele(WorkIdTxtChangedByDele), str);
+            }
+            else
+            {
+                txt_work_id.Text = str;
+            }
         }
 
         /// <summary>
@@ -457,6 +519,141 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
+        /// 解析数据
+        /// </summary>
+        /// <param name="str"></param>
+        private void Parse(string str)
+        {
+            string[] strArray = str.Split(' ');
+            string type = strArray[8];
+            switch (type)
+            {
+                //开锁
+                case "90":
+                    {
+                        string result = strArray[9];
+                        switch (_operation)
+                        {
+                            case "开锁一":
+                                if ("00".Equals(result))
+                                    LogTxtChangedByDele("开锁一成功：" + result + "\r\n");
+                                else
+                                    LogTxtChangedByDele("开锁一失败：" + result + "\r\n");
+                                break;
+                            case "开锁二":
+                                if ("00".Equals(result))
+                                    LogTxtChangedByDele("开锁二成功：" + result + "\r\n");
+                                else
+                                    LogTxtChangedByDele("开锁二失败：" + result + "\r\n");
+                                break;
+                            case "开锁三":
+                                if ("00".Equals(result))
+                                    LogTxtChangedByDele("开锁三成功：" + result + "\r\n");
+                                else
+                                    LogTxtChangedByDele("开锁三失败：" + result + "\r\n");
+                                break;
+                            case "开锁全部":
+                                if ("00".Equals(result))
+                                    LogTxtChangedByDele("开锁全部成功：" + result + "\r\n");
+                                else
+                                    LogTxtChangedByDele("开锁全部失败：" + result + "\r\n");
+                                break;
+                        }
+                    }
+                    break;
+                //工号
+                case "8B":
+                    {
+                        int len = MyConvertUtil.HexStrToInt(strArray[9]);
+                        string hexWorkId = strArray[10] + strArray[11] + strArray[12] + strArray[13] + strArray[14] + strArray[15] + strArray[16] + strArray[17];
+                        string workId = MyConvertUtil.HexStrToStr(hexWorkId);
+                        switch (_operation)
+                        {
+                            case "读取工号":
+                                WorkIdTxtChangedByDele(workId);
+                                LogTxtChangedByDele("读取工号成功：" + workId + "\r\n");
+                                break;
+                            case "设置工号":
+                                LogTxtChangedByDele("设置工号成功：" + workId + "\r\n");
+                                break;
+                        }
+                    }
+                    break;
+                //表箱号
+                case "86":
+                    string hexBoxId = strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6];
+                    switch (_operation)
+                    {
+                        case "读取表箱号":
+                            BoxIdTxtChangedByDele(hexBoxId);
+                            LogTxtChangedByDele("读取表箱号成功：" + hexBoxId + "\r\n");
+                            break;
+                        case "设置表箱号":
+                            LogTxtChangedByDele("设置表箱号成功：" + hexBoxId + "\r\n");
+                            break;
+                    }
+                    break;
+                //读取GPS位置
+                case "8A":
+                    {
+                        int len = MyConvertUtil.HexStrToInt(strArray[9]);
+                        //状态信息：00未定位，1已定位
+                        int state = Convert.ToInt32(strArray[10]) - 33;
+                        if (1 == state)
+                        {
+                            //时间
+                            int ss = MyConvertUtil.HexStrToInt(strArray[11]) - 33;
+                            int mm = MyConvertUtil.HexStrToInt(strArray[12]) - 33;
+                            int HH = MyConvertUtil.HexStrToInt(strArray[13]) - 33;
+                            int dd = MyConvertUtil.HexStrToInt(strArray[14]) - 33;
+                            int MM = MyConvertUtil.HexStrToInt(strArray[15]) - 33;
+                            int yy = MyConvertUtil.HexStrToInt(strArray[16]) - 33;
+                            string timeStr = yy + "年" + MM + "月" + dd + "日" + HH + "时" + mm + "分" + ss + "秒";
+                            //经纬度
+                            int lat1 = MyConvertUtil.HexStrToInt(strArray[17]) - 33;
+                            int lat2 = MyConvertUtil.HexStrToInt(strArray[18]) - 33;
+                            int lat3 = MyConvertUtil.HexStrToInt(strArray[19]) - 33;
+                            int lat4 = MyConvertUtil.HexStrToInt(strArray[20]) - 33;
+                            string latStr = "" + lat1 + lat2 + lat3 + lat4;
+                            int lat = Convert.ToInt32(latStr) * 1000000;
+                            int lot1 = MyConvertUtil.HexStrToInt(strArray[21]) - 33;
+                            int lot2 = MyConvertUtil.HexStrToInt(strArray[22]) - 33;
+                            int lot3 = MyConvertUtil.HexStrToInt(strArray[23]) - 33;
+                            int lot4 = MyConvertUtil.HexStrToInt(strArray[24]) - 33;
+                            string lotStr = "" + lot1 + lot2 + lot3 + lot4;
+                            int lot = Convert.ToInt32(lotStr) * 1000000;
+                            //海拔
+                            int height1 = MyConvertUtil.HexStrToInt(strArray[25]) - 33;
+                            int height2 = MyConvertUtil.HexStrToInt(strArray[26]) - 33;
+                            string heightStr = "" + height1 + height2;
+                            int height = Convert.ToInt32(heightStr);
+                            //速度
+                            int speed1 = MyConvertUtil.HexStrToInt(strArray[27]) - 33;
+                            int speed2 = MyConvertUtil.HexStrToInt(strArray[28]) - 33;
+                            string speedStr = "" + speed1 + speed2;
+                            int speed = Convert.ToInt32(speedStr);
+                            //方向
+                            int dir1 = MyConvertUtil.HexStrToInt(strArray[29]) - 33;
+                            int dir2 = MyConvertUtil.HexStrToInt(strArray[30]) - 33;
+                            string dirStr = "" + dir1 + dir2;
+                            int dir = Convert.ToInt32(dirStr);
+                            //温度
+                            int temperature = MyConvertUtil.HexStrToInt(strArray[31]) - 33;
+                            string parseStr = timeStr + "   经度：" + lat + "   纬度：" + lot + "  海拔：" + height + "米   速度" + speed + "   方向：" + dir + "   温度：" + temperature;
+                            GpsTxtChangedByDele(parseStr);
+                            LogTxtChangedByDele(parseStr + "\r\n");
+                        }
+                        else
+                        {
+                            GpsTxtChangedByDele("未定位");
+                            LogTxtChangedByDele("未定位\r\n");
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
         /// 异步接收
         /// 注意，收到数据就会触发该方法，每次收到的数据不一定是完整的，需要校对
         /// </summary>
@@ -497,137 +694,14 @@ namespace HelloCSharp.UI
                     int len = _receivedStr.Length;
                     Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
                     _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
+                    //显示数据
                     LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n");
+                    //解析数据
+                    Parse(_receivedStr);
                     //清空缓存
                     _receivedStr = "";
                 }
             }
-        }
-
-        /// <summary>
-        /// 从数组中截取一部分成新的数组
-        /// </summary>
-        /// <param name="source">原数组</param>
-        /// <param name="startIndex">原数组的起始位置</param>
-        /// <param name="endIndex">原数组的截止位置</param>
-        /// <returns></returns>
-        public byte[] SplitArray(byte[] source, int startIndex, int endIndex)
-        {
-            try
-            {
-                byte[] result = new byte[endIndex - startIndex + 1];
-                for (int i = 0; i <= endIndex - startIndex; i++)
-                    result[i] = source[i + startIndex];
-                return result;
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// 从数组中截取一部分成新的数组
-        /// </summary>
-        /// <param name="source">原数组</param>
-        /// <param name="startIndex">原数组的起始位置</param>
-        /// <param name="endIndex">原数组的截止位置</param>
-        /// <returns></returns>
-        public string[] SplitArray(string[] source, int startIndex, int endIndex)
-        {
-            try
-            {
-                string[] result = new string[endIndex - startIndex + 1];
-                for (int i = 0; i <= endIndex - startIndex; i++)
-                    result[i] = source[i + startIndex];
-                return result;
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// 合并数组
-        /// </summary>
-        /// <param name="first">第一个数组</param>
-        /// <param name="second">第二个数组</param>
-        /// <returns></returns>
-        public byte[] MergerArray(byte[] first, byte[] second)
-        {
-            byte[] result = new byte[first.Length + second.Length];
-            first.CopyTo(result, 0);
-            second.CopyTo(result, first.Length);
-            return result;
-        }
-
-        /// <summary>
-        /// Str的前面/后面补零
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="length"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
-        private string SupplementZero(string input, int length, bool flag)
-        {
-            string zero = "";
-            for (int i = 0; i < length - input.Length; i++)
-            {
-                zero += "0";
-            }
-            if (flag)
-                return zero + input;
-            else
-                return input + zero;
-        }
-
-        /// <summary>
-        /// str[]排序
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
-        private string SortStringArray(string[] array, bool flag)
-        {
-            //从小到大
-            if (flag)
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    for (int j = 0; j < array.Length; j++)
-                    {
-                        if (MyConvertUtil.HexStrToInt(array[i]) < MyConvertUtil.HexStrToInt(array[j]))
-                        {
-                            string temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                        }
-                    }
-                }
-            }
-            //从大到小
-            else
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    for (int j = 0; j < array.Length; j++)
-                    {
-                        if (MyConvertUtil.HexStrToInt(array[i]) > MyConvertUtil.HexStrToInt(array[j]))
-                        {
-                            string temp = array[i];
-                            array[i] = array[j];
-                            array[j] = temp;
-                        }
-                    }
-                }
-            }
-            string result = "";
-            foreach (string tempStr in array)
-            {
-                result += tempStr;
-            }
-            return result;
         }
     }
 
