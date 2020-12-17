@@ -67,7 +67,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 读取表箱号，校验码已提前算好
         /// </summary>
-        private const string READ_BOX = "";
+        private const string READ_BOX = "FE FE FE FE 68 22 23 01 56 34 00 68 06 00 9E 16";
         private readonly byte[] READ_BOX_BYTE = MyConvertUtil.HexStrToBytes(READ_BOX);
 
         /// <summary>
@@ -251,7 +251,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_box_read_Click(object sender, EventArgs e)
         {
-
+            _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
+            txt_log.AppendText("发送读取表箱号指令：" + READ_BOX + "\r\n");
         }
 
         /// <summary>
@@ -435,7 +436,9 @@ namespace HelloCSharp.UI
                 string crcStr2 = strArray[strArray.Length - 2];
                 Print("数据内容包含的校验码（Hex）：" + crcStr2);
                 //比较校验码
-                if (crcStr1.Equals(crcStr2))
+                bool flag = crcStr1.Equals(crcStr2);
+                Print("校验码是否正确：" + flag);
+                if (flag)
                 {
                     int len = _receivedStr.Length;
                     Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
