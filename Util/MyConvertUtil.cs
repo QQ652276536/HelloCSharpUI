@@ -11,12 +11,91 @@ namespace HelloCSharp.Util
         }
 
         /// <summary>
+        /// 转16进制需要的字符
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetHexChar(string value)
+        {
+            string sReturn = string.Empty; switch (value)
+            {
+                case "10": sReturn = "A"; break;
+                case "11": sReturn = "B"; break;
+                case "12": sReturn = "C"; break;
+                case "13": sReturn = "D"; break;
+                case "14": sReturn = "E"; break;
+                case "15": sReturn = "F"; break;
+                default: sReturn = value; break;
+            }
+            return sReturn;
+        }
+
+        /// <summary>
+        /// Int转HexStr
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string IntToHexStr(string value)
+        {
+            string result = string.Empty;
+            try
+            {
+                while (ulong.Parse(value) >= 16)
+                {
+                    ulong v = ulong.Parse(value);
+                    result = GetHexChar((v % 16).ToString()) + result;
+                    value = Math.Floor(Convert.ToDouble(v / 16)).ToString();
+                }
+                result = GetHexChar(value) + result;
+            }
+            catch
+            {
+                result = "";
+            }
+            return result;
+        }
+
+
+        /// <summary>
+        /// 计算1位校验码（取最低位），仅用于ZM301研发压测工具
+        /// </summary>
+        /// <param name="hexStr"></param>
+        /// <returns></returns>
+        public static String CalcZM301CRC(String hexStr)
+        {
+            hexStr = hexStr.Replace(" ", "");
+            int num = 0;
+            string[] strArray = MyConvertUtil.StrAddChar(hexStr, 2, " ").Split(' ');
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                int tempNum = HexStrToInt(strArray[i]);
+                if (i == 0)
+                {
+                    num = tempNum;
+                }
+                else
+                {
+                    num += tempNum;
+                }
+            }
+            string result = IntToHexStr(Convert.ToString(num));
+            //前面补零使成为偶数，方便截取
+            if (result.Length % 2 != 0)
+            {
+                result = "0" + result;
+            }
+            //取最低位
+            strArray = MyConvertUtil.StrAddChar(result, 2, " ").Split(' ');
+            return strArray[strArray.Length - 1];
+        }
+
+        /// <summary>
         /// 计算2位校验码
         /// </summary>
         /// <param name="byteArray"></param>
         /// <param name="isLowInBefore">低字节在前/后</param>
         /// <returns></returns>
-        public static string CalculateCRC(byte[] byteArray, bool isLowInBefore)
+        public static string CalcCRC(byte[] byteArray, bool isLowInBefore)
         {
             int crc = 0;
             foreach (byte tempByte in byteArray)
@@ -35,7 +114,7 @@ namespace HelloCSharp.Util
                 }
             }
             string crcStr = crc.ToString("x2");
-            string[] tempArray = MyConvertUtil.StrAddCharacter(crcStr, 2, " ").Split(' ');
+            string[] tempArray = MyConvertUtil.StrAddChar(crcStr, 2, " ").Split(' ');
             if (tempArray.Length == 1)
             {
                 return "00" + tempArray[0];
@@ -203,13 +282,39 @@ namespace HelloCSharp.Util
         }
 
         /// <summary>
+        /// 每隔n个字符分割
+        /// 坑啊，C#里的Substring的第二个参数为截取长度，Java里的是结束字符的下标！！！
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="interval"></param>
+        /// <returns></returns>
+        public static string[] StrSplitInterval(string input, int interval)
+        {
+            //分割成的数组长度
+            int len = input.Length / interval;
+            //分割不完剩余的，如果为0则表示刚好分割完
+            int num = input.Length % interval;
+            string[] strArray = new string[len];
+            if (num != 0)
+            {
+                strArray = new string[len + 1];
+            }
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                string str = input.Substring(i * interval, interval);
+                strArray[i] = str;
+            }
+            return strArray;
+        }
+
+        /// <summary>
         /// 每隔n个字符插入一个字符
         /// </summary>
         /// <param name="input"></param>
         /// <param name="interval"></param>
         /// <param name="character"></param>
         /// <returns></returns>
-        public static string StrAddCharacter(string input, int interval, string character)
+        public static string StrAddChar(string input, int interval, string character)
         {
             for (int i = interval; i < input.Length; i += interval + 1)
                 input = input.Insert(i, character);

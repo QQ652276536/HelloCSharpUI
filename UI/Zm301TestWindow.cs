@@ -150,6 +150,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_open_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             try
             {
                 if ("打开串口".Equals(btn_open.Text.ToString()))
@@ -269,7 +271,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_gps_Click(object sender, EventArgs e)
         {
-
+            _serialPort.Write(READ_GPS_BYTE, 0, READ_GPS_BYTE.Length);
+            txt_log.AppendText("发送查询GPS指令：" + READ_GPS + "\r\n");
         }
 
         /// <summary>
@@ -306,8 +309,6 @@ namespace HelloCSharp.UI
             else
             {
                 txt_log.AppendText(str);
-                //重置
-                _receivedStr = "";
             }
         }
 
@@ -414,18 +415,35 @@ namespace HelloCSharp.UI
             }
             //待读字节长度
             int byteLen = _serialPort.BytesToRead;
-            Print("本次待读字节长度：" + byteLen);
             byte[] byteArray = new byte[byteLen];
             _serialPort.Read(byteArray, 0, byteArray.Length);
             string str = MyConvertUtil.BytesToStr(byteArray);
+            Print("本次读取字节：" + str + "，长度：" + byteLen);
             _receivedStr += str;
-            Print("累计收到字节（Hex）：" + _receivedStr);
+            //不能仅凭指令的开头和结尾来判断是否为一包完整数据，还需要验证校验码
             if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
             {
-                int len = _receivedStr.Length;
-                Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
-                _receivedStr = MyConvertUtil.StrAddCharacter(_receivedStr, 2, " ");
-                LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n");
+                Print("累计收到字节（Hex）：" + _receivedStr);
+                //计算收到的数据的校验码的时候不包含最后现个字节
+                string tempReceivedStr = _receivedStr.Substring(0, _receivedStr.Length - 4);
+                Print("参与计算校验码的数据（Hex）：" + tempReceivedStr);
+                //计算出的校验码
+                string crcStr1 = MyConvertUtil.CalcZM301CRC(tempReceivedStr);
+                Print("计算出的校验码（Hex）：" + crcStr1);
+                string[] strArray = MyConvertUtil.StrSplitInterval(_receivedStr, 2);
+                //收到的数据里的校验码
+                string crcStr2 = strArray[strArray.Length - 2];
+                Print("数据内容包含的校验码（Hex）：" + crcStr2);
+                //比较校验码
+                if (crcStr1.Equals(crcStr2))
+                {
+                    int len = _receivedStr.Length;
+                    Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
+                    _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
+                    LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n");
+                    //清空缓存
+                    _receivedStr = "";
+                }
             }
         }
 

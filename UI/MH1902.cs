@@ -246,7 +246,7 @@ namespace HelloCSharp.UI
             string blockName = MyConvertUtil.StrToHexStr("kernel.bin").PadRight(32, '0');
             //固件总长度，将高字节放在前面
             string dataTotalLenHexStr = fileLen.ToString("x6");
-            string[] tempTotalLenArray = MyConvertUtil.StrAddCharacter(dataTotalLenHexStr, 2, " ").Split(' ');
+            string[] tempTotalLenArray = MyConvertUtil.StrAddChar(dataTotalLenHexStr, 2, " ").Split(' ');
             dataTotalLenHexStr = MyConvertUtil.SortStringArray(tempTotalLenArray, false);
             //将固件数据分包，每包的长度
             int dataMax = 900;
@@ -258,7 +258,7 @@ namespace HelloCSharp.UI
             //包长度，不包含包头=固件数据分包+每包固定长度，将高字节放在前面
             int everyPackageLenNotLast = dataMax + everyPackageFixedLen;
             string everyPackageLenNotLastHexStr = everyPackageLenNotLast.ToString("x4");
-            string[] everyPackageLenNotLastHexStrArray = MyConvertUtil.StrAddCharacter(everyPackageLenNotLastHexStr, 2, " ").Split(' ');
+            string[] everyPackageLenNotLastHexStrArray = MyConvertUtil.StrAddChar(everyPackageLenNotLastHexStr, 2, " ").Split(' ');
             everyPackageLenNotLastHexStr = MyConvertUtil.SortStringArray(everyPackageLenNotLastHexStrArray, false);
             //包数
             double packageNum = Math.Ceiling((double)fileLen / dataMax);
@@ -271,7 +271,7 @@ namespace HelloCSharp.UI
                 //当前块号，将高字节放在前面
                 int blockNo = i + 1;
                 string blockNoHexStr = blockNo.ToString("x4");
-                string[] blockNoHexStrArray = MyConvertUtil.StrAddCharacter(blockNoHexStr, 2, " ").Split(' ');
+                string[] blockNoHexStrArray = MyConvertUtil.StrAddChar(blockNoHexStr, 2, " ").Split(' ');
                 blockNoHexStr = MyConvertUtil.SortStringArray(blockNoHexStrArray, false);
                 if (i != packageNum - 1)
                 {
@@ -287,7 +287,7 @@ namespace HelloCSharp.UI
                     byte[] tempBytes3 = MyConvertUtil.MergerArray(tempBytes1, tempBytes2);
                     string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
                     //计算2位校验码，低字节在前
-                    string crcStr = MyConvertUtil.CalculateCRC(tempBytes3, true);
+                    string crcStr = MyConvertUtil.CalcCRC(tempBytes3, true);
                     byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
                     //完整的包内容
                     byte[] tempBytes5 = MyConvertUtil.MergerArray(tempBytes3, tempBytes4);
@@ -307,7 +307,7 @@ namespace HelloCSharp.UI
                     }
                     //高字节在前
                     string surplusLenHexStr = ((int)surplusLen).ToString("x4");
-                    string[] tempArray = MyConvertUtil.StrAddCharacter(surplusLenHexStr, 2, " ").Split(' ');
+                    string[] tempArray = MyConvertUtil.StrAddChar(surplusLenHexStr, 2, " ").Split(' ');
                     surplusLenHexStr = MyConvertUtil.SortStringArray(tempArray, false);
                     //包内容，不包含固件数据和校验码
                     string cmdx = "3F" + surplusLenHexStr + packageProperty + "21" + blockName + dataTotalLenHexStr + blockNoHexStr;
@@ -319,7 +319,7 @@ namespace HelloCSharp.UI
                     byte[] tempBytes3 = MyConvertUtil.MergerArray(tempBytes1, tempBytes2);
                     string tempStr22222222222222222222222222222222222222222222222222222222 = MyConvertUtil.BytesToStr(tempBytes3);
                     //计算2位校验码，低字节在前
-                    string crcStr = MyConvertUtil.CalculateCRC(tempBytes3, true);
+                    string crcStr = MyConvertUtil.CalcCRC(tempBytes3, true);
                     byte[] tempBytes4 = MyConvertUtil.HexStrToBytes(crcStr);
                     //完整的包内容
                     byte[] tempBytes5 = MyConvertUtil.MergerArray(tempBytes3, tempBytes4);
@@ -570,7 +570,7 @@ namespace HelloCSharp.UI
             _logger.WriteLog("收到的数据（Hex）：" + str + "，长度：" + byteLen);
             Console.WriteLine("收到的数据（Hex）：" + str + "，长度：" + byteLen);
             //每隔两位插入一个空格，用以分割成数组，方便使用下标进行判断
-            string[] receivedDataArray = MyConvertUtil.StrAddCharacter(_packageStr, 2, ",").Split(',');
+            string[] receivedDataArray = MyConvertUtil.StrAddChar(_packageStr, 2, ",").Split(',');
             string head = receivedDataArray[0];
             //1、必须是3F打头，否则就说明是上一包没读完的数据
             //2、下标为1和2的数据是数据长度（不包含最后两位校验码，高位在前），长度不一致说明这一包数据不完整
