@@ -210,7 +210,7 @@ namespace HelloCSharp.Util
         /// <param name="length"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public static string SupplementZero(string input, int length, bool flag)
+        public static string AddZero(string input, int length, bool flag)
         {
             string zero = "";
             for (int i = 0; i < length - input.Length; i++)
