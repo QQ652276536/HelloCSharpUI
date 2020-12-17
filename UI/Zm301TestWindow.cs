@@ -283,6 +283,16 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
+        /// 打印Log+控制台输出
+        /// </summary>
+        /// <param name="str"></param>
+        private void Print(string str)
+        {
+            _logger.WriteLog(str);
+            Console.WriteLine(str);
+        }
+
+        /// <summary>
         /// 修改日志文本框的内容
         /// </summary>
         /// <param name="str"></param>
@@ -404,21 +414,16 @@ namespace HelloCSharp.UI
             }
             //待读字节长度
             int byteLen = _serialPort.BytesToRead;
-            _logger.WriteLog("本次待读字节长度：" + byteLen);
-            Console.WriteLine("本次待读字节长度：" + byteLen);
+            Print("本次待读字节长度：" + byteLen);
             byte[] byteArray = new byte[byteLen];
             _serialPort.Read(byteArray, 0, byteArray.Length);
             string str = MyConvertUtil.BytesToStr(byteArray);
-            _logger.WriteLog("本次收到字节（Hex）：" + str);
-            Console.WriteLine("本次收到字节（Hex）：" + str);
             _receivedStr += str;
-            _logger.WriteLog("累计收到字节（Hex）：" + _receivedStr);
-            Console.WriteLine("累计收到字节（Hex）：" + _receivedStr);
+            Print("累计收到字节（Hex）：" + _receivedStr);
             if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
             {
                 int len = _receivedStr.Length;
-                _logger.WriteLog("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
-                Console.WriteLine("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
+                Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
                 _receivedStr = MyConvertUtil.StrAddCharacter(_receivedStr, 2, " ");
                 LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n");
             }
