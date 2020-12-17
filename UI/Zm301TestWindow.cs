@@ -248,7 +248,7 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_work_write_Click(object sender, EventArgs e)
         {
-            string comStr = "68 53 01 80 01 01 00 68 0B 08";
+            string comStr = "68 22 23 01 56 34 00 68 0B 08";
             string input = txt_work_id.Text;
             bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{8}");
             if (flag)
@@ -268,6 +268,7 @@ namespace HelloCSharp.UI
                 string crcStr = MyConvertUtil.CalcZM301CRC(comStr);
                 Print("计算出的校验码（Hex）：" + crcStr);
                 comStr += " " + crcStr + " 16";
+                comStr = "FE FE FE FE " + comStr;
                 byte[] comByte = MyConvertUtil.HexStrToBytes(comStr);
                 _serialPort.Write(comByte, 0, comByte.Length);
                 txt_log.AppendText("发送设置工号指令：" + comStr + "\r\n");
@@ -292,7 +293,30 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_box_write_Click(object sender, EventArgs e)
         {
-
+            string comStr = "68 53 01 80 01 01 00 68 06 08";
+            string input = txt_work_id.Text;
+            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{8}");
+            if (flag)
+            {
+                String str = "";
+                for (int i = 0; i < input.Length; i++)
+                {
+                    string temp = MyConvertUtil.CharAt(input, i);
+                    temp = MyConvertUtil.StrToHexStr(temp);
+                    if (temp.Length < 2)
+                        temp = "0" + temp;
+                    Print("遂字转换（Hex）：" + temp);
+                    str += temp;
+                }
+                String[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
+                comStr += " " + strArray[0] + " " + strArray[1] + " " + strArray[2] + " " + strArray[3] + " " + strArray[4] + " " + strArray[5] + " " + strArray[6] + " " + strArray[7];
+                string crcStr = MyConvertUtil.CalcZM301CRC(comStr);
+                Print("计算出的校验码（Hex）：" + crcStr);
+                comStr += " " + crcStr + " 16";
+                byte[] comByte = MyConvertUtil.HexStrToBytes(comStr);
+                _serialPort.Write(comByte, 0, comByte.Length);
+                txt_log.AppendText("发送设置工号指令：" + comStr + "\r\n");
+            }
         }
 
         /// <summary>
