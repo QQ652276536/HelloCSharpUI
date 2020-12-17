@@ -105,6 +105,7 @@ namespace HelloCSharp.UI
         //标示具体操作
         private string _operation = "";
         private int _tabSelectedIndex = 0;
+        private bool _threadFlag = true;
 
         //串口名
         private string _portName = "";
@@ -120,6 +121,18 @@ namespace HelloCSharp.UI
             InitView();
         }
 
+        /// <summary>
+        /// 循环测试
+        /// </summary>
+        private void CycleTest()
+        {
+            while (_threadFlag && null != _serialPort && _serialPort.IsOpen)
+            {
+                LogTxtChangedByDele("~~~~~~~~~~~~~~~~~~~~~\r\n");
+                Thread.Sleep(1 * 1000);
+            }
+        }
+
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             _tabSelectedIndex = tabControl.SelectedIndex;
@@ -127,6 +140,31 @@ namespace HelloCSharp.UI
 
         private void btn_cycle_start_Click(object sender, EventArgs e)
         {
+            if ("开始".Equals(btn_cycle_start.Text))
+            {
+                if (null == _thread)
+                {
+                    _thread = new Thread(CycleTest);
+                    _thread.Start();
+                }
+                else
+                {
+                    _threadFlag = false;
+                    _thread.Abort();
+                    _thread = null;
+                    _threadFlag = true;
+                    _thread = new Thread(CycleTest);
+                    _thread.Start();
+                }
+                btn_cycle_start.Text = "停止";
+            }
+            else
+            {
+                _threadFlag = false;
+                if (null != _thread)
+                    _thread.Abort();
+                btn_cycle_start.Text = "开始";
+            }
         }
 
         private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
@@ -544,6 +582,7 @@ namespace HelloCSharp.UI
             btn_box_read.Enabled = flag;
             btn_box_write.Enabled = flag;
             btn_gps.Enabled = flag;
+            btn_cycle_start.Enabled = flag;
         }
 
         /// <summary>

@@ -464,7 +464,7 @@
             this.btn_cycle_start.Name = "btn_cycle_start";
             this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
             this.btn_cycle_start.TabIndex = 0;
-            this.btn_cycle_start.Text = "开启";
+            this.btn_cycle_start.Text = "开始";
             this.btn_cycle_start.UseVisualStyleBackColor = true;
             this.btn_cycle_start.Click += new System.EventHandler(this.btn_cycle_start_Click);
             // 
