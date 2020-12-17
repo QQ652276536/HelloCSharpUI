@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.btn_clear = new System.Windows.Forms.Button();
@@ -60,25 +60,34 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cbx_port = new System.Windows.Forms.ComboBox();
-            this.tabControl1.SuspendLayout();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.btn_clear2 = new System.Windows.Forms.Button();
+            this.txt_log2 = new System.Windows.Forms.TextBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.btn_cycle_start = new System.Windows.Forms.Button();
+            this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabControl
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(16, 89);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(768, 700);
-            this.tabControl1.TabIndex = 1;
+            this.tabControl.Controls.Add(this.tabPage1);
+            this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Location = new System.Drawing.Point(16, 89);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(768, 700);
+            this.tabControl.TabIndex = 1;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -90,7 +99,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(760, 574);
+            this.tabPage1.Size = new System.Drawing.Size(760, 674);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "单项测试";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -286,16 +295,18 @@
             this.btn_lock_all.Name = "btn_lock_all";
             this.btn_lock_all.Size = new System.Drawing.Size(75, 23);
             this.btn_lock_all.TabIndex = 3;
-            this.btn_lock_all.Text = "全部开";
+            this.btn_lock_all.Text = "开全部锁";
             this.btn_lock_all.UseVisualStyleBackColor = true;
             this.btn_lock_all.Click += new System.EventHandler(this.btn_lock_all_Click);
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox8);
+            this.tabPage2.Controls.Add(this.groupBox7);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(760, 574);
+            this.tabPage2.Size = new System.Drawing.Size(760, 674);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "循环测试";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -404,18 +415,71 @@
             this.cbx_port.TabIndex = 6;
             this.cbx_port.SelectedIndexChanged += new System.EventHandler(this.cbx_port_SelectedIndexChanged);
             // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.btn_clear2);
+            this.groupBox7.Controls.Add(this.txt_log2);
+            this.groupBox7.Location = new System.Drawing.Point(8, 116);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(746, 552);
+            this.groupBox7.TabIndex = 1;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "日志";
+            // 
+            // btn_clear2
+            // 
+            this.btn_clear2.Location = new System.Drawing.Point(665, 523);
+            this.btn_clear2.Name = "btn_clear2";
+            this.btn_clear2.Size = new System.Drawing.Size(75, 23);
+            this.btn_clear2.TabIndex = 0;
+            this.btn_clear2.Text = "清除";
+            this.btn_clear2.UseVisualStyleBackColor = true;
+            this.btn_clear2.Click += new System.EventHandler(this.btn_clear2_Click);
+            // 
+            // txt_log2
+            // 
+            this.txt_log2.BackColor = System.Drawing.Color.Silver;
+            this.txt_log2.Location = new System.Drawing.Point(6, 20);
+            this.txt_log2.Multiline = true;
+            this.txt_log2.Name = "txt_log2";
+            this.txt_log2.ReadOnly = true;
+            this.txt_log2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txt_log2.Size = new System.Drawing.Size(734, 497);
+            this.txt_log2.TabIndex = 1;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox8.Controls.Add(this.btn_cycle_start);
+            this.groupBox8.Location = new System.Drawing.Point(6, 22);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(746, 53);
+            this.groupBox8.TabIndex = 5;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "操作";
+            // 
+            // btn_cycle_start
+            // 
+            this.btn_cycle_start.Location = new System.Drawing.Point(6, 20);
+            this.btn_cycle_start.Name = "btn_cycle_start";
+            this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
+            this.btn_cycle_start.TabIndex = 0;
+            this.btn_cycle_start.Text = "开启";
+            this.btn_cycle_start.UseVisualStyleBackColor = true;
+            this.btn_cycle_start.Click += new System.EventHandler(this.btn_cycle_start_Click);
+            // 
             // Zm301TestWidnow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 800);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "Zm301TestWidnow";
             this.Text = "ZM301研发压力测试工具";
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
@@ -426,15 +490,19 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -466,5 +534,10 @@
         private System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.ComboBox cbx_parity;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Button btn_cycle_start;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button btn_clear2;
+        private System.Windows.Forms.TextBox txt_log2;
     }
 }

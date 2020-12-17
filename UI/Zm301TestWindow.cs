@@ -104,6 +104,7 @@ namespace HelloCSharp.UI
         private string _receivedStr = "";
         //标示具体操作
         private string _operation = "";
+        private int _tabSelectedIndex = 0;
 
         //串口名
         private string _portName = "";
@@ -119,22 +120,30 @@ namespace HelloCSharp.UI
             InitView();
         }
 
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _tabSelectedIndex = tabControl.SelectedIndex;
+        }
+
+        private void btn_cycle_start_Click(object sender, EventArgs e)
+        {
+        }
+
         private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
         {
             _portName = _portNameArray[cbx_port.SelectedIndex];
-            txt_log.AppendText("串口名称：" + _portName + "\r\n");
+            LogTxtChangedByDele("串口名称：" + _portName + "\r\n");
         }
 
         private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _rate = RATE_ARRAY[cbx_rate.SelectedIndex];
-            txt_log.AppendText("波特率：" + _rate + "\r\n");
+            LogTxtChangedByDele("波特率：" + _rate + "\r\n");
         }
 
         private void cbx_data_SelectedIndexChanged(object sender, EventArgs e)
         {
             _data = DATA_ARRAY[cbx_data.SelectedIndex];
-            txt_log.AppendText("数据位：" + _data + "\r\n");
+            LogTxtChangedByDele("数据位：" + _data + "\r\n");
         }
 
         private void cbx_parity_SelectedIndexChanged(object sender, EventArgs e)
@@ -148,7 +157,7 @@ namespace HelloCSharp.UI
                 case "Mark": _parity = Parity.Mark; break;
                 case "Space": _parity = Parity.Space; break;
             }
-            txt_log.AppendText("校验位：" + _parity + "\r\n");
+            LogTxtChangedByDele("校验位：" + _parity + "\r\n");
         }
 
         /// <summary>
@@ -170,21 +179,21 @@ namespace HelloCSharp.UI
                         _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
                     }
                     _serialPort.Open();
-                    txt_log.AppendText("已打开：" + _portName + "\r\n");
+                    LogTxtChangedByDele("已打开：" + _portName + "\r\n");
                     EnableButton(true);
                     btn_open.Text = "关闭串口";
                 }
                 else
                 {
                     _serialPort.Close();
-                    txt_log.AppendText("已关闭：" + _portName + "\r\n");
+                    LogTxtChangedByDele("已关闭：" + _portName + "\r\n");
                     EnableButton(false);
                     btn_open.Text = "打开串口";
                 }
             }
             catch (Exception ex)
             {
-                txt_log.AppendText("串口" + _portName + "打开/关闭失败，原因：" + ex.ToString() + "\r\n");
+                LogTxtChangedByDele("串口" + _portName + "打开/关闭失败，原因：" + ex.ToString() + "\r\n");
             }
         }
 
@@ -197,7 +206,7 @@ namespace HelloCSharp.UI
         {
             _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
             _operation = "开锁一";
-            txt_log.AppendText("发送开锁一指令：" + OPEN_DOOR1 + "\r\n");
+            LogTxtChangedByDele("发送开锁一指令：" + OPEN_DOOR1 + "\r\n");
         }
 
         /// <summary>
@@ -209,7 +218,7 @@ namespace HelloCSharp.UI
         {
             _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
             _operation = "开锁二";
-            txt_log.AppendText("发送开锁二指令：" + OPEN_DOOR2 + "\r\n");
+            LogTxtChangedByDele("发送开锁二指令：" + OPEN_DOOR2 + "\r\n");
         }
 
         /// <summary>
@@ -221,7 +230,7 @@ namespace HelloCSharp.UI
         {
             _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
             _operation = "开锁三";
-            txt_log.AppendText("发送开锁三指令：" + OPEN_DOOR3 + "\r\n");
+            LogTxtChangedByDele("发送开锁三指令：" + OPEN_DOOR3 + "\r\n");
         }
 
         /// <summary>
@@ -233,7 +242,7 @@ namespace HelloCSharp.UI
         {
             _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
             _operation = "开锁全部";
-            txt_log.AppendText("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n");
+            LogTxtChangedByDele("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n");
         }
 
         /// <summary>
@@ -245,7 +254,7 @@ namespace HelloCSharp.UI
         {
             _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
             _operation = "读取工号";
-            txt_log.AppendText("发送读取工号指令：" + READ_WORK + "\r\n");
+            LogTxtChangedByDele("发送读取工号指令：" + READ_WORK + "\r\n");
         }
 
         /// <summary>
@@ -279,7 +288,7 @@ namespace HelloCSharp.UI
                 byte[] comByte = MyConvertUtil.HexStrToBytes(comStr);
                 _serialPort.Write(comByte, 0, comByte.Length);
                 _operation = "设置工号";
-                txt_log.AppendText("发送设置工号指令：" + comStr + "\r\n");
+                LogTxtChangedByDele("发送设置工号指令：" + comStr + "\r\n");
             }
         }
 
@@ -292,7 +301,7 @@ namespace HelloCSharp.UI
         {
             _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
             _operation = "读取表箱号";
-            txt_log.AppendText("发送读取表箱号指令：" + READ_BOX + "\r\n");
+            LogTxtChangedByDele("发送读取表箱号指令：" + READ_BOX + "\r\n");
         }
 
         /// <summary>
@@ -326,7 +335,7 @@ namespace HelloCSharp.UI
                 byte[] comByte = MyConvertUtil.HexStrToBytes(comStr);
                 _serialPort.Write(comByte, 0, comByte.Length);
                 _operation = "设置表箱号";
-                txt_log.AppendText("发送设置表箱号指令：" + comStr + "\r\n");
+                LogTxtChangedByDele("发送设置表箱号指令：" + comStr + "\r\n");
             }
         }
 
@@ -338,7 +347,17 @@ namespace HelloCSharp.UI
         private void btn_gps_Click(object sender, EventArgs e)
         {
             _serialPort.Write(READ_GPS_BYTE, 0, READ_GPS_BYTE.Length);
-            txt_log.AppendText("发送查询GPS指令：" + READ_GPS + "\r\n");
+            LogTxtChangedByDele("发送查询GPS指令：" + READ_GPS + "\r\n");
+        }
+
+        /// <summary>
+        /// 清空日志文本框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_clear2_Click(object sender, EventArgs e)
+        {
+            txt_log2.Clear();
         }
 
         /// <summary>
@@ -418,14 +437,23 @@ namespace HelloCSharp.UI
         /// <param name="str"></param>
         private void LogTxtChangedByDele(string str)
         {
-            //非UI线程访问控件时
-            if (txt_log.InvokeRequired)
+            //判断给哪个Tab下的日志文本框添加内容
+            switch (_tabSelectedIndex)
             {
-                txt_log.Invoke(new LogTxtDele(LogTxtChangedByDele), str);
-            }
-            else
-            {
-                txt_log.AppendText(str);
+                case 0:
+                    //非UI线程访问控件时
+                    if (txt_log.InvokeRequired)
+                        txt_log.Invoke(new LogTxtDele(LogTxtChangedByDele), str);
+                    else
+                        txt_log.AppendText(str);
+                    break;
+                case 1:
+                    //非UI线程访问控件时
+                    if (txt_log2.InvokeRequired)
+                        txt_log2.Invoke(new LogTxtDele(LogTxtChangedByDele), str);
+                    else
+                        txt_log2.AppendText(str);
+                    break;
             }
         }
 
