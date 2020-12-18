@@ -2,6 +2,7 @@
 using HelloCSharp.Util;
 using System;
 using System.Data;
+using System.Drawing;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -32,8 +33,9 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 日志文本框委托
         /// </summary>
-        /// <param name="str">文本内容</param>
-        private delegate void LogTxtDele(string str);
+        /// <param name="str"></param>
+        /// <param name="color"></param>
+        private delegate void LogTxtDele(string str, Color color);
 
         /// <summary>
         /// 开锁一，校验码已提前算好，如果有设置蓝牙名称则需要重新生成指令并计算校验码
@@ -129,7 +131,7 @@ namespace HelloCSharp.UI
         {
             InitializeComponent();
             InitData();
-            InitView();
+            EnableBtn(false);
         }
 
         /// <summary>
@@ -139,9 +141,9 @@ namespace HelloCSharp.UI
         {
             while (_vibrateThreadFlag && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                LogTxtChangedByDele("循环测试_振动事件查询\r\n");
+                LogTxtChangedByDele("循环测试_振动事件查询\r\n", Color.Black);
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -151,9 +153,9 @@ namespace HelloCSharp.UI
         {
             while (_stealThreadFlag && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                LogTxtChangedByDele("循环测试_窃电事件查询\r\n");
+                LogTxtChangedByDele("循环测试_窃电事件查询\r\n", Color.Black);
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -163,9 +165,9 @@ namespace HelloCSharp.UI
         {
             while (_closeDoorThreadFlag && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                LogTxtChangedByDele("循环测试_关门事件查询\r\n");
+                LogTxtChangedByDele("循环测试_关门事件查询\r\n", Color.Black);
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -175,9 +177,9 @@ namespace HelloCSharp.UI
         {
             while (_openDoorThreadFlag && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                LogTxtChangedByDele("循环测试_开门事件查询\r\n");
+                LogTxtChangedByDele("循环测试_开门事件查询\r\n", Color.Black);
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -187,9 +189,9 @@ namespace HelloCSharp.UI
         {
             while (_closeLockThreadFlag && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                LogTxtChangedByDele("循环测试_关锁事件查询\r\n");
+                LogTxtChangedByDele("循环测试_关锁事件查询\r\n", Color.Black);
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -199,9 +201,9 @@ namespace HelloCSharp.UI
         {
             while (_openLockThreadFlag && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                LogTxtChangedByDele("循环测试_开锁事件查询\r\n");
+                LogTxtChangedByDele("循环测试_开锁事件查询\r\n", Color.Black);
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(100);
         }
 
         /// <summary>
@@ -211,8 +213,38 @@ namespace HelloCSharp.UI
         {
             while (_eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
+                //先发对时
+                //FE FE FE FE 68 22 23 01 56 34 00 68 07 06 57 85 34 34 34 33 58 16
+                int ss = DateTime.Now.Second + 33;
+                int mm = DateTime.Now.Minute + 33;
+                int HH = DateTime.Now.Hour + 33;
+                int dd = DateTime.Now.Day + 33;
+                int MM = DateTime.Now.Month + 33;
+                int yy = DateTime.Now.Year % 100 + 33;
+                if (!"".Equals(_hexName))
+                {
+                    string timeCmd = "68" + _hexName + "00680706" + ss + mm + HH + dd + MM + yy;
+                    string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
+                    timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
+                    byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
+                    _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                    LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
+                }
+                else
+                {
+                    string timeCmd = "68222301563400680706" + ss + mm + HH + dd + MM + yy;
+                    string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
+                    timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
+                    byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
+                    _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                    LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
+                }
+                Thread.Sleep(1 * 1000);
+                //TODO:再发设置工号
+                //Thread.Sleep(1 * 1000);
+                //最后发查询事件总数
                 _serialPort.Write(READ_EVENT_ALL_BYTE, 0, READ_EVENT_ALL_BYTE.Length);
-                LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n");
+                LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
                 Thread.Sleep(1 * 1000);
                 //开启循环测试开锁事件查询
                 if (_openLock == 1)
@@ -325,7 +357,7 @@ namespace HelloCSharp.UI
         /// 修改日志文本框的内容
         /// </summary>
         /// <param name="str"></param>
-        private void LogTxtChangedByDele(string str)
+        private void LogTxtChangedByDele(string str, Color color)
         {
             Print(str);
             //判断给哪个Tab下的日志文本框添加内容
@@ -334,26 +366,28 @@ namespace HelloCSharp.UI
                 case 0:
                     //非UI线程访问控件时
                     if (txt_log.InvokeRequired)
-                        txt_log.Invoke(new LogTxtDele(LogTxtChangedByDele), str);
+                    {
+                        txt_log.Invoke(new LogTxtDele(LogTxtChangedByDele), str, color);
+                    }
                     else
+                    {
+                        txt_log.SelectionColor = color;
                         txt_log.AppendText(str);
+                    }
                     break;
                 case 1:
                     //非UI线程访问控件时
                     if (txt_log2.InvokeRequired)
-                        txt_log2.Invoke(new LogTxtDele(LogTxtChangedByDele), str);
+                    {
+                        txt_log2.Invoke(new LogTxtDele(LogTxtChangedByDele), str, color);
+                    }
                     else
+                    {
+                        txt_log2.SelectionColor = color;
                         txt_log2.AppendText(str);
+                    }
                     break;
             }
-        }
-
-        /// <summary>
-        /// 初始化控件
-        /// </summary>
-        private void InitView()
-        {
-            EnableButton(false);
         }
 
         /// <summary>
@@ -432,19 +466,19 @@ namespace HelloCSharp.UI
         /// 启用禁用按钮控件
         /// </summary>
         /// <param name="flag"></param>
-        private void EnableButton(bool flag)
+        private void EnableBtn(bool flag)
         {
             btn_lock1.Enabled = flag;
             btn_lock2.Enabled = flag;
             btn_lock3.Enabled = flag;
             btn_lock_all.Enabled = flag;
             btn_work_read.Enabled = flag;
-            btn_work_write.Enabled = flag;
             btn_box_read.Enabled = flag;
-            btn_box_write.Enabled = flag;
             btn_gps.Enabled = flag;
             btn_cycle_start.Enabled = flag;
-            btn_name_write.Enabled = flag;
+            //btn_name_write.Enabled = flag;
+            //btn_work_write.Enabled = flag;
+            //btn_box_write.Enabled = flag;
         }
 
         /// <summary>
@@ -453,163 +487,181 @@ namespace HelloCSharp.UI
         /// <param name="str"></param>
         private void Parse(string str)
         {
-            string[] strArray = str.Split(' ');
-            string type = strArray[8];
-            switch (type)
+            try
             {
-                //事件总数
-                case "80":
-                    {
-                        int len = MyConvertUtil.HexStrToInt(strArray[9]);
-                        //0表示没有，1表示有
-                        //开锁事件
-                        _openLock = Convert.ToInt32(strArray[10]) - 33;
-                        //开锁事件次数
-                        int openLockCount = Convert.ToInt32(strArray[12]) + Convert.ToInt32(strArray[11]);
-                        //关锁事件
-                        _closeLock = Convert.ToInt32(strArray[13]) - 33;
-                        //关锁事件次数
-                        int closeLockCount = Convert.ToInt32(strArray[15]) + Convert.ToInt32(strArray[14]);
-                        //开门事件
-                        _openDoor = Convert.ToInt32(strArray[16]) - 33;
-                        //开门事件次数
-                        int openDoorCount = Convert.ToInt32(strArray[18]) + Convert.ToInt32(strArray[17]);
-                        //关门事件
-                        _closeDoor = Convert.ToInt32(strArray[19]) - 33;
-                        //关门事件次数
-                        int closeDoorCount = Convert.ToInt32(strArray[21]) + Convert.ToInt32(strArray[20]);
-                        //窃电事件
-                        _steal = Convert.ToInt32(strArray[22]) - 33;
-                        //窃电事件次数
-                        int stealCount = Convert.ToInt32(strArray[24]) + Convert.ToInt32(strArray[23]);
-                        //振动事件
-                        _vibrate = Convert.ToInt32(strArray[25]) - 33;
-                        //振动事件次数
-                        int vibrateCount = Convert.ToInt32(strArray[27]) + Convert.ToInt32(strArray[26]);
-                    }
-                    break;
-                //开锁
-                case "90":
-                    {
-                        string result = strArray[9];
+                string[] strArray = str.Split(' ');
+                string type = strArray[8];
+                int len = MyConvertUtil.HexStrToInt(strArray[9]);
+                switch (type)
+                {
+                    //对时
+                    case "87":
+                        //设置对时返回的是版本号
+                        int ver1 = Convert.ToInt32(strArray[10]) - 33;
+                        string verStr1 = MyConvertUtil.HexStrToStr(ver1 + "");
+                        int ver2 = Convert.ToInt32(strArray[11]) - 33;
+                        string verStr2 = MyConvertUtil.HexStrToStr(ver2 + "");
+                        int ver3 = Convert.ToInt32(strArray[12]) - 33;
+                        string verStr3 = MyConvertUtil.HexStrToStr(ver3 + "");
+                        int ver4 = MyConvertUtil.HexStrToInt(strArray[13]) - 51;
+                        string hexVerStr4 = MyConvertUtil.IntToHexStr(ver4 + "");
+                        LogTxtChangedByDele("对时成功，版本号：" + verStr1 + verStr2 + "." + verStr3 + "." + hexVerStr4 + "\r\n", Color.Green);
+                        break;
+                    //事件总数
+                    case "80":
+                        {
+                            //0表示没有，1表示有
+                            //开锁事件
+                            _openLock = Convert.ToInt32(strArray[10]) - 33;
+                            //开锁事件次数
+                            int openLockCount = Convert.ToInt32(strArray[12]) + Convert.ToInt32(strArray[11]);
+                            //关锁事件
+                            _closeLock = Convert.ToInt32(strArray[13]) - 33;
+                            //关锁事件次数
+                            int closeLockCount = Convert.ToInt32(strArray[15]) + Convert.ToInt32(strArray[14]);
+                            //开门事件
+                            _openDoor = Convert.ToInt32(strArray[16]) - 33;
+                            //开门事件次数
+                            int openDoorCount = Convert.ToInt32(strArray[18]) + Convert.ToInt32(strArray[17]);
+                            //关门事件
+                            _closeDoor = Convert.ToInt32(strArray[19]) - 33;
+                            //关门事件次数
+                            int closeDoorCount = Convert.ToInt32(strArray[21]) + Convert.ToInt32(strArray[20]);
+                            //窃电事件
+                            _steal = Convert.ToInt32(strArray[22]) - 33;
+                            //窃电事件次数
+                            int stealCount = Convert.ToInt32(strArray[24]) + Convert.ToInt32(strArray[23]);
+                            //振动事件
+                            _vibrate = Convert.ToInt32(strArray[25]) - 33;
+                            //振动事件次数
+                            int vibrateCount = Convert.ToInt32(strArray[27]) + Convert.ToInt32(strArray[26]);
+                        }
+                        break;
+                    //开锁
+                    case "90":
+                        {
+                            string result = strArray[9];
+                            switch (_operation)
+                            {
+                                case "开锁一":
+                                    if ("00".Equals(result))
+                                        LogTxtChangedByDele("开锁一成功，状态码：" + result + "\r\n", Color.Green);
+                                    else
+                                        LogTxtChangedByDele("开锁一失败，状态码：" + result + "\r\n", Color.Red);
+                                    break;
+                                case "开锁二":
+                                    if ("00".Equals(result))
+                                        LogTxtChangedByDele("开锁二成功，状态码：" + result + "\r\n", Color.Green);
+                                    else
+                                        LogTxtChangedByDele("开锁二失败，状态码：" + result + "\r\n", Color.Red);
+                                    break;
+                                case "开锁三":
+                                    if ("00".Equals(result))
+                                        LogTxtChangedByDele("开锁三成功，状态码：" + result + "\r\n", Color.Green);
+                                    else
+                                        LogTxtChangedByDele("开锁三失败，状态码：" + result + "\r\n", Color.Red);
+                                    break;
+                                case "开锁全部":
+                                    if ("00".Equals(result))
+                                        LogTxtChangedByDele("开锁全部成功，状态码：" + result + "\r\n", Color.Green);
+                                    else
+                                        LogTxtChangedByDele("开锁全部失败，状态码：" + result + "\r\n", Color.Red);
+                                    break;
+                            }
+                        }
+                        break;
+                    //工号
+                    case "8B":
+                        {
+                            string hexWorkId = strArray[10] + strArray[11] + strArray[12] + strArray[13] + strArray[14] + strArray[15] + strArray[16] + strArray[17];
+                            string workId = MyConvertUtil.HexStrToStr(hexWorkId);
+                            switch (_operation)
+                            {
+                                case "读取工号":
+                                    WorkIdTxtChangedByDele(workId);
+                                    LogTxtChangedByDele("读取工号成功：" + workId + "\r\n", Color.Green);
+                                    break;
+                                case "设置工号":
+                                    LogTxtChangedByDele("设置工号成功：" + workId + "\r\n", Color.Green);
+                                    break;
+                            }
+                        }
+                        break;
+                    //表箱号
+                    case "86":
+                        string hexBoxId = strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6];
                         switch (_operation)
                         {
-                            case "开锁一":
-                                if ("00".Equals(result))
-                                    LogTxtChangedByDele("开锁一成功：" + result + "\r\n");
-                                else
-                                    LogTxtChangedByDele("开锁一失败：" + result + "\r\n");
+                            case "读取表箱号":
+                                BoxIdTxtChangedByDele(hexBoxId);
+                                LogTxtChangedByDele("读取表箱号成功：" + hexBoxId + "\r\n", Color.Green);
                                 break;
-                            case "开锁二":
-                                if ("00".Equals(result))
-                                    LogTxtChangedByDele("开锁二成功：" + result + "\r\n");
-                                else
-                                    LogTxtChangedByDele("开锁二失败：" + result + "\r\n");
-                                break;
-                            case "开锁三":
-                                if ("00".Equals(result))
-                                    LogTxtChangedByDele("开锁三成功：" + result + "\r\n");
-                                else
-                                    LogTxtChangedByDele("开锁三失败：" + result + "\r\n");
-                                break;
-                            case "开锁全部":
-                                if ("00".Equals(result))
-                                    LogTxtChangedByDele("开锁全部成功：" + result + "\r\n");
-                                else
-                                    LogTxtChangedByDele("开锁全部失败：" + result + "\r\n");
+                            case "设置表箱号":
+                                LogTxtChangedByDele("设置表箱号成功：" + hexBoxId + "\r\n", Color.Green);
                                 break;
                         }
-                    }
-                    break;
-                //工号
-                case "8B":
-                    {
-                        int len = MyConvertUtil.HexStrToInt(strArray[9]);
-                        string hexWorkId = strArray[10] + strArray[11] + strArray[12] + strArray[13] + strArray[14] + strArray[15] + strArray[16] + strArray[17];
-                        string workId = MyConvertUtil.HexStrToStr(hexWorkId);
-                        switch (_operation)
+                        break;
+                    //读取GPS位置
+                    case "8A":
                         {
-                            case "读取工号":
-                                WorkIdTxtChangedByDele(workId);
-                                LogTxtChangedByDele("读取工号成功：" + workId + "\r\n");
-                                break;
-                            case "设置工号":
-                                LogTxtChangedByDele("设置工号成功：" + workId + "\r\n");
-                                break;
+                            //状态信息：00未定位，1已定位
+                            int state = Convert.ToInt32(strArray[10]) - 33;
+                            if (1 == state)
+                            {
+                                //时间
+                                int ss = Convert.ToInt32(strArray[11]) - 33;
+                                int mm = Convert.ToInt32(strArray[12]) - 33;
+                                int HH = Convert.ToInt32(strArray[13]) - 33;
+                                int dd = Convert.ToInt32(strArray[14]) - 33;
+                                int MM = Convert.ToInt32(strArray[15]) - 33;
+                                int yy = Convert.ToInt32(strArray[16]) - 33;
+                                string timeStr = yy + "年" + MM + "月" + dd + "日" + HH + "时" + mm + "分" + ss + "秒";
+                                //经纬度
+                                int lat1 = Convert.ToInt32(strArray[17]) - 33;
+                                int lat2 = Convert.ToInt32(strArray[18]) - 33;
+                                int lat3 = Convert.ToInt32(strArray[19]) - 33;
+                                int lat4 = Convert.ToInt32(strArray[20]) - 33;
+                                string latStr = "" + lat1 + lat2 + lat3 + lat4;
+                                int lat = Convert.ToInt32(latStr) * 1000000;
+                                int lot1 = Convert.ToInt32(strArray[21]) - 33;
+                                int lot2 = Convert.ToInt32(strArray[22]) - 33;
+                                int lot3 = Convert.ToInt32(strArray[23]) - 33;
+                                int lot4 = Convert.ToInt32(strArray[24]) - 33;
+                                string lotStr = "" + lot1 + lot2 + lot3 + lot4;
+                                int lot = Convert.ToInt32(lotStr) * 1000000;
+                                //海拔
+                                int height1 = Convert.ToInt32(strArray[25]) - 33;
+                                int height2 = Convert.ToInt32(strArray[26]) - 33;
+                                string heightStr = "" + height1 + height2;
+                                int height = Convert.ToInt32(heightStr);
+                                //速度
+                                int speed1 = Convert.ToInt32(strArray[27]) - 33;
+                                int speed2 = Convert.ToInt32(strArray[28]) - 33;
+                                string speedStr = "" + speed1 + speed2;
+                                int speed = Convert.ToInt32(speedStr);
+                                //方向
+                                int dir1 = Convert.ToInt32(strArray[29]) - 33;
+                                int dir2 = Convert.ToInt32(strArray[30]) - 33;
+                                string dirStr = "" + dir1 + dir2;
+                                int dir = Convert.ToInt32(dirStr);
+                                //温度
+                                int temperature = Convert.ToInt32(strArray[31]) - 33;
+                                string parseStr = timeStr + "   经度：" + lat + "   纬度：" + lot + "  海拔：" + height + "米   速度" + speed + "   方向：" + dir + "   温度：" + temperature;
+                                GpsTxtChangedByDele(parseStr);
+                                LogTxtChangedByDele(parseStr + "\r\n", Color.Green);
+                            }
+                            else
+                            {
+                                GpsTxtChangedByDele("未定位");
+                                LogTxtChangedByDele("未定位\r\n", Color.Red);
+                            }
                         }
-                    }
-                    break;
-                //表箱号
-                case "86":
-                    string hexBoxId = strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6];
-                    switch (_operation)
-                    {
-                        case "读取表箱号":
-                            BoxIdTxtChangedByDele(hexBoxId);
-                            LogTxtChangedByDele("读取表箱号成功：" + hexBoxId + "\r\n");
-                            break;
-                        case "设置表箱号":
-                            LogTxtChangedByDele("设置表箱号成功：" + hexBoxId + "\r\n");
-                            break;
-                    }
-                    break;
-                //读取GPS位置
-                case "8A":
-                    {
-                        int len = MyConvertUtil.HexStrToInt(strArray[9]);
-                        //状态信息：00未定位，1已定位
-                        int state = Convert.ToInt32(strArray[10]) - 33;
-                        if (1 == state)
-                        {
-                            //时间
-                            int ss = Convert.ToInt32(strArray[11]) - 33;
-                            int mm = Convert.ToInt32(strArray[12]) - 33;
-                            int HH = Convert.ToInt32(strArray[13]) - 33;
-                            int dd = Convert.ToInt32(strArray[14]) - 33;
-                            int MM = Convert.ToInt32(strArray[15]) - 33;
-                            int yy = Convert.ToInt32(strArray[16]) - 33;
-                            string timeStr = yy + "年" + MM + "月" + dd + "日" + HH + "时" + mm + "分" + ss + "秒";
-                            //经纬度
-                            int lat1 = Convert.ToInt32(strArray[17]) - 33;
-                            int lat2 = Convert.ToInt32(strArray[18]) - 33;
-                            int lat3 = Convert.ToInt32(strArray[19]) - 33;
-                            int lat4 = Convert.ToInt32(strArray[20]) - 33;
-                            string latStr = "" + lat1 + lat2 + lat3 + lat4;
-                            int lat = Convert.ToInt32(latStr) * 1000000;
-                            int lot1 = Convert.ToInt32(strArray[21]) - 33;
-                            int lot2 = Convert.ToInt32(strArray[22]) - 33;
-                            int lot3 = Convert.ToInt32(strArray[23]) - 33;
-                            int lot4 = Convert.ToInt32(strArray[24]) - 33;
-                            string lotStr = "" + lot1 + lot2 + lot3 + lot4;
-                            int lot = Convert.ToInt32(lotStr) * 1000000;
-                            //海拔
-                            int height1 = Convert.ToInt32(strArray[25]) - 33;
-                            int height2 = Convert.ToInt32(strArray[26]) - 33;
-                            string heightStr = "" + height1 + height2;
-                            int height = Convert.ToInt32(heightStr);
-                            //速度
-                            int speed1 = Convert.ToInt32(strArray[27]) - 33;
-                            int speed2 = Convert.ToInt32(strArray[28]) - 33;
-                            string speedStr = "" + speed1 + speed2;
-                            int speed = Convert.ToInt32(speedStr);
-                            //方向
-                            int dir1 = Convert.ToInt32(strArray[29]) - 33;
-                            int dir2 = Convert.ToInt32(strArray[30]) - 33;
-                            string dirStr = "" + dir1 + dir2;
-                            int dir = Convert.ToInt32(dirStr);
-                            //温度
-                            int temperature = Convert.ToInt32(strArray[31]) - 33;
-                            string parseStr = timeStr + "   经度：" + lat + "   纬度：" + lot + "  海拔：" + height + "米   速度" + speed + "   方向：" + dir + "   温度：" + temperature;
-                            GpsTxtChangedByDele(parseStr);
-                            LogTxtChangedByDele(parseStr + "\r\n");
-                        }
-                        else
-                        {
-                            GpsTxtChangedByDele("未定位");
-                            LogTxtChangedByDele("未定位\r\n");
-                        }
-                    }
-                    break;
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                LogTxtChangedByDele(e.ToString() + "\r\n", Color.Red);
             }
         }
 
@@ -652,8 +704,8 @@ namespace HelloCSharp.UI
                     int len = _receivedStr.Length;
                     Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
                     _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
-                    //显示数据
-                    LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n");
+                    //显示收到的数据
+                    LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n", Color.Black);
                     //解析数据
                     Parse(_receivedStr);
                     //清空缓存
@@ -664,14 +716,32 @@ namespace HelloCSharp.UI
 
         private void txt_name_TextChanged(object sender, EventArgs e)
         {
+            string input = txt_name.Text.ToString();
+            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{5}");
+            if (flag)
+                btn_name_write.Enabled = true;
+            else
+                btn_name_write.Enabled = false;
         }
 
         private void txt_work_id_TextChanged(object sender, EventArgs e)
         {
+            string input = txt_work_id.Text.ToString();
+            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{8}");
+            if (flag)
+                btn_work_write.Enabled = true;
+            else
+                btn_work_write.Enabled = false;
         }
 
         private void txt_box_id_TextChanged(object sender, EventArgs e)
         {
+            string input = txt_box_id.Text.ToString();
+            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{6}");
+            if (flag)
+                btn_box_write.Enabled = true;
+            else
+                btn_box_write.Enabled = false;
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -682,8 +752,8 @@ namespace HelloCSharp.UI
         private void btn_name_write_Click(object sender, EventArgs e)
         {
             //TODO:校验五位蓝牙名称
-            string name = txt_name.Text.ToString();
-            _hexName = MyConvertUtil.StrToHexStr(name);
+            string input = txt_name.Text.ToString();
+            _hexName = MyConvertUtil.StrToHexStr(input);
 
             //重新生成开锁一指令并计算校验码
             //OPEN_DOOR1 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 34 E5 16";
@@ -750,12 +820,14 @@ namespace HelloCSharp.UI
 
             //重新生成查询事件总数指令并计算校验码
             //READ_EVENT_ALL = "FE FE FE FE 68 22 23 01 56 34 00 68 00 00 A0 16";
-            string readEventAllCmd = "68" + _hexName + " 00680000";
+            string readEventAllCmd = "68" + _hexName + "00680000";
             string readEventAllCrc = MyConvertUtil.CalcZM301CRC(readEventAllCmd);
             READ_EVENT_ALL = "FEFEFEFE" + readEventAllCmd + readEventAllCrc + "16";
             //添加空格
             READ_EVENT_ALL = MyConvertUtil.StrAddChar(READ_EVENT_ALL, 2, " ");
             READ_EVENT_ALL_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL);
+
+            LogTxtChangedByDele("蓝牙名称即将设置为" + input + "\r\n", Color.Black);
         }
 
         private void btn_cycle_start_Click(object sender, EventArgs e)
@@ -764,6 +836,7 @@ namespace HelloCSharp.UI
             {
                 if (null == _eventAllThread)
                 {
+                    _eventAllThreadFlag = true;
                     _eventAllThread = new Thread(CycleTest);
                     _eventAllThread.Start();
                 }
@@ -788,18 +861,25 @@ namespace HelloCSharp.UI
                 _vibrateThreadFlag = false;
                 if (null != _openLockThread)
                     _openLockThread.Abort();
+                _openLockThread = null;
                 if (null != _closeLockThread)
                     _closeLockThread.Abort();
+                _closeLockThread = null;
                 if (null != _openDoorThread)
                     _openDoorThread.Abort();
+                _openDoorThread = null;
                 if (null != _closeDoorThread)
                     _closeDoorThread.Abort();
+                _closeDoorThread = null;
                 if (null != _stealThread)
                     _stealThread.Abort();
+                _stealThread = null;
                 if (null != _vibrateThread)
                     _vibrateThread.Abort();
+                _vibrateThread = null;
                 if (null != _eventAllThread)
                     _eventAllThread.Abort();
+                _eventAllThread = null;
                 btn_cycle_start.Text = "开始";
             }
         }
@@ -807,18 +887,18 @@ namespace HelloCSharp.UI
         private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
         {
             _portName = _portNameArray[cbx_port.SelectedIndex];
-            LogTxtChangedByDele("串口名称：" + _portName + "\r\n");
+            LogTxtChangedByDele("串口名称：" + _portName + "\r\n", Color.Black);
         }
 
         private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LogTxtChangedByDele("波特率：" + _rate + "\r\n");
+            LogTxtChangedByDele("波特率：" + _rate + "\r\n", Color.Black);
         }
 
         private void cbx_data_SelectedIndexChanged(object sender, EventArgs e)
         {
             _data = DATA_ARRAY[cbx_data.SelectedIndex];
-            LogTxtChangedByDele("数据位：" + _data + "\r\n");
+            LogTxtChangedByDele("数据位：" + _data + "\r\n", Color.Black);
         }
 
         private void cbx_parity_SelectedIndexChanged(object sender, EventArgs e)
@@ -832,7 +912,7 @@ namespace HelloCSharp.UI
                 case "Mark": _parity = Parity.Mark; break;
                 case "Space": _parity = Parity.Space; break;
             }
-            LogTxtChangedByDele("校验位：" + _parity + "\r\n");
+            LogTxtChangedByDele("校验位：" + _parity + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -854,21 +934,21 @@ namespace HelloCSharp.UI
                         _serialPort.DataReceived += new SerialDataReceivedEventHandler(ReceivedComData);
                     }
                     _serialPort.Open();
-                    LogTxtChangedByDele("已打开：" + _portName + "\r\n");
-                    EnableButton(true);
+                    LogTxtChangedByDele("已打开：" + _portName + "\r\n", Color.Black);
+                    EnableBtn(true);
                     btn_open.Text = "关闭串口";
                 }
                 else
                 {
                     _serialPort.Close();
-                    LogTxtChangedByDele("已关闭：" + _portName + "\r\n");
-                    EnableButton(false);
+                    LogTxtChangedByDele("已关闭：" + _portName + "\r\n", Color.Black);
+                    EnableBtn(false);
                     btn_open.Text = "打开串口";
                 }
             }
             catch (Exception ex)
             {
-                LogTxtChangedByDele("串口" + _portName + "打开/关闭失败，原因：" + ex.ToString() + "\r\n");
+                LogTxtChangedByDele("串口" + _portName + "打开/关闭失败，原因：" + ex.ToString() + "\r\n", Color.Red);
             }
         }
 
@@ -879,9 +959,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock1_Click(object sender, EventArgs e)
         {
-            _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
             _operation = "开锁一";
-            LogTxtChangedByDele("发送开锁一指令：" + OPEN_DOOR1 + "\r\n");
+            _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
+            LogTxtChangedByDele("发送开锁一指令：" + OPEN_DOOR1 + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -891,9 +971,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock2_Click(object sender, EventArgs e)
         {
-            _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
             _operation = "开锁二";
-            LogTxtChangedByDele("发送开锁二指令：" + OPEN_DOOR2 + "\r\n");
+            _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
+            LogTxtChangedByDele("发送开锁二指令：" + OPEN_DOOR2 + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -903,9 +983,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock3_Click(object sender, EventArgs e)
         {
-            _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
             _operation = "开锁三";
-            LogTxtChangedByDele("发送开锁三指令：" + OPEN_DOOR3 + "\r\n");
+            _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
+            LogTxtChangedByDele("发送开锁三指令：" + OPEN_DOOR3 + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -915,9 +995,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock_all_Click(object sender, EventArgs e)
         {
-            _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
             _operation = "开锁全部";
-            LogTxtChangedByDele("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n");
+            _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
+            LogTxtChangedByDele("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -927,9 +1007,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_work_read_Click(object sender, EventArgs e)
         {
-            _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
             _operation = "读取工号";
-            LogTxtChangedByDele("发送读取工号指令：" + READ_WORK + "\r\n");
+            _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
+            LogTxtChangedByDele("发送读取工号指令：" + READ_WORK + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -964,9 +1044,9 @@ namespace HelloCSharp.UI
                 cmdStr += crcStr + " 16";
                 cmdStr = "FEFEFEFE" + cmdStr;
                 byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
-                _serialPort.Write(comByte, 0, comByte.Length);
                 _operation = "设置工号";
-                LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n");
+                _serialPort.Write(comByte, 0, comByte.Length);
+                LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
             }
         }
 
@@ -977,9 +1057,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_box_read_Click(object sender, EventArgs e)
         {
-            _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
             _operation = "读取表箱号";
-            LogTxtChangedByDele("发送读取表箱号指令：" + READ_BOX + "\r\n");
+            _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
+            LogTxtChangedByDele("发送读取表箱号指令：" + READ_BOX + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -1014,9 +1094,9 @@ namespace HelloCSharp.UI
                 cmdStr += crcStr + "16";
                 cmdStr = "FEFEFEFE" + cmdStr;
                 byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
-                _serialPort.Write(comByte, 0, comByte.Length);
                 _operation = "设置表箱号";
-                LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n");
+                _serialPort.Write(comByte, 0, comByte.Length);
+                LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
             }
         }
 
@@ -1028,7 +1108,7 @@ namespace HelloCSharp.UI
         private void btn_gps_Click(object sender, EventArgs e)
         {
             _serialPort.Write(READ_GPS_BYTE, 0, READ_GPS_BYTE.Length);
-            LogTxtChangedByDele("发送查询GPS指令：" + READ_GPS + "\r\n");
+            LogTxtChangedByDele("发送查询GPS指令：" + READ_GPS + "\r\n", Color.Black);
         }
 
         /// <summary>
