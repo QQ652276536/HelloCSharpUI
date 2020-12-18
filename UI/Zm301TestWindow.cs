@@ -102,7 +102,9 @@ namespace HelloCSharp.UI
         private readonly string[] PARITY_ARRAY = new string[] { "None", "Odd", "Even", "Mark", "Space" };
 
         private MyLogger _logger = MyLogger.Instance;
-        //全局时间，用于判断超时
+        //用于获取当前毫秒，Ticks为纳秒，转换为毫秒需要除以10000，转换为秒需要除以10000000
+        private DateTime DATETIME = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        //用于获取当前时间
         private DateTime _nowTime = DateTime.Now;
         private SerialPort _serialPort;
         //查询事件总次数的线程、查询开锁事件的线程、查询关锁事件的线程、查询开门事件的线程、查询关门事件的线程、查询窃电事件的线程、查询振动事件的线程、监听读取超时线程
@@ -116,7 +118,6 @@ namespace HelloCSharp.UI
         private int _tabSelectedIndex = 0;
         //蓝牙名称，如果设置了每次发送指令的时候都是要包含进去的
         private string _hexName = "";
-
         //串口名
         private string _portName = "";
         //波特率、数据位
@@ -124,10 +125,7 @@ namespace HelloCSharp.UI
         //校验位
         private Parity _parity = Parity.None;
         //记录当前指令发送时间
-        private long _currentMs = 0;
-        //Stopwatch提供一组方法和属性，可用于准确地测量运行时间
-        private Stopwatch stopwatch = new Stopwatch();
-
+        private long _currentMillis = 0;
         //记录具体操作
         private string _operation = "";
 
@@ -147,10 +145,9 @@ namespace HelloCSharp.UI
             {
                 //一、操作类型不为空、记录当前毫秒值不为零，则说明有发送指令的动作
                 //二、接收数据的缓存为空则说明未收到任何数据
-                //三、当前毫秒值与记录的毫秒值之差大于指定时间则表示超时
-                TimeSpan timeSpan = stopwatch.Elapsed;
-                Print("已过去" + timeSpan.Seconds+"秒");
-                if (!"".Equals(_operation) && "".Equals(_receivedStr) && _currentMs > 0 && DateTime.Now.Millisecond - _currentMs > 5000)
+                //三、当前毫秒值与记录的毫秒值之差大于1秒则表示超时
+                long tempCurrentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                if (!"".Equals(_operation) && "".Equals(_receivedStr) && _currentMillis > 0 && tempCurrentMillis - _currentMillis > 1000)
                 {
                     switch (_operation)
                     {
@@ -165,7 +162,7 @@ namespace HelloCSharp.UI
                         case "查询GPS位置": LogTxtChangedByDele("查询GPS位置超时\r\n", Color.Red); break;
                     }
                     //重置记录的状态
-                    _currentMs = 0;
+                    _currentMillis = 0;
                     _operation = "";
                 }
             }
@@ -265,7 +262,7 @@ namespace HelloCSharp.UI
                     timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                     byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                     _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
-                    _currentMs = _nowTime.Millisecond;
+                    _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                     LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
                 }
                 else
@@ -275,7 +272,7 @@ namespace HelloCSharp.UI
                     timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                     byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                     _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
-                    _currentMs = _nowTime.Millisecond;
+                    _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                     LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
                 }
                 Thread.Sleep(1 * 1000);
@@ -283,7 +280,7 @@ namespace HelloCSharp.UI
                 //Thread.Sleep(1 * 1000);
                 //最后发查询事件总数
                 _serialPort.Write(READ_EVENT_ALL_BYTE, 0, READ_EVENT_ALL_BYTE.Length);
-                _currentMs = _nowTime.Millisecond;
+                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                 LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
                 Thread.Sleep(1 * 1000);
                 //开启循环测试开锁事件查询
@@ -412,6 +409,10 @@ namespace HelloCSharp.UI
                     else
                     {
                         txt_log.SelectionColor = color;
+                        //设置光标的位置到文本尾
+                        txt_log.Select(txt_log.TextLength, 0);
+                        //滚动到控件光标处  
+                        txt_log.ScrollToCaret();
                         txt_log.AppendText(str);
                     }
                     break;
@@ -424,6 +425,10 @@ namespace HelloCSharp.UI
                     else
                     {
                         txt_log2.SelectionColor = color;
+                        //设置光标的位置到文本尾
+                        txt_log2.Select(txt_log2.TextLength, 0);
+                        //滚动到控件光标处  
+                        txt_log2.ScrollToCaret();
                         txt_log2.AppendText(str);
                     }
                     break;
@@ -528,7 +533,7 @@ namespace HelloCSharp.UI
         private void Parse(string str)
         {
             //重置记录的状态
-            _currentMs = 0;
+            _currentMillis = 0;
             _operation = "";
             try
             {
@@ -1036,7 +1041,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁一";
             _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送开锁一指令：" + OPEN_DOOR1 + "\r\n", Color.Black);
         }
 
@@ -1049,7 +1054,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁二";
             _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送开锁二指令：" + OPEN_DOOR2 + "\r\n", Color.Black);
         }
 
@@ -1062,7 +1067,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁三";
             _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送开锁三指令：" + OPEN_DOOR3 + "\r\n", Color.Black);
         }
 
@@ -1075,7 +1080,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁全部";
             _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n", Color.Black);
         }
 
@@ -1088,7 +1093,7 @@ namespace HelloCSharp.UI
         {
             _operation = "读取工号";
             _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送读取工号指令：" + READ_WORK + "\r\n", Color.Black);
         }
 
@@ -1126,7 +1131,7 @@ namespace HelloCSharp.UI
                 byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
                 _operation = "设置工号";
                 _serialPort.Write(comByte, 0, comByte.Length);
-                _currentMs = _nowTime.Millisecond;
+                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                 LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
             }
         }
@@ -1140,7 +1145,7 @@ namespace HelloCSharp.UI
         {
             _operation = "读取表箱号";
             _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送读取表箱号指令：" + READ_BOX + "\r\n", Color.Black);
         }
 
@@ -1178,7 +1183,7 @@ namespace HelloCSharp.UI
                 byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
                 _operation = "设置表箱号";
                 _serialPort.Write(comByte, 0, comByte.Length);
-                _currentMs = _nowTime.Millisecond;
+                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                 LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
             }
         }
@@ -1192,8 +1197,7 @@ namespace HelloCSharp.UI
         {
             _operation = "查询GPS位置";
             _serialPort.Write(READ_GPS_BYTE, 0, READ_GPS_BYTE.Length);
-            _currentMs = _nowTime.Millisecond;
-            stopwatch.Start();
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
             LogTxtChangedByDele("发送查询GPS指令：" + READ_GPS + "\r\n", Color.Black);
         }
 
