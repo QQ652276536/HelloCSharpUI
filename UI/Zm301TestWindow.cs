@@ -2,6 +2,7 @@
 using HelloCSharp.Util;
 using System;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
@@ -100,22 +101,18 @@ namespace HelloCSharp.UI
         /// </summary>
         private readonly string[] PARITY_ARRAY = new string[] { "None", "Odd", "Even", "Mark", "Space" };
 
-        /// <summary>
-        /// 工号的正则表达式
-        /// </summary>
-        private readonly Regex REGEX_WORK_ID = new Regex("[A-Z a-z 0-9]{8}");
-
         private MyLogger _logger = MyLogger.Instance;
+        //全局时间，用于判断超时
+        private DateTime _nowTime = DateTime.Now;
         private SerialPort _serialPort;
-        //查询事件总次数的线程、查询开锁事件的线程、查询关锁事件的线程、查询开门事件的线程、查询关门事件的线程、查询窃电事件的线程、查询振动事件的线程
-        private Thread _eventAllThread, _openLockThread, _closeLockThread, _openDoorThread, _closeDoorThread, _stealThread, _vibrateThread;
-        private bool _eventAllThreadFlag = true, _openLockThreadFlag = true, _closeLockThreadFlag = true, _openDoorThreadFlag = true, _closeDoorThreadFlag = true, _stealThreadFlag = true, _vibrateThreadFlag = true;
+        //查询事件总次数的线程、查询开锁事件的线程、查询关锁事件的线程、查询开门事件的线程、查询关门事件的线程、查询窃电事件的线程、查询振动事件的线程、监听读取超时线程
+        private Thread _eventAllThread, _openLockThread, _closeLockThread, _openDoorThread, _closeDoorThread, _stealThread, _vibrateThread, _timeOutThread;
+        private bool _eventAllThreadFlag = true, _openLockThreadFlag = true, _closeLockThreadFlag = true, _openDoorThreadFlag = true
+            , _closeDoorThreadFlag = true, _stealThreadFlag = true, _vibrateThreadFlag = true, _timeOutThreadFlag = true;
         //查询开锁事件、查询关锁事件、查询开门事件、查询关门事件、查询窃电事件、查询振动事件
         private int _openLock = 0, _closeLock = 0, _openDoor = 0, _closeDoor = 0, _steal = 0, _vibrate = 0;
         private string[] _portNameArray;
         private string _receivedStr = "";
-        //标示具体操作
-        private string _operation = "";
         private int _tabSelectedIndex = 0;
         //蓝牙名称，如果设置了每次发送指令的时候都是要包含进去的
         private string _hexName = "";
@@ -126,12 +123,52 @@ namespace HelloCSharp.UI
         private int _rate = 1200, _data = 8;
         //校验位
         private Parity _parity = Parity.None;
+        //记录当前指令发送时间
+        private long _currentMs = 0;
+        //Stopwatch提供一组方法和属性，可用于准确地测量运行时间
+        private Stopwatch stopwatch = new Stopwatch();
+
+        //记录具体操作
+        private string _operation = "";
 
         public Zm301TestWidnow()
         {
             InitializeComponent();
             InitData();
             EnableBtn(false);
+        }
+
+        /// <summary>
+        /// 监听串口响应
+        /// </summary>
+        private void TimeOutForThread()
+        {
+            while (_timeOutThreadFlag && null != _serialPort && _serialPort.IsOpen)
+            {
+                //一、操作类型不为空、记录当前毫秒值不为零，则说明有发送指令的动作
+                //二、接收数据的缓存为空则说明未收到任何数据
+                //三、当前毫秒值与记录的毫秒值之差大于指定时间则表示超时
+                TimeSpan timeSpan = stopwatch.Elapsed;
+                Print("已过去" + timeSpan.Seconds+"秒");
+                if (!"".Equals(_operation) && "".Equals(_receivedStr) && _currentMs > 0 && DateTime.Now.Millisecond - _currentMs > 5000)
+                {
+                    switch (_operation)
+                    {
+                        case "开锁一": LogTxtChangedByDele("开锁一超时\r\n", Color.Red); break;
+                        case "开锁二": LogTxtChangedByDele("开锁二超时\r\n", Color.Red); break;
+                        case "开锁三": LogTxtChangedByDele("开锁三超时\r\n", Color.Red); break;
+                        case "开锁全部": LogTxtChangedByDele("开锁全部超时\r\n", Color.Red); break;
+                        case "读取工号": LogTxtChangedByDele("读取工号超时\r\n", Color.Red); break;
+                        case "设置工号": LogTxtChangedByDele("设置工号超时\r\n", Color.Red); break;
+                        case "读取表箱号": LogTxtChangedByDele("读取表箱号超时\r\n", Color.Red); break;
+                        case "设置表箱号": LogTxtChangedByDele("设置表箱号超时\r\n", Color.Red); break;
+                        case "查询GPS位置": LogTxtChangedByDele("查询GPS位置超时\r\n", Color.Red); break;
+                    }
+                    //重置记录的状态
+                    _currentMs = 0;
+                    _operation = "";
+                }
+            }
         }
 
         /// <summary>
@@ -215,12 +252,12 @@ namespace HelloCSharp.UI
             {
                 //先发对时
                 //FE FE FE FE 68 22 23 01 56 34 00 68 07 06 57 85 34 34 34 33 58 16
-                int ss = DateTime.Now.Second + 33;
-                int mm = DateTime.Now.Minute + 33;
-                int HH = DateTime.Now.Hour + 33;
-                int dd = DateTime.Now.Day + 33;
-                int MM = DateTime.Now.Month + 33;
-                int yy = DateTime.Now.Year % 100 + 33;
+                int ss = _nowTime.Second + 33;
+                int mm = _nowTime.Minute + 33;
+                int HH = _nowTime.Hour + 33;
+                int dd = _nowTime.Day + 33;
+                int MM = _nowTime.Month + 33;
+                int yy = _nowTime.Year % 100 + 33;
                 if (!"".Equals(_hexName))
                 {
                     string timeCmd = "68" + _hexName + "00680706" + ss + mm + HH + dd + MM + yy;
@@ -228,6 +265,7 @@ namespace HelloCSharp.UI
                     timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                     byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                     _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                    _currentMs = _nowTime.Millisecond;
                     LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
                 }
                 else
@@ -237,6 +275,7 @@ namespace HelloCSharp.UI
                     timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                     byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                     _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                    _currentMs = _nowTime.Millisecond;
                     LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
                 }
                 Thread.Sleep(1 * 1000);
@@ -244,6 +283,7 @@ namespace HelloCSharp.UI
                 //Thread.Sleep(1 * 1000);
                 //最后发查询事件总数
                 _serialPort.Write(READ_EVENT_ALL_BYTE, 0, READ_EVENT_ALL_BYTE.Length);
+                _currentMs = _nowTime.Millisecond;
                 LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
                 Thread.Sleep(1 * 1000);
                 //开启循环测试开锁事件查询
@@ -487,6 +527,9 @@ namespace HelloCSharp.UI
         /// <param name="str"></param>
         private void Parse(string str)
         {
+            //重置记录的状态
+            _currentMs = 0;
+            _operation = "";
             try
             {
                 string[] strArray = str.Split(' ');
@@ -749,6 +792,11 @@ namespace HelloCSharp.UI
             _tabSelectedIndex = tabControl.SelectedIndex;
         }
 
+        /// <summary>
+        /// 预设蓝牙名称
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_name_write_Click(object sender, EventArgs e)
         {
             //TODO:校验五位蓝牙名称
@@ -830,6 +878,11 @@ namespace HelloCSharp.UI
             LogTxtChangedByDele("蓝牙名称即将设置为" + input + "\r\n", Color.Black);
         }
 
+        /// <summary>
+        /// 开始/停止循环测试
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_cycle_start_Click(object sender, EventArgs e)
         {
             if ("开始".Equals(btn_cycle_start.Text))
@@ -928,6 +981,7 @@ namespace HelloCSharp.UI
             {
                 if ("打开串口".Equals(btn_open.Text.ToString()))
                 {
+                    //打开串口
                     if (null == _serialPort)
                     {
                         _serialPort = new SerialPort(_portName, _rate, _parity, _data, StopBits.One);
@@ -937,9 +991,30 @@ namespace HelloCSharp.UI
                     LogTxtChangedByDele("已打开：" + _portName + "\r\n", Color.Black);
                     EnableBtn(true);
                     btn_open.Text = "关闭串口";
+                    //开启监听读取超时的线程，里面对串口有作判断，必须放在串口操作之后
+                    if (null == _timeOutThread)
+                    {
+                        _timeOutThread = new Thread(TimeOutForThread);
+                        _timeOutThread.Start();
+                    }
+                    else
+                    {
+                        _timeOutThreadFlag = false;
+                        _timeOutThread.Abort();
+                        _timeOutThread = null;
+                        _timeOutThreadFlag = true;
+                        _timeOutThread = new Thread(TimeOutForThread);
+                        _timeOutThread.Start();
+                    }
                 }
                 else
                 {
+                    //关闭监听读取超时的线程
+                    _timeOutThreadFlag = false;
+                    if (null != _timeOutThread)
+                        _timeOutThread.Abort();
+                    _timeOutThread = null;
+                    //关闭串口
                     _serialPort.Close();
                     LogTxtChangedByDele("已关闭：" + _portName + "\r\n", Color.Black);
                     EnableBtn(false);
@@ -961,6 +1036,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁一";
             _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
             LogTxtChangedByDele("发送开锁一指令：" + OPEN_DOOR1 + "\r\n", Color.Black);
         }
 
@@ -973,6 +1049,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁二";
             _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
             LogTxtChangedByDele("发送开锁二指令：" + OPEN_DOOR2 + "\r\n", Color.Black);
         }
 
@@ -985,6 +1062,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁三";
             _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
             LogTxtChangedByDele("发送开锁三指令：" + OPEN_DOOR3 + "\r\n", Color.Black);
         }
 
@@ -997,6 +1075,7 @@ namespace HelloCSharp.UI
         {
             _operation = "开锁全部";
             _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
             LogTxtChangedByDele("发送开全部锁指令：" + OPEN_DOOR_ALL + "\r\n", Color.Black);
         }
 
@@ -1009,6 +1088,7 @@ namespace HelloCSharp.UI
         {
             _operation = "读取工号";
             _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
             LogTxtChangedByDele("发送读取工号指令：" + READ_WORK + "\r\n", Color.Black);
         }
 
@@ -1046,6 +1126,7 @@ namespace HelloCSharp.UI
                 byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
                 _operation = "设置工号";
                 _serialPort.Write(comByte, 0, comByte.Length);
+                _currentMs = _nowTime.Millisecond;
                 LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
             }
         }
@@ -1059,6 +1140,7 @@ namespace HelloCSharp.UI
         {
             _operation = "读取表箱号";
             _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
             LogTxtChangedByDele("发送读取表箱号指令：" + READ_BOX + "\r\n", Color.Black);
         }
 
@@ -1096,6 +1178,7 @@ namespace HelloCSharp.UI
                 byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
                 _operation = "设置表箱号";
                 _serialPort.Write(comByte, 0, comByte.Length);
+                _currentMs = _nowTime.Millisecond;
                 LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
             }
         }
@@ -1107,7 +1190,10 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_gps_Click(object sender, EventArgs e)
         {
+            _operation = "查询GPS位置";
             _serialPort.Write(READ_GPS_BYTE, 0, READ_GPS_BYTE.Length);
+            _currentMs = _nowTime.Millisecond;
+            stopwatch.Start();
             LogTxtChangedByDele("发送查询GPS指令：" + READ_GPS + "\r\n", Color.Black);
         }
 
