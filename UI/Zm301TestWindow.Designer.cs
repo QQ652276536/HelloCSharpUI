@@ -30,6 +30,9 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.btn_name_write = new System.Windows.Forms.Button();
+            this.txt_name = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.btn_clear = new System.Windows.Forms.Button();
             this.txt_log = new System.Windows.Forms.TextBox();
@@ -50,6 +53,11 @@
             this.btn_lock3 = new System.Windows.Forms.Button();
             this.btn_lock_all = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.btn_cycle_start = new System.Windows.Forms.Button();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.btn_clear2 = new System.Windows.Forms.Button();
+            this.txt_log2 = new System.Windows.Forms.TextBox();
             this.btn_open = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbx_parity = new System.Windows.Forms.ComboBox();
@@ -60,22 +68,18 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cbx_port = new System.Windows.Forms.ComboBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.btn_clear2 = new System.Windows.Forms.Button();
-            this.txt_log2 = new System.Windows.Forms.TextBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.btn_cycle_start = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox7.SuspendLayout();
             this.groupBox8.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -91,6 +95,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox9);
             this.tabPage1.Controls.Add(this.groupBox6);
             this.tabPage1.Controls.Add(this.groupBox5);
             this.tabPage1.Controls.Add(this.groupBox4);
@@ -103,6 +108,34 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "单项测试";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.btn_name_write);
+            this.groupBox9.Controls.Add(this.txt_name);
+            this.groupBox9.Location = new System.Drawing.Point(6, 22);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(228, 53);
+            this.groupBox9.TabIndex = 5;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "蓝牙名称（5位）";
+            // 
+            // btn_name_write
+            // 
+            this.btn_name_write.Location = new System.Drawing.Point(143, 20);
+            this.btn_name_write.Name = "btn_name_write";
+            this.btn_name_write.Size = new System.Drawing.Size(75, 23);
+            this.btn_name_write.TabIndex = 1;
+            this.btn_name_write.Text = "设置";
+            this.btn_name_write.Click += new System.EventHandler(this.btn_name_write_Click);
+            // 
+            // txt_name
+            // 
+            this.txt_name.Location = new System.Drawing.Point(6, 20);
+            this.txt_name.Name = "txt_name";
+            this.txt_name.Size = new System.Drawing.Size(100, 21);
+            this.txt_name.TabIndex = 2;
+            this.txt_name.TextChanged += new System.EventHandler(this.txt_name_TextChanged);
             // 
             // groupBox6
             // 
@@ -172,16 +205,16 @@
             this.groupBox4.Controls.Add(this.btn_box_write);
             this.groupBox4.Controls.Add(this.btn_box_read);
             this.groupBox4.Controls.Add(this.txt_box_id);
-            this.groupBox4.Location = new System.Drawing.Point(8, 173);
+            this.groupBox4.Location = new System.Drawing.Point(428, 173);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(746, 53);
+            this.groupBox4.Size = new System.Drawing.Size(320, 53);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "表箱号";
+            this.groupBox4.Text = "表箱号（6位）";
             // 
             // btn_box_write
             // 
-            this.btn_box_write.Location = new System.Drawing.Point(405, 18);
+            this.btn_box_write.Location = new System.Drawing.Point(232, 18);
             this.btn_box_write.Name = "btn_box_write";
             this.btn_box_write.Size = new System.Drawing.Size(75, 23);
             this.btn_box_write.TabIndex = 0;
@@ -191,7 +224,7 @@
             // 
             // btn_box_read
             // 
-            this.btn_box_read.Location = new System.Drawing.Point(274, 18);
+            this.btn_box_read.Location = new System.Drawing.Point(133, 18);
             this.btn_box_read.Name = "btn_box_read";
             this.btn_box_read.Size = new System.Drawing.Size(75, 23);
             this.btn_box_read.TabIndex = 1;
@@ -203,24 +236,25 @@
             // 
             this.txt_box_id.Location = new System.Drawing.Point(6, 20);
             this.txt_box_id.Name = "txt_box_id";
-            this.txt_box_id.Size = new System.Drawing.Size(212, 21);
+            this.txt_box_id.Size = new System.Drawing.Size(100, 21);
             this.txt_box_id.TabIndex = 2;
+            this.txt_box_id.TextChanged += new System.EventHandler(this.txt_box_id_TextChanged);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.btn_work_write);
             this.groupBox3.Controls.Add(this.btn_work_read);
             this.groupBox3.Controls.Add(this.txt_work_id);
-            this.groupBox3.Location = new System.Drawing.Point(8, 97);
+            this.groupBox3.Location = new System.Drawing.Point(6, 173);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(746, 53);
+            this.groupBox3.Size = new System.Drawing.Size(368, 53);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "工号";
+            this.groupBox3.Text = "工号（8位）";
             // 
             // btn_work_write
             // 
-            this.btn_work_write.Location = new System.Drawing.Point(405, 18);
+            this.btn_work_write.Location = new System.Drawing.Point(274, 20);
             this.btn_work_write.Name = "btn_work_write";
             this.btn_work_write.Size = new System.Drawing.Size(75, 23);
             this.btn_work_write.TabIndex = 0;
@@ -230,7 +264,7 @@
             // 
             // btn_work_read
             // 
-            this.btn_work_read.Location = new System.Drawing.Point(274, 18);
+            this.btn_work_read.Location = new System.Drawing.Point(143, 20);
             this.btn_work_read.Name = "btn_work_read";
             this.btn_work_read.Size = new System.Drawing.Size(75, 23);
             this.btn_work_read.TabIndex = 1;
@@ -242,8 +276,9 @@
             // 
             this.txt_work_id.Location = new System.Drawing.Point(6, 20);
             this.txt_work_id.Name = "txt_work_id";
-            this.txt_work_id.Size = new System.Drawing.Size(212, 21);
+            this.txt_work_id.Size = new System.Drawing.Size(100, 21);
             this.txt_work_id.TabIndex = 2;
+            this.txt_work_id.TextChanged += new System.EventHandler(this.txt_work_id_TextChanged);
             // 
             // groupBox2
             // 
@@ -252,9 +287,9 @@
             this.groupBox2.Controls.Add(this.btn_lock2);
             this.groupBox2.Controls.Add(this.btn_lock3);
             this.groupBox2.Controls.Add(this.btn_lock_all);
-            this.groupBox2.Location = new System.Drawing.Point(8, 20);
+            this.groupBox2.Location = new System.Drawing.Point(8, 94);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(746, 53);
+            this.groupBox2.Size = new System.Drawing.Size(486, 53);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "开锁";
@@ -271,7 +306,7 @@
             // 
             // btn_lock2
             // 
-            this.btn_lock2.Location = new System.Drawing.Point(143, 20);
+            this.btn_lock2.Location = new System.Drawing.Point(143, 21);
             this.btn_lock2.Name = "btn_lock2";
             this.btn_lock2.Size = new System.Drawing.Size(75, 23);
             this.btn_lock2.TabIndex = 1;
@@ -281,7 +316,7 @@
             // 
             // btn_lock3
             // 
-            this.btn_lock3.Location = new System.Drawing.Point(274, 20);
+            this.btn_lock3.Location = new System.Drawing.Point(274, 21);
             this.btn_lock3.Name = "btn_lock3";
             this.btn_lock3.Size = new System.Drawing.Size(75, 23);
             this.btn_lock3.TabIndex = 2;
@@ -291,7 +326,7 @@
             // 
             // btn_lock_all
             // 
-            this.btn_lock_all.Location = new System.Drawing.Point(405, 20);
+            this.btn_lock_all.Location = new System.Drawing.Point(405, 21);
             this.btn_lock_all.Name = "btn_lock_all";
             this.btn_lock_all.Size = new System.Drawing.Size(75, 23);
             this.btn_lock_all.TabIndex = 3;
@@ -310,6 +345,59 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "循环测试";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox8.Controls.Add(this.btn_cycle_start);
+            this.groupBox8.Location = new System.Drawing.Point(6, 22);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(746, 53);
+            this.groupBox8.TabIndex = 5;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "操作";
+            // 
+            // btn_cycle_start
+            // 
+            this.btn_cycle_start.Location = new System.Drawing.Point(6, 20);
+            this.btn_cycle_start.Name = "btn_cycle_start";
+            this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
+            this.btn_cycle_start.TabIndex = 0;
+            this.btn_cycle_start.Text = "开始";
+            this.btn_cycle_start.UseVisualStyleBackColor = true;
+            this.btn_cycle_start.Click += new System.EventHandler(this.btn_cycle_start_Click);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.btn_clear2);
+            this.groupBox7.Controls.Add(this.txt_log2);
+            this.groupBox7.Location = new System.Drawing.Point(8, 116);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(746, 552);
+            this.groupBox7.TabIndex = 1;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "日志";
+            // 
+            // btn_clear2
+            // 
+            this.btn_clear2.Location = new System.Drawing.Point(665, 523);
+            this.btn_clear2.Name = "btn_clear2";
+            this.btn_clear2.Size = new System.Drawing.Size(75, 23);
+            this.btn_clear2.TabIndex = 0;
+            this.btn_clear2.Text = "清除";
+            this.btn_clear2.UseVisualStyleBackColor = true;
+            this.btn_clear2.Click += new System.EventHandler(this.btn_clear2_Click);
+            // 
+            // txt_log2
+            // 
+            this.txt_log2.BackColor = System.Drawing.Color.Silver;
+            this.txt_log2.Location = new System.Drawing.Point(6, 20);
+            this.txt_log2.Multiline = true;
+            this.txt_log2.Name = "txt_log2";
+            this.txt_log2.ReadOnly = true;
+            this.txt_log2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txt_log2.Size = new System.Drawing.Size(734, 497);
+            this.txt_log2.TabIndex = 1;
             // 
             // btn_open
             // 
@@ -415,59 +503,6 @@
             this.cbx_port.TabIndex = 6;
             this.cbx_port.SelectedIndexChanged += new System.EventHandler(this.cbx_port_SelectedIndexChanged);
             // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.btn_clear2);
-            this.groupBox7.Controls.Add(this.txt_log2);
-            this.groupBox7.Location = new System.Drawing.Point(8, 116);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(746, 552);
-            this.groupBox7.TabIndex = 1;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "日志";
-            // 
-            // btn_clear2
-            // 
-            this.btn_clear2.Location = new System.Drawing.Point(665, 523);
-            this.btn_clear2.Name = "btn_clear2";
-            this.btn_clear2.Size = new System.Drawing.Size(75, 23);
-            this.btn_clear2.TabIndex = 0;
-            this.btn_clear2.Text = "清除";
-            this.btn_clear2.UseVisualStyleBackColor = true;
-            this.btn_clear2.Click += new System.EventHandler(this.btn_clear2_Click);
-            // 
-            // txt_log2
-            // 
-            this.txt_log2.BackColor = System.Drawing.Color.Silver;
-            this.txt_log2.Location = new System.Drawing.Point(6, 20);
-            this.txt_log2.Multiline = true;
-            this.txt_log2.Name = "txt_log2";
-            this.txt_log2.ReadOnly = true;
-            this.txt_log2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_log2.Size = new System.Drawing.Size(734, 497);
-            this.txt_log2.TabIndex = 1;
-            // 
-            // groupBox8
-            // 
-            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox8.Controls.Add(this.btn_cycle_start);
-            this.groupBox8.Location = new System.Drawing.Point(6, 22);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(746, 53);
-            this.groupBox8.TabIndex = 5;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "操作";
-            // 
-            // btn_cycle_start
-            // 
-            this.btn_cycle_start.Location = new System.Drawing.Point(6, 20);
-            this.btn_cycle_start.Name = "btn_cycle_start";
-            this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
-            this.btn_cycle_start.TabIndex = 0;
-            this.btn_cycle_start.Text = "开始";
-            this.btn_cycle_start.UseVisualStyleBackColor = true;
-            this.btn_cycle_start.Click += new System.EventHandler(this.btn_cycle_start_Click);
-            // 
             // Zm301TestWidnow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -481,6 +516,8 @@
             this.Text = "ZM301研发压力测试工具";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -491,11 +528,11 @@
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -539,5 +576,8 @@
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Button btn_clear2;
         private System.Windows.Forms.TextBox txt_log2;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Button btn_name_write;
+        private System.Windows.Forms.TextBox txt_name;
     }
 }
