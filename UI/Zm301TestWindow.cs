@@ -587,29 +587,36 @@ namespace HelloCSharp.UI
                         {
                             //0表示没有，1表示有
                             //开锁事件
-                            _openLock = Convert.ToInt32(strArray[10]) - 51;
+                            _openLock = Convert.ToInt32(strArray[10], 16) - 51;
                             //开锁事件次数
-                            int openLockCount = Convert.ToInt32(strArray[12]) + Convert.ToInt32(strArray[11]);
+                            int openLockCount = (Convert.ToInt32(strArray[12], 16) - 51) + (Convert.ToInt32(strArray[11], 16) - 51);
                             //关锁事件
-                            _closeLock = Convert.ToInt32(strArray[13]) - 51;
+                            _closeLock = Convert.ToInt32(strArray[13], 16) - 51;
                             //关锁事件次数
-                            int closeLockCount = Convert.ToInt32(strArray[15]) + Convert.ToInt32(strArray[14]);
+                            int closeLockCount = (Convert.ToInt32(strArray[15], 16) - 51) + (Convert.ToInt32(strArray[14], 16) - 51);
                             //开门事件
-                            _openDoor = Convert.ToInt32(strArray[16]) - 51;
+                            _openDoor = Convert.ToInt32(strArray[16], 16) - 51;
                             //开门事件次数
-                            int openDoorCount = Convert.ToInt32(strArray[18]) + Convert.ToInt32(strArray[17]);
+                            int openDoorCount = (Convert.ToInt32(strArray[18], 16) - 51) + (Convert.ToInt32(strArray[17], 16) - 51);
                             //关门事件
-                            _closeDoor = Convert.ToInt32(strArray[19]) - 51;
+                            _closeDoor = Convert.ToInt32(strArray[19], 16) - 51;
                             //关门事件次数
-                            int closeDoorCount = Convert.ToInt32(strArray[21]) + Convert.ToInt32(strArray[20]);
+                            int closeDoorCount = (Convert.ToInt32(strArray[21], 16) - 51) + (Convert.ToInt32(strArray[20], 16) - 51);
                             //窃电事件
-                            _steal = Convert.ToInt32(strArray[22]) - 51;
+                            _steal = Convert.ToInt32(strArray[22], 16) - 51;
                             //窃电事件次数
-                            int stealCount = Convert.ToInt32(strArray[24]) + Convert.ToInt32(strArray[23]);
+                            int stealCount = (Convert.ToInt32(strArray[24], 16) - 51) + (Convert.ToInt32(strArray[23], 16) - 51);
                             //振动事件
-                            _vibrate = Convert.ToInt32(strArray[25]) - 51;
+                            _vibrate = Convert.ToInt32(strArray[25], 16) - 51;
                             //振动事件次数
-                            int vibrateCount = Convert.ToInt32(strArray[27]) + Convert.ToInt32(strArray[26]);
+                            int vibrateCount = (Convert.ToInt32(strArray[27], 16) - 51) + (Convert.ToInt32(strArray[26], 16) - 51);
+                            LogTxtChangedByDele("事件总数，开锁事件：" + _openLock + "，次数：" + openLockCount +
+                                 "\r\n事件总数，关锁事件：" + _closeLock + "，次数：" + closeLockCount +
+                                 "\r\n事件总数，开门事件：" + _openDoor + "，次数：" + openDoorCount +
+                                 "\r\n事件总数，关门事件：" + _closeDoor + "，次数：" + closeDoorCount +
+                                 "\r\n事件总数，窃电事件：" + _steal + "，次数：" + stealCount +
+                                 "\r\n事件总数，振动事件：" + _vibrate + "，次数：" + vibrateCount +
+                                 "\r\n", Color.Green);
                         }
                         break;
                     //开锁
