@@ -545,11 +545,11 @@ namespace HelloCSharp.UI
                     //对时
                     case "87":
                         //设置对时返回的是版本号
-                        int ver1 = Convert.ToInt32(strArray[10]) - 33;
+                        int ver1 = Convert.ToInt32(strArray[10]) - 51;
                         string verStr1 = MyConvertUtil.HexStrToStr(ver1 + "");
-                        int ver2 = Convert.ToInt32(strArray[11]) - 33;
+                        int ver2 = Convert.ToInt32(strArray[11]) - 51;
                         string verStr2 = MyConvertUtil.HexStrToStr(ver2 + "");
-                        int ver3 = Convert.ToInt32(strArray[12]) - 33;
+                        int ver3 = Convert.ToInt32(strArray[12]) - 51;
                         string verStr3 = MyConvertUtil.HexStrToStr(ver3 + "");
                         int ver4 = MyConvertUtil.HexStrToInt(strArray[13]) - 51;
                         string hexVerStr4 = MyConvertUtil.IntToHexStr(ver4 + "");
@@ -560,27 +560,27 @@ namespace HelloCSharp.UI
                         {
                             //0表示没有，1表示有
                             //开锁事件
-                            _openLock = Convert.ToInt32(strArray[10]) - 33;
+                            _openLock = Convert.ToInt32(strArray[10]) - 51;
                             //开锁事件次数
                             int openLockCount = Convert.ToInt32(strArray[12]) + Convert.ToInt32(strArray[11]);
                             //关锁事件
-                            _closeLock = Convert.ToInt32(strArray[13]) - 33;
+                            _closeLock = Convert.ToInt32(strArray[13]) - 51;
                             //关锁事件次数
                             int closeLockCount = Convert.ToInt32(strArray[15]) + Convert.ToInt32(strArray[14]);
                             //开门事件
-                            _openDoor = Convert.ToInt32(strArray[16]) - 33;
+                            _openDoor = Convert.ToInt32(strArray[16]) - 51;
                             //开门事件次数
                             int openDoorCount = Convert.ToInt32(strArray[18]) + Convert.ToInt32(strArray[17]);
                             //关门事件
-                            _closeDoor = Convert.ToInt32(strArray[19]) - 33;
+                            _closeDoor = Convert.ToInt32(strArray[19]) - 51;
                             //关门事件次数
                             int closeDoorCount = Convert.ToInt32(strArray[21]) + Convert.ToInt32(strArray[20]);
                             //窃电事件
-                            _steal = Convert.ToInt32(strArray[22]) - 33;
+                            _steal = Convert.ToInt32(strArray[22]) - 51;
                             //窃电事件次数
                             int stealCount = Convert.ToInt32(strArray[24]) + Convert.ToInt32(strArray[23]);
                             //振动事件
-                            _vibrate = Convert.ToInt32(strArray[25]) - 33;
+                            _vibrate = Convert.ToInt32(strArray[25]) - 51;
                             //振动事件次数
                             int vibrateCount = Convert.ToInt32(strArray[27]) + Convert.ToInt32(strArray[26]);
                         }
@@ -653,56 +653,55 @@ namespace HelloCSharp.UI
                     case "8A":
                         {
                             //状态信息：00未定位，1已定位
-                            int state = Convert.ToInt32(strArray[10]) - 33;
-                            if (1 == state)
-                            {
-                                //时间
-                                int ss = Convert.ToInt32(strArray[11]) - 33;
-                                int mm = Convert.ToInt32(strArray[12]) - 33;
-                                int HH = Convert.ToInt32(strArray[13]) - 33;
-                                int dd = Convert.ToInt32(strArray[14]) - 33;
-                                int MM = Convert.ToInt32(strArray[15]) - 33;
-                                int yy = Convert.ToInt32(strArray[16]) - 33;
-                                string timeStr = yy + "年" + MM + "月" + dd + "日" + HH + "时" + mm + "分" + ss + "秒";
-                                //经纬度
-                                int lat1 = Convert.ToInt32(strArray[17]) - 33;
-                                int lat2 = Convert.ToInt32(strArray[18]) - 33;
-                                int lat3 = Convert.ToInt32(strArray[19]) - 33;
-                                int lat4 = Convert.ToInt32(strArray[20]) - 33;
-                                string latStr = "" + lat1 + lat2 + lat3 + lat4;
-                                int lat = Convert.ToInt32(latStr) * 1000000;
-                                int lot1 = Convert.ToInt32(strArray[21]) - 33;
-                                int lot2 = Convert.ToInt32(strArray[22]) - 33;
-                                int lot3 = Convert.ToInt32(strArray[23]) - 33;
-                                int lot4 = Convert.ToInt32(strArray[24]) - 33;
-                                string lotStr = "" + lot1 + lot2 + lot3 + lot4;
-                                int lot = Convert.ToInt32(lotStr) * 1000000;
-                                //海拔
-                                int height1 = Convert.ToInt32(strArray[25]) - 33;
-                                int height2 = Convert.ToInt32(strArray[26]) - 33;
-                                string heightStr = "" + height1 + height2;
-                                int height = Convert.ToInt32(heightStr);
-                                //速度
-                                int speed1 = Convert.ToInt32(strArray[27]) - 33;
-                                int speed2 = Convert.ToInt32(strArray[28]) - 33;
-                                string speedStr = "" + speed1 + speed2;
-                                int speed = Convert.ToInt32(speedStr);
-                                //方向
-                                int dir1 = Convert.ToInt32(strArray[29]) - 33;
-                                int dir2 = Convert.ToInt32(strArray[30]) - 33;
-                                string dirStr = "" + dir1 + dir2;
-                                int dir = Convert.ToInt32(dirStr);
-                                //温度
-                                int temperature = Convert.ToInt32(strArray[31]) - 33;
-                                string parseStr = timeStr + "   经度：" + lat + "   纬度：" + lot + "  海拔：" + height + "米   速度" + speed + "   方向：" + dir + "   温度：" + temperature;
-                                GpsTxtChangedByDele(parseStr);
-                                LogTxtChangedByDele(parseStr + "\r\n", Color.Green);
-                            }
-                            else
-                            {
-                                GpsTxtChangedByDele("未定位");
-                                LogTxtChangedByDele("未定位\r\n", Color.Red);
-                            }
+                            int state = Convert.ToInt32(strArray[10], 16) - 51;
+                            LogTxtChangedByDele("GPS位置，状态信息：" + (state == 1 ? "已定位" : "未定位") + "\r\n", Color.Green);
+                            //时间
+                            string hex_yy = (Convert.ToInt32(strArray[16], 16) - 51).ToString("X");
+                            string hex_MM = (Convert.ToInt32(strArray[15], 16) - 51).ToString("X");
+                            string hex_DD = (Convert.ToInt32(strArray[14], 16) - 51).ToString("X");
+                            string hex_HH = (Convert.ToInt32(strArray[13], 16) - 51).ToString("X");
+                            string hex_mm = (Convert.ToInt32(strArray[12], 16) - 51).ToString("X");
+                            string hex_ss = (Convert.ToInt32(strArray[11], 16) - 51).ToString("X");
+                            string hexTime = "20" + hex_yy + "年" + hex_MM + "月" + hex_DD + "日" + hex_HH + "时" + hex_mm + "分" + hex_ss + "秒";
+                            LogTxtChangedByDele("GPS位置，时间：" + hexTime + "\r\n", Color.Green);
+                            //经度，因为需要转换成10进制，所以要判断负数情况
+                            string hexLat1 = (Convert.ToInt32(strArray[20], 16) - 51).ToString("X").Replace("FF", "");
+                            string hexLat2 = (Convert.ToInt32(strArray[19], 16) - 51).ToString("X").Replace("FF", "");
+                            string hexLat3 = (Convert.ToInt32(strArray[18], 16) - 51).ToString("X").Replace("FF", "");
+                            string hexLat4 = (Convert.ToInt32(strArray[17], 16) - 51).ToString("X").Replace("FF", "");
+                            double latNum = Convert.ToDouble(Convert.ToInt32(hexLat1 + hexLat2 + hexLat3 + hexLat4, 16)) / 1000000;
+                            LogTxtChangedByDele("GPS位置，经度：" + latNum + "\r\n", Color.Green);
+                            //纬度，因为需要转换成10进制，所以要判断负数情况
+                            string hexLot1 = (Convert.ToInt32(strArray[24], 16) - 51).ToString("X").Replace("FF", "");
+                            string hexLot2 = (Convert.ToInt32(strArray[23], 16) - 51).ToString("X").Replace("FF", "");
+                            string hexLot3 = (Convert.ToInt32(strArray[22], 16) - 51).ToString("X").Replace("FF", "");
+                            string hexLot4 = (Convert.ToInt32(strArray[21], 16) - 51).ToString("X").Replace("FF", "");
+                            double lotNum = Convert.ToDouble(Convert.ToInt32(hexLot1 + hexLot2 + hexLot3 + hexLot4, 16)) / 1000000;
+                            LogTxtChangedByDele("GPS位置，纬度：" + lotNum + "\r\n", Color.Green);
+                            //海拔
+                            string height1 = (Convert.ToInt32(strArray[26], 16) - 51).ToString("X");
+                            string height2 = (Convert.ToInt32(strArray[25], 16) - 51).ToString("X");
+                            string heightStr = height1 + height2;
+                            int height = Convert.ToInt32(heightStr, 16);
+                            LogTxtChangedByDele("GPS位置，海拔：" + height + "米" + "\r\n", Color.Green);
+                            //速度
+                            string speed1 = (Convert.ToInt32(strArray[28], 16) - 51).ToString("X");
+                            string speed2 = (Convert.ToInt32(strArray[27], 16) - 51).ToString("X");
+                            string speedStr = speed1 + speed2;
+                            int speed = Convert.ToInt32(speedStr, 16);
+                            LogTxtChangedByDele("GPS位置，速度：" + speed + "km/h\r\n", Color.Green);
+                            //方向
+                            string dir1 = (Convert.ToInt32(strArray[30], 16) - 51).ToString("X");
+                            string dir2 = (Convert.ToInt32(strArray[29], 16) - 51).ToString("X");
+                            string dirStr = dir1 + dir2;
+                            int dir = Convert.ToInt32(dirStr, 16);
+                            LogTxtChangedByDele("GPS位置，方向：" + dir + "\r\n", Color.Green);
+                            //温度
+                            string temperature = (Convert.ToInt32(strArray[31], 16) - 51).ToString("X");
+                            LogTxtChangedByDele("GPS位置，温度：" + temperature + "℃\r\n", Color.Green);
+                            string parseStr = hexTime + "，经度：" + latNum + "，纬度：" + lotNum + "，海拔：" + height + "米，速度" + speed + "km/h，方向：" + dir + "，温度：" + temperature + "℃";
+                            GpsTxtChangedByDele(parseStr);
+
                         }
                         break;
                 }
@@ -907,6 +906,12 @@ namespace HelloCSharp.UI
                     _eventAllThread.Start();
                 }
                 btn_cycle_start.Text = "停止";
+                _openLockThreadFlag = true;
+                _closeLockThreadFlag = true;
+                _openDoorThreadFlag = true;
+                _closeDoorThreadFlag = true;
+                _stealThreadFlag = true;
+                _vibrateThreadFlag = true;
             }
             else
             {
@@ -999,6 +1004,7 @@ namespace HelloCSharp.UI
                     //开启监听读取超时的线程，里面对串口有作判断，必须放在串口操作之后
                     if (null == _timeOutThread)
                     {
+                        _timeOutThreadFlag = true;
                         _timeOutThread = new Thread(TimeOutForThread);
                         _timeOutThread.Start();
                     }

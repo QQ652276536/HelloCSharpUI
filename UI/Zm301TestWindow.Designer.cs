@@ -113,7 +113,7 @@
             // 
             this.groupBox9.Controls.Add(this.btn_name_write);
             this.groupBox9.Controls.Add(this.txt_name);
-            this.groupBox9.Location = new System.Drawing.Point(6, 22);
+            this.groupBox9.Location = new System.Drawing.Point(6, 17);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(273, 53);
             this.groupBox9.TabIndex = 5;
@@ -175,18 +175,18 @@
             // 
             this.groupBox5.Controls.Add(this.btn_gps);
             this.groupBox5.Controls.Add(this.txt_gps);
-            this.groupBox5.Location = new System.Drawing.Point(8, 250);
+            this.groupBox5.Location = new System.Drawing.Point(8, 232);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(746, 53);
+            this.groupBox5.Size = new System.Drawing.Size(746, 74);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "GPS位置";
             // 
             // btn_gps
             // 
-            this.btn_gps.Location = new System.Drawing.Point(405, 19);
+            this.btn_gps.Location = new System.Drawing.Point(652, 22);
             this.btn_gps.Name = "btn_gps";
-            this.btn_gps.Size = new System.Drawing.Size(75, 27);
+            this.btn_gps.Size = new System.Drawing.Size(75, 43);
             this.btn_gps.TabIndex = 0;
             this.btn_gps.Text = "查询";
             this.btn_gps.UseVisualStyleBackColor = true;
@@ -196,10 +196,12 @@
             // 
             this.txt_gps.BackColor = System.Drawing.Color.Silver;
             this.txt_gps.Enabled = false;
-            this.txt_gps.Location = new System.Drawing.Point(6, 20);
+            this.txt_gps.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txt_gps.Location = new System.Drawing.Point(6, 22);
+            this.txt_gps.Multiline = true;
             this.txt_gps.Name = "txt_gps";
             this.txt_gps.ReadOnly = true;
-            this.txt_gps.Size = new System.Drawing.Size(343, 26);
+            this.txt_gps.Size = new System.Drawing.Size(622, 43);
             this.txt_gps.TabIndex = 2;
             // 
             // groupBox4
@@ -207,7 +209,7 @@
             this.groupBox4.Controls.Add(this.btn_box_write);
             this.groupBox4.Controls.Add(this.btn_box_read);
             this.groupBox4.Controls.Add(this.txt_box_id);
-            this.groupBox4.Location = new System.Drawing.Point(428, 173);
+            this.groupBox4.Location = new System.Drawing.Point(428, 163);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(320, 53);
             this.groupBox4.TabIndex = 2;
@@ -249,7 +251,7 @@
             this.groupBox3.Controls.Add(this.btn_work_write);
             this.groupBox3.Controls.Add(this.btn_work_read);
             this.groupBox3.Controls.Add(this.txt_work_id);
-            this.groupBox3.Location = new System.Drawing.Point(6, 173);
+            this.groupBox3.Location = new System.Drawing.Point(6, 163);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(368, 53);
             this.groupBox3.TabIndex = 3;
@@ -293,7 +295,7 @@
             this.groupBox2.Controls.Add(this.btn_lock2);
             this.groupBox2.Controls.Add(this.btn_lock3);
             this.groupBox2.Controls.Add(this.btn_lock_all);
-            this.groupBox2.Location = new System.Drawing.Point(8, 94);
+            this.groupBox2.Location = new System.Drawing.Point(8, 89);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(552, 53);
             this.groupBox2.TabIndex = 4;
