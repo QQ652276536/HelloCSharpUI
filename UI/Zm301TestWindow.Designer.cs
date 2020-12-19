@@ -53,7 +53,6 @@
             this.btn_lock3 = new System.Windows.Forms.Button();
             this.btn_lock_all = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.btn_cycle_start = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.txt_log2 = new System.Windows.Forms.RichTextBox();
@@ -77,7 +76,6 @@
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -344,8 +342,8 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.groupBox8);
             this.tabPage2.Controls.Add(this.groupBox7);
+            this.tabPage2.Controls.Add(this.btn_cycle_start);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -353,20 +351,9 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "循环测试";
             // 
-            // groupBox8
-            // 
-            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox8.Controls.Add(this.btn_cycle_start);
-            this.groupBox8.Location = new System.Drawing.Point(8, 23);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(746, 53);
-            this.groupBox8.TabIndex = 5;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "操作";
-            // 
             // btn_cycle_start
             // 
-            this.btn_cycle_start.Location = new System.Drawing.Point(6, 20);
+            this.btn_cycle_start.Location = new System.Drawing.Point(328, 15);
             this.btn_cycle_start.Name = "btn_cycle_start";
             this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
             this.btn_cycle_start.TabIndex = 0;
@@ -376,27 +363,27 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.txt_log2);
             this.groupBox7.Controls.Add(this.btn_clear2);
-            this.groupBox7.Location = new System.Drawing.Point(8, 116);
+            this.groupBox7.Controls.Add(this.txt_log2);
+            this.groupBox7.Location = new System.Drawing.Point(8, 44);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(746, 552);
+            this.groupBox7.Size = new System.Drawing.Size(746, 624);
             this.groupBox7.TabIndex = 1;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "日志";
             // 
             // txt_log2
             // 
-            this.txt_log2.Location = new System.Drawing.Point(7, 26);
+            this.txt_log2.Location = new System.Drawing.Point(6, 25);
             this.txt_log2.Name = "txt_log2";
             this.txt_log2.ReadOnly = true;
-            this.txt_log2.Size = new System.Drawing.Size(733, 491);
+            this.txt_log2.Size = new System.Drawing.Size(733, 566);
             this.txt_log2.TabIndex = 1;
             this.txt_log2.Text = "";
             // 
             // btn_clear2
             // 
-            this.btn_clear2.Location = new System.Drawing.Point(665, 523);
+            this.btn_clear2.Location = new System.Drawing.Point(665, 597);
             this.btn_clear2.Name = "btn_clear2";
             this.btn_clear2.Size = new System.Drawing.Size(75, 23);
             this.btn_clear2.TabIndex = 0;
@@ -533,7 +520,6 @@
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -574,7 +560,6 @@
         private System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.ComboBox cbx_parity;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.Button btn_cycle_start;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Button btn_clear2;

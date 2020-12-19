@@ -545,15 +545,15 @@ namespace HelloCSharp.UI
                     //对时
                     case "87":
                         //设置对时返回的是版本号
-                        int ver1 = Convert.ToInt32(strArray[10]) - 51;
-                        string verStr1 = MyConvertUtil.HexStrToStr(ver1 + "");
-                        int ver2 = Convert.ToInt32(strArray[11]) - 51;
-                        string verStr2 = MyConvertUtil.HexStrToStr(ver2 + "");
-                        int ver3 = Convert.ToInt32(strArray[12]) - 51;
-                        string verStr3 = MyConvertUtil.HexStrToStr(ver3 + "");
-                        int ver4 = MyConvertUtil.HexStrToInt(strArray[13]) - 51;
-                        string hexVerStr4 = MyConvertUtil.IntToHexStr(ver4 + "");
-                        LogTxtChangedByDele("对时成功，版本号：" + verStr1 + verStr2 + "." + verStr3 + "." + hexVerStr4 + "\r\n", Color.Green);
+                        int ver1 = Convert.ToInt32(strArray[10], 16) - 51;
+                        string hexVer1 = MyConvertUtil.HexStrToStr(ver1.ToString("X"));
+                        int ver2 = Convert.ToInt32(strArray[11], 16) - 51;
+                        string hexVer2 = MyConvertUtil.HexStrToStr(ver2.ToString("X"));
+                        int ver3 = Convert.ToInt32(strArray[12], 16) - 51;
+                        string hexVer3 = MyConvertUtil.HexStrToStr(ver3.ToString("X"));
+                        int ver4 = Convert.ToInt32(strArray[13], 16) - 51;
+                        string hexVer4 = MyConvertUtil.HexStrToStr(ver4.ToString("X"));
+                        LogTxtChangedByDele("对时成功，版本号：" + hexVer1 + hexVer2 + "." + hexVer3 + "." + hexVer4 + "\r\n", Color.Green);
                         break;
                     //事件总数
                     case "80":
