@@ -2,7 +2,6 @@
 using HelloCSharp.Util;
 using System;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
@@ -101,6 +100,11 @@ namespace HelloCSharp.UI
         /// </summary>
         private readonly string[] PARITY_ARRAY = new string[] { "None", "Odd", "Even", "Mark", "Space" };
 
+        /// <summary>
+        /// 读取超时时间
+        /// </summary>
+        private readonly int TIME_OUT = 2 * 1000;
+
         private MyLogger _logger = MyLogger.Instance;
         //用于获取当前毫秒，Ticks为纳秒，转换为毫秒需要除以10000，转换为秒需要除以10000000
         private DateTime DATETIME = new DateTime(1970, 1, 1, 0, 0, 0, 0);
@@ -116,8 +120,6 @@ namespace HelloCSharp.UI
         private string[] _portNameArray;
         private string _receivedStr = "";
         private int _tabSelectedIndex = 0;
-        //蓝牙名称，如果设置了每次发送指令的时候都是要包含进去的
-        private string _hexName = "";
         //串口名
         private string _portName = "";
         //波特率、数据位
@@ -128,6 +130,12 @@ namespace HelloCSharp.UI
         private long _currentMillis = 0;
         //记录具体操作
         private string _operation = "";
+        //蓝牙名称，如果设置了每次发送指令的时候都是要包含进去的
+        private string _hexName = "";
+        //工号
+        private string _hexWorkId = "";
+        //循环测试时当前执行到的步骤：0表示对时、1表示设置工号、2表示查询事件总数
+        private int _cycleTestStep = 0;
 
         public Zm301TestWidnow()
         {
@@ -147,7 +155,7 @@ namespace HelloCSharp.UI
                 //二、接收数据的缓存为空则说明未收到任何数据
                 //三、当前毫秒值与记录的毫秒值之差大于1秒则表示超时
                 long tempCurrentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                if (!"".Equals(_operation) && "".Equals(_receivedStr) && _currentMillis > 0 && tempCurrentMillis - _currentMillis > 1000)
+                if (!"".Equals(_operation) && "".Equals(_receivedStr) && _currentMillis > 0 && tempCurrentMillis - _currentMillis > TIME_OUT)
                 {
                     switch (_operation)
                     {
@@ -160,6 +168,8 @@ namespace HelloCSharp.UI
                         case "读取表箱号": LogTxtChangedByDele("读取表箱号超时\r\n", Color.Red); break;
                         case "设置表箱号": LogTxtChangedByDele("设置表箱号超时\r\n", Color.Red); break;
                         case "查询GPS位置": LogTxtChangedByDele("查询GPS位置超时\r\n", Color.Red); break;
+                        case "对时": LogTxtChangedByDele("对时超时\r\n", Color.Red); break;
+                        case "查询事件总数": LogTxtChangedByDele("查询事件总数超时\r\n", Color.Red); break;
                     }
                     //重置记录的状态
                     _currentMillis = 0;
@@ -245,97 +255,100 @@ namespace HelloCSharp.UI
         /// </summary>
         private void CycleTest()
         {
+            //循环流程：先发一次对时，再发一次设置工号（如果有填写工号），然后循环查询事件总数，事件数大于零则一直循环查询对应的事件
             while (_eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                //先发对时
-                //FE FE FE FE 68 22 23 01 56 34 00 68 07 06 57 85 34 34 34 33 58 16
-                int ss = _nowTime.Second + 33;
-                int mm = _nowTime.Minute + 33;
-                int HH = _nowTime.Hour + 33;
-                int dd = _nowTime.Day + 33;
-                int MM = _nowTime.Month + 33;
-                int yy = _nowTime.Year % 100 + 33;
-                if (!"".Equals(_hexName))
+                //等待判断超时的线程将重置记录再进行下一次测试
+                if (_currentMillis > 0)
+                    continue;
+                switch (_cycleTestStep)
                 {
-                    string timeCmd = "68" + _hexName + "00680706" + ss + mm + HH + dd + MM + yy;
-                    string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
-                    timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
-                    byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
-                    _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
-                    _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                    LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
-                }
-                else
-                {
-                    string timeCmd = "68222301563400680706" + ss + mm + HH + dd + MM + yy;
-                    string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
-                    timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
-                    byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
-                    _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
-                    _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                    LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
-                }
-                Thread.Sleep(1 * 1000);
-                //TODO:再发设置工号
-                //Thread.Sleep(1 * 1000);
-                //最后发查询事件总数
-                _serialPort.Write(READ_EVENT_ALL_BYTE, 0, READ_EVENT_ALL_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
-                Thread.Sleep(1 * 1000);
-                //开启循环测试开锁事件查询
-                if (_openLock == 1)
-                {
-                    if (null == _openLockThread)
-                    {
-                        _openLockThread = new Thread(CycleTest_OpenLock);
-                        _openLockThread.Start();
-                    }
-                }
-                //开启循环测试关锁事件查询
-                if (_closeLock == 1)
-                {
-                    if (null == _closeLockThread)
-                    {
-                        _closeLockThread = new Thread(CycleTest_CloseLock);
-                        _closeLockThread.Start();
-                    }
-                }
-                //开启循环测试开门事件查询
-                if (_openDoor == 1)
-                {
-                    if (null == _openDoorThread)
-                    {
-                        _openDoorThread = new Thread(CycleTest_OpenDoor);
-                        _openDoorThread.Start();
-                    }
-                }
-                //开启循环测试关门事件查询
-                if (_closeDoor == 1)
-                {
-                    if (null == _closeDoorThread)
-                    {
-                        _closeDoorThread = new Thread(CycleTest_CloseDoor);
-                        _closeDoorThread.Start();
-                    }
-                }
-                //开启循环测试窃电事件查询
-                if (_steal == 1)
-                {
-                    if (null == _stealThread)
-                    {
-                        _stealThread = new Thread(CycleTest_Steal);
-                        _stealThread.Start();
-                    }
-                }
-                //开启循环测试振动事件查询
-                if (_vibrate == 1)
-                {
-                    if (null == _vibrateThread)
-                    {
-                        _vibrateThread = new Thread(CycleTest_Vibrate);
-                        _vibrateThread.Start();
-                    }
+                    //对时，FE FE FE FE 68 XX XX XX XX XX 00 68 07 06 秒 分 时 日 月 年 校验码 16
+                    case 0:
+                        int ss = _nowTime.Second + 33;
+                        int mm = _nowTime.Minute + 33;
+                        int HH = _nowTime.Hour + 33;
+                        int dd = _nowTime.Day + 33;
+                        int MM = _nowTime.Month + 33;
+                        int yy = _nowTime.Year % 100 + 33;
+                        _operation = "对时";
+                        if (!"".Equals(_hexName))
+                        {
+                            string timeCmd = "68" + _hexName + "00680706" + ss + mm + HH + dd + MM + yy;
+                            string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
+                            timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
+                            byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
+                            _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
+                        }
+                        else
+                        {
+                            string timeCmd = "68222301563400680706" + ss + mm + HH + dd + MM + yy;
+                            string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
+                            timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
+                            byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
+                            _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
+                        }
+                        _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                        Thread.Sleep(1 * 1000);
+                        _cycleTestStep = 1;
+                        break;
+                    //设置工号，调用设置工号的按钮事件即可
+                    case 1:
+                        if (!"".Equals(_hexWorkId))
+                        {
+                            btn_work_write.PerformClick();
+                            Thread.Sleep(1 * 1000);
+                        }
+                        _cycleTestStep = 2;
+                        break;
+                    //查询事件总数
+                    case 2:
+                        _operation = "查询事件总数";
+                        _serialPort.Write(READ_EVENT_ALL_BYTE, 0, READ_EVENT_ALL_BYTE.Length);
+                        _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                        LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
+                        Thread.Sleep(1 * 1000);
+                        //开启循环测试开锁事件查询
+                        if (_openLock == 1 && null == _openLockThread)
+                        {
+                            _openLockThread = new Thread(CycleTest_OpenLock);
+                            _openLockThread.Start();
+                        }
+                        //开启循环测试关锁事件查询
+                        if (_closeLock == 1 && null == _closeLockThread)
+                        {
+                            _closeLockThread = new Thread(CycleTest_CloseLock);
+                            _closeLockThread.Start();
+                        }
+                        //开启循环测试开门事件查询
+                        if (_openDoor == 1 && null == _openDoorThread)
+                        {
+                            _openDoorThread = new Thread(CycleTest_OpenDoor);
+                            _openDoorThread.Start();
+                        }
+                        //开启循环测试关门事件查询
+                        if (_closeDoor == 1 && null == _closeDoorThread)
+                        {
+                            _closeDoorThread = new Thread(CycleTest_CloseDoor);
+                            _closeDoorThread.Start();
+                        }
+                        //开启循环测试窃电事件查询
+                        if (_steal == 1 && null == _stealThread)
+                        {
+                            _stealThread = new Thread(CycleTest_Steal);
+                            _stealThread.Start();
+                        }
+                        //开启循环测试振动事件查询
+                        if (_vibrate == 1 && null == _vibrateThread)
+                        {
+                            _vibrateThread = new Thread(CycleTest_Vibrate);
+                            _vibrateThread.Start();
+                        }
+                        break;
                 }
             }
         }
@@ -362,7 +375,6 @@ namespace HelloCSharp.UI
             else
                 txt_gps.Text = str;
         }
-
 
         /// <summary>
         /// 修改表箱号文本框内容
@@ -409,11 +421,11 @@ namespace HelloCSharp.UI
                     else
                     {
                         txt_log.SelectionColor = color;
+                        txt_log.AppendText(str);
                         //设置光标的位置到文本尾
                         txt_log.Select(txt_log.TextLength, 0);
                         //滚动到控件光标处  
                         txt_log.ScrollToCaret();
-                        txt_log.AppendText(str);
                     }
                     break;
                 case 1:
@@ -425,11 +437,11 @@ namespace HelloCSharp.UI
                     else
                     {
                         txt_log2.SelectionColor = color;
+                        txt_log2.AppendText(str);
                         //设置光标的位置到文本尾
                         txt_log2.Select(txt_log2.TextLength, 0);
                         //滚动到控件光标处  
                         txt_log2.ScrollToCaret();
-                        txt_log2.AppendText(str);
                     }
                     break;
             }
@@ -524,6 +536,21 @@ namespace HelloCSharp.UI
             //btn_name_write.Enabled = flag;
             //btn_work_write.Enabled = flag;
             //btn_box_write.Enabled = flag;
+            //打开串口后禁止更改参数
+            if (flag)
+            {
+                cbx_port.Enabled = false;
+                cbx_rate.Enabled = false;
+                cbx_data.Enabled = false;
+                cbx_parity.Enabled = false;
+            }
+            else
+            {
+                cbx_port.Enabled = true;
+                cbx_rate.Enabled = true;
+                cbx_data.Enabled = true;
+                cbx_parity.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -794,6 +821,11 @@ namespace HelloCSharp.UI
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             _tabSelectedIndex = tabControl.SelectedIndex;
+            //切换至单项测试时如果有循环测试则停止
+            if (_tabSelectedIndex == 0 && "停止".Equals(btn_cycle_start.Text.ToString()))
+            {
+                btn_cycle_start_Click(null, null);
+            }
         }
 
         /// <summary>
@@ -879,7 +911,7 @@ namespace HelloCSharp.UI
             READ_EVENT_ALL = MyConvertUtil.StrAddChar(READ_EVENT_ALL, 2, " ");
             READ_EVENT_ALL_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL);
 
-            LogTxtChangedByDele("蓝牙名称即将设置为" + input + "\r\n", Color.Black);
+            LogTxtChangedByDele("蓝牙名称即将设置为" + input + "，发送任意指令即生效\r\n", Color.Blue);
         }
 
         /// <summary>
@@ -945,37 +977,10 @@ namespace HelloCSharp.UI
                 _eventAllThread = null;
                 btn_cycle_start.Text = "开始";
             }
-        }
-
-        private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _portName = _portNameArray[cbx_port.SelectedIndex];
-            LogTxtChangedByDele("串口名称：" + _portName + "\r\n", Color.Black);
-        }
-
-        private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            LogTxtChangedByDele("波特率：" + _rate + "\r\n", Color.Black);
-        }
-
-        private void cbx_data_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _data = DATA_ARRAY[cbx_data.SelectedIndex];
-            LogTxtChangedByDele("数据位：" + _data + "\r\n", Color.Black);
-        }
-
-        private void cbx_parity_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string str = PARITY_ARRAY[cbx_parity.SelectedIndex];
-            switch (str)
-            {
-                case "None": _parity = Parity.None; break;
-                case "Odd": _parity = Parity.Odd; break;
-                case "Even": _parity = Parity.Even; break;
-                case "Mark": _parity = Parity.Mark; break;
-                case "Space": _parity = Parity.Space; break;
-            }
-            LogTxtChangedByDele("校验位：" + _parity + "\r\n", Color.Black);
+            //重置记录的状态
+            _currentMillis = 0;
+            _operation = "";
+            _cycleTestStep = 0;
         }
 
         /// <summary>
@@ -1025,12 +1030,22 @@ namespace HelloCSharp.UI
                     if (null != _timeOutThread)
                         _timeOutThread.Abort();
                     _timeOutThread = null;
+                    //关闭循环测试的线程
+                    if ("停止".Equals(btn_cycle_start.Text.ToString()))
+                    {
+                        btn_cycle_start_Click(null, null);
+                    }
                     //关闭串口
                     _serialPort.Close();
+                    _serialPort = null;
                     LogTxtChangedByDele("已关闭：" + _portName + "\r\n", Color.Black);
                     EnableBtn(false);
                     btn_open.Text = "打开串口";
                 }
+                //重置记录的状态
+                _currentMillis = 0;
+                _operation = "";
+                _cycleTestStep = 0;
             }
             catch (Exception ex)
             {
@@ -1111,35 +1126,31 @@ namespace HelloCSharp.UI
         private void btn_work_write_Click(object sender, EventArgs e)
         {
             string input = txt_work_id.Text;
-            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{8}");
-            if (flag)
+            string cmdStr = "68222301563400680B08";
+            //有设置蓝牙名称
+            if (!"".Equals(_hexName))
+                cmdStr = "68" + _hexName + "00680B08";
+            _hexWorkId = "";
+            for (int i = 0; i < input.Length; i++)
             {
-                string cmdStr = "68222301563400680B08";
-                //有设置蓝牙名称
-                if (!"".Equals(_hexName))
-                    cmdStr = "68" + _hexName + "00680B08";
-                String str = "";
-                for (int i = 0; i < input.Length; i++)
-                {
-                    string temp = MyConvertUtil.CharAt(input, i);
-                    temp = MyConvertUtil.StrToHexStr(temp);
-                    if (temp.Length < 2)
-                        temp = "0" + temp;
-                    Print("遂字转换（Hex）：" + temp);
-                    str += temp;
-                }
-                String[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
-                cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6] + strArray[7];
-                string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
-                Print("计算出的校验码（Hex）：" + crcStr);
-                cmdStr += crcStr + " 16";
-                cmdStr = "FEFEFEFE" + cmdStr;
-                byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
-                _operation = "设置工号";
-                _serialPort.Write(comByte, 0, comByte.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
+                string temp = MyConvertUtil.CharAt(input, i);
+                temp = MyConvertUtil.StrToHexStr(temp);
+                if (temp.Length < 2)
+                    temp = "0" + temp;
+                Print("遂字转换（Hex）：" + temp);
+                _hexWorkId += temp;
             }
+            string[] strArray = MyConvertUtil.StrSplitInterval(_hexWorkId, 2);
+            cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6] + strArray[7];
+            string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
+            Print("计算出的校验码（Hex）：" + crcStr);
+            cmdStr += crcStr + " 16";
+            cmdStr = "FEFEFEFE" + cmdStr;
+            byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
+            _operation = "设置工号";
+            _serialPort.Write(comByte, 0, comByte.Length);
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+            LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -1163,35 +1174,31 @@ namespace HelloCSharp.UI
         private void btn_box_write_Click(object sender, EventArgs e)
         {
             string input = txt_box_id.Text;
-            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{6}");
-            if (flag)
+            string cmdStr = "68222301563400680606";
+            //有设置蓝牙名称
+            if (!"".Equals(_hexName))
+                cmdStr = "68" + _hexName + "00680606";
+            string str = "";
+            for (int i = 0; i < input.Length; i++)
             {
-                string cmdStr = "68222301563400680606";
-                //有设置蓝牙名称
-                if (!"".Equals(_hexName))
-                    cmdStr = "68" + _hexName + "00680606";
-                String str = "";
-                for (int i = 0; i < input.Length; i++)
-                {
-                    string temp = MyConvertUtil.CharAt(input, i);
-                    temp = MyConvertUtil.StrToHexStr(temp);
-                    if (temp.Length < 2)
-                        temp = "0" + temp;
-                    Print("遂字转换（Hex）：" + temp);
-                    str += temp;
-                }
-                String[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
-                cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5];
-                string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
-                Print("计算出的校验码（Hex）：" + crcStr);
-                cmdStr += crcStr + "16";
-                cmdStr = "FEFEFEFE" + cmdStr;
-                byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
-                _operation = "设置表箱号";
-                _serialPort.Write(comByte, 0, comByte.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
+                string temp = MyConvertUtil.CharAt(input, i);
+                temp = MyConvertUtil.StrToHexStr(temp);
+                if (temp.Length < 2)
+                    temp = "0" + temp;
+                Print("遂字转换（Hex）：" + temp);
+                str += temp;
             }
+            string[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
+            cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5];
+            string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
+            Print("计算出的校验码（Hex）：" + crcStr);
+            cmdStr += crcStr + "16";
+            cmdStr = "FEFEFEFE" + cmdStr;
+            byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
+            _operation = "设置表箱号";
+            _serialPort.Write(comByte, 0, comByte.Length);
+            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+            LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
         }
 
         /// <summary>
@@ -1225,6 +1232,37 @@ namespace HelloCSharp.UI
         private void btn_clear_Click(object sender, EventArgs e)
         {
             txt_log.Clear();
+        }
+
+        private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _portName = _portNameArray[cbx_port.SelectedIndex];
+            LogTxtChangedByDele("串口名称：" + _portName + "\r\n", Color.Black);
+        }
+
+        private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LogTxtChangedByDele("波特率：" + _rate + "\r\n", Color.Black);
+        }
+
+        private void cbx_data_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _data = DATA_ARRAY[cbx_data.SelectedIndex];
+            LogTxtChangedByDele("数据位：" + _data + "\r\n", Color.Black);
+        }
+
+        private void cbx_parity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string str = PARITY_ARRAY[cbx_parity.SelectedIndex];
+            switch (str)
+            {
+                case "None": _parity = Parity.None; break;
+                case "Odd": _parity = Parity.Odd; break;
+                case "Even": _parity = Parity.Even; break;
+                case "Mark": _parity = Parity.Mark; break;
+                case "Space": _parity = Parity.Space; break;
+            }
+            LogTxtChangedByDele("校验位：" + _parity + "\r\n", Color.Black);
         }
     }
 
