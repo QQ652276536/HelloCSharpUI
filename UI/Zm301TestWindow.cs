@@ -349,32 +349,47 @@ namespace HelloCSharp.UI
                 {
                     //对时，FE FE FE FE 68 XX XX XX XX XX 00 68 07 06 秒 分 时 日 月 年 校验码 16
                     case 0:
-                        int ss = _nowTime.Second + 33;
-                        int mm = _nowTime.Minute + 33;
-                        int HH = _nowTime.Hour + 33;
-                        int dd = _nowTime.Day + 33;
-                        int MM = _nowTime.Month + 33;
-                        int yy = _nowTime.Year % 100 + 33;
+                        int yy = DateTime.Now.Year % 100;
+                        int MM = DateTime.Now.Month;
+                        int DD = DateTime.Now.Day;
+                        int HH = DateTime.Now.Hour;
+                        int mm = DateTime.Now.Minute;
+                        int ss = DateTime.Now.Second;
+
+                        int yy2 = Convert.ToInt32(yy + "", 16) + 51;
+                        int MM2 = Convert.ToInt32(MM + "", 16) + 51;
+                        int DD2 = Convert.ToInt32(DD + "", 16) + 51;
+                        int HH2 = Convert.ToInt32(HH + "", 16) + 51;
+                        int mm2 = Convert.ToInt32(mm + "", 16) + 51;
+                        int ss2 = Convert.ToInt32(ss + "", 16) + 51;
+                       
+                        string hex_yy = yy2.ToString("X");
+                        string hex_MM = MM2.ToString("X");
+                        string hex_DD = DD2.ToString("X");
+                        string hex_HH = HH2.ToString("X");
+                        string hex_mm = mm2.ToString("X");
+                        string hex_ss = ss2.ToString("X");
+
                         _operation = "对时";
                         if (!"".Equals(_hexName))
                         {
-                            string timeCmd = "68" + _hexName + "00680706" + ss + mm + HH + dd + MM + yy;
+                            string timeCmd = "68" + _hexName + "00680706" + hex_ss + hex_mm + hex_HH + hex_DD + hex_MM + hex_yy;
                             string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
                             timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                             byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                             _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（" + _nowTime.Year + "年" + _nowTime.Month + "月" + _nowTime.Day + "日" + _nowTime.Hour + "时" + _nowTime.Minute + "分" + _nowTime.Second + "秒）\r\n", Color.Black);
+                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（20" + yy + "年" + MM + "月" + DD + "日" + HH + "时" + mm + "分" + ss + "秒）\r\n", Color.Black);
                         }
                         else
                         {
-                            string timeCmd = "68222301563400680706" + ss + mm + HH + dd + MM + yy;
+                            string timeCmd = "68" + _hexName + "00680706" + hex_ss + hex_mm + hex_HH + hex_DD + hex_MM + hex_yy;
                             string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
                             timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                             byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                             _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（" + _nowTime.Year + "年" + _nowTime.Month + "月" + _nowTime.Day + "日" + _nowTime.Hour + "时" + _nowTime.Minute + "分" + _nowTime.Second + "秒）\r\n", Color.Black);
+                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（20" + yy + "年" + MM + "月" + DD + "日" + HH + "时" + mm + "分" + ss + "秒）\r\n", Color.Black);
                         }
                         Thread.Sleep(1 * 1000);
                         _cycleTestStep = 1;
@@ -744,7 +759,12 @@ namespace HelloCSharp.UI
                     case "89":
                         LogTxtChangedByDele("振动事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
                         break;
-                    //对时
+                    //对时失败
+                    case "C6":
+                    case "C7":
+                        LogTxtChangedByDele("对时失败\r\n", Color.Red);
+                        break;
+                    //对时成功
                     case "87":
                         //设置对时返回的是版本号
                         int ver1 = Convert.ToInt32(strArray[10], 16) - 51;
@@ -1234,7 +1254,6 @@ namespace HelloCSharp.UI
                 else
                 {
                     _eventAllThreadFlag = false;
-                    _eventAllThread.Abort();
                     _eventAllThread = null;
                     _eventAllThread = new Thread(CycleTest);
                     _eventAllThread.Start();
@@ -1249,8 +1268,7 @@ namespace HelloCSharp.UI
                 _closeDoor = 0;
                 _steal = 0;
                 _vibrate = 0;
-                if (null != _eventAllThread)
-                    _eventAllThread.Abort();
+                _eventAllThreadFlag = false;
                 _eventAllThread = null;
                 btn_cycle_start.Text = "开始";
             }
@@ -1293,7 +1311,6 @@ namespace HelloCSharp.UI
                     else
                     {
                         _timeOutThreadFlag = false;
-                        _timeOutThread.Abort();
                         _timeOutThread = null;
                         _timeOutThreadFlag = true;
                         _timeOutThread = new Thread(TimeOutForThread);
@@ -1304,8 +1321,7 @@ namespace HelloCSharp.UI
                 {
                     //关闭读取超时的线程
                     _timeOutThreadFlag = false;
-                    if (null != _timeOutThread)
-                        _timeOutThread.Abort();
+                    _eventAllThreadFlag = false;
                     _timeOutThread = null;
                     //关闭循环测试的线程
                     if ("停止".Equals(btn_cycle_start.Text.ToString()))
