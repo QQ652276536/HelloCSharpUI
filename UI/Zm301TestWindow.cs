@@ -362,7 +362,7 @@ namespace HelloCSharp.UI
                         int HH2 = Convert.ToInt32(HH + "", 16) + 51;
                         int mm2 = Convert.ToInt32(mm + "", 16) + 51;
                         int ss2 = Convert.ToInt32(ss + "", 16) + 51;
-                       
+
                         string hex_yy = yy2.ToString("X");
                         string hex_MM = MM2.ToString("X");
                         string hex_DD = DD2.ToString("X");
@@ -760,6 +760,7 @@ namespace HelloCSharp.UI
                         LogTxtChangedByDele("振动事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
                         break;
                     //对时失败
+                    case "D4":
                     case "C6":
                     case "C7":
                         LogTxtChangedByDele("对时失败\r\n", Color.Red);
@@ -1077,11 +1078,9 @@ namespace HelloCSharp.UI
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             _tabSelectedIndex = tabControl.SelectedIndex;
-            //切换至单项测试时如果有循环测试则停止
-            if (_tabSelectedIndex == 0 && "停止".Equals(btn_cycle_start.Text.ToString()))
-            {
-                btn_cycle_start_Click(null, null);
-            }
+            //切换至单项测试时停止循环测试
+            _eventAllThreadFlag = false;
+            _eventAllThread = null;
         }
 
         /// <summary>
@@ -1321,13 +1320,10 @@ namespace HelloCSharp.UI
                 {
                     //关闭读取超时的线程
                     _timeOutThreadFlag = false;
-                    _eventAllThreadFlag = false;
                     _timeOutThread = null;
                     //关闭循环测试的线程
-                    if ("停止".Equals(btn_cycle_start.Text.ToString()))
-                    {
-                        btn_cycle_start_Click(null, null);
-                    }
+                    _eventAllThreadFlag = false;
+                    _eventAllThread = null;
                     //关闭串口
                     _serialPort.Close();
                     _serialPort = null;
