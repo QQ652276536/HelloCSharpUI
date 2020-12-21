@@ -53,10 +53,10 @@
             this.btn_lock3 = new System.Windows.Forms.Button();
             this.btn_lock_all = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btn_cycle_start = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.txt_log2 = new System.Windows.Forms.RichTextBox();
             this.btn_clear2 = new System.Windows.Forms.Button();
+            this.txt_log2 = new System.Windows.Forms.RichTextBox();
+            this.btn_cycle_start = new System.Windows.Forms.Button();
             this.btn_open = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbx_parity = new System.Windows.Forms.ComboBox();
@@ -217,7 +217,7 @@
             // btn_box_write
             // 
             this.btn_box_write.Enabled = false;
-            this.btn_box_write.Location = new System.Drawing.Point(232, 20);
+            this.btn_box_write.Location = new System.Drawing.Point(133, 20);
             this.btn_box_write.Name = "btn_box_write";
             this.btn_box_write.Size = new System.Drawing.Size(75, 27);
             this.btn_box_write.TabIndex = 0;
@@ -227,7 +227,7 @@
             // 
             // btn_box_read
             // 
-            this.btn_box_read.Location = new System.Drawing.Point(133, 20);
+            this.btn_box_read.Location = new System.Drawing.Point(232, 20);
             this.btn_box_read.Name = "btn_box_read";
             this.btn_box_read.Size = new System.Drawing.Size(75, 27);
             this.btn_box_read.TabIndex = 1;
@@ -259,7 +259,7 @@
             // btn_work_write
             // 
             this.btn_work_write.Enabled = false;
-            this.btn_work_write.Location = new System.Drawing.Point(274, 20);
+            this.btn_work_write.Location = new System.Drawing.Point(143, 20);
             this.btn_work_write.Name = "btn_work_write";
             this.btn_work_write.Size = new System.Drawing.Size(75, 27);
             this.btn_work_write.TabIndex = 0;
@@ -269,7 +269,7 @@
             // 
             // btn_work_read
             // 
-            this.btn_work_read.Location = new System.Drawing.Point(143, 20);
+            this.btn_work_read.Location = new System.Drawing.Point(274, 20);
             this.btn_work_read.Name = "btn_work_read";
             this.btn_work_read.Size = new System.Drawing.Size(75, 27);
             this.btn_work_read.TabIndex = 1;
@@ -351,16 +351,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "循环测试";
             // 
-            // btn_cycle_start
-            // 
-            this.btn_cycle_start.Location = new System.Drawing.Point(328, 15);
-            this.btn_cycle_start.Name = "btn_cycle_start";
-            this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
-            this.btn_cycle_start.TabIndex = 0;
-            this.btn_cycle_start.Text = "开始";
-            this.btn_cycle_start.UseVisualStyleBackColor = true;
-            this.btn_cycle_start.Click += new System.EventHandler(this.btn_cycle_start_Click);
-            // 
             // groupBox7
             // 
             this.groupBox7.Controls.Add(this.btn_clear2);
@@ -372,15 +362,6 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "日志";
             // 
-            // txt_log2
-            // 
-            this.txt_log2.Location = new System.Drawing.Point(6, 25);
-            this.txt_log2.Name = "txt_log2";
-            this.txt_log2.ReadOnly = true;
-            this.txt_log2.Size = new System.Drawing.Size(733, 566);
-            this.txt_log2.TabIndex = 1;
-            this.txt_log2.Text = "";
-            // 
             // btn_clear2
             // 
             this.btn_clear2.Location = new System.Drawing.Point(665, 597);
@@ -390,6 +371,25 @@
             this.btn_clear2.Text = "清除";
             this.btn_clear2.UseVisualStyleBackColor = true;
             this.btn_clear2.Click += new System.EventHandler(this.btn_clear2_Click);
+            // 
+            // txt_log2
+            // 
+            this.txt_log2.Location = new System.Drawing.Point(6, 25);
+            this.txt_log2.Name = "txt_log2";
+            this.txt_log2.ReadOnly = true;
+            this.txt_log2.Size = new System.Drawing.Size(733, 566);
+            this.txt_log2.TabIndex = 1;
+            this.txt_log2.Text = "";
+            // 
+            // btn_cycle_start
+            // 
+            this.btn_cycle_start.Location = new System.Drawing.Point(328, 15);
+            this.btn_cycle_start.Name = "btn_cycle_start";
+            this.btn_cycle_start.Size = new System.Drawing.Size(75, 23);
+            this.btn_cycle_start.TabIndex = 0;
+            this.btn_cycle_start.Text = "开始";
+            this.btn_cycle_start.UseVisualStyleBackColor = true;
+            this.btn_cycle_start.Click += new System.EventHandler(this.btn_cycle_start_Click);
             // 
             // btn_open
             // 

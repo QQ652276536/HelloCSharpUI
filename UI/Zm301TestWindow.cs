@@ -774,15 +774,28 @@ namespace HelloCSharp.UI
                         break;
                     //表箱号
                     case "86":
-                        string hexBoxId = strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6];
+                        //int boxId1 = Convert.ToInt32(strArray[], 16) - 51;
+                        //int boxId2 = Convert.ToInt32(strArray[], 16) - 51;
+                        //int boxId3 = Convert.ToInt32(strArray[], 16) - 51;
+                        //int boxId4 = Convert.ToInt32(strArray[], 16) - 51;
+                        //int boxId5 = Convert.ToInt32(strArray[], 16) - 51;
+                        //int boxId6 = Convert.ToInt32(strArray[], 16) - 51;
+                        //string hexBoxId1 = boxId1.ToString("X");
+                        //string hexBoxId2 = boxId2.ToString("X");
+                        //string hexBoxId3 = boxId3.ToString("X");
+                        //string hexBoxId4 = boxId4.ToString("X");
+                        //string hexBoxId5 = boxId5.ToString("X");
+                        //string hexBoxId6 = boxId6.ToString("X");
+                        //string boxId = hexBoxId1 + hexBoxId2 + hexBoxId3 + hexBoxId4 + hexBoxId5 + hexBoxId6;
+                        string boxId = "";
                         switch (_operation)
                         {
                             case "读取表箱号":
-                                BoxIdTxtChangedByDele(hexBoxId);
-                                LogTxtChangedByDele("读取表箱号成功：" + hexBoxId + "\r\n", Color.Green);
+                                BoxIdTxtChangedByDele(boxId);
+                                LogTxtChangedByDele("读取表箱号成功：" + boxId + "\r\n", Color.Green);
                                 break;
                             case "设置表箱号":
-                                LogTxtChangedByDele("设置表箱号成功：" + hexBoxId + "\r\n", Color.Green);
+                                LogTxtChangedByDele("设置表箱号成功：" + boxId + "\r\n", Color.Green);
                                 break;
                         }
                         break;
@@ -943,14 +956,24 @@ namespace HelloCSharp.UI
 
         /// <summary>
         /// 预设蓝牙名称
+        /// 蓝牙名称不属于数据域，不需要+33
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btn_name_write_Click(object sender, EventArgs e)
         {
-            //TODO:校验五位蓝牙名称
             string input = txt_name.Text.ToString();
-            _hexName = MyConvertUtil.StrToHexStr(input);
+            _hexName = "";
+            //蓝牙名称
+            for (int i = 0; i < input.Length; i++)
+            {
+                string temp = MyConvertUtil.CharAt(input, i);
+                temp = MyConvertUtil.StrToHexStr(temp);
+                if (temp.Length < 2)
+                    temp = "0" + temp;
+                Print("设置蓝牙名称，遂字转换（Hex）：" + temp);
+                _hexName += temp;
+            }
 
             //重新生成查询开锁事件指令并计算校验码
             //READ_EVENT_ALL_OPENLOCK = "FE FE FE FE 68 22 23 01 56 34 00 68 01 00 A1 16";
@@ -1305,6 +1328,7 @@ namespace HelloCSharp.UI
             if (!"".Equals(_hexName))
                 cmdStr = "68" + _hexName + "00680B08";
             _hexWorkId = "";
+            //工号+33
             for (int i = 0; i < input.Length; i++)
             {
                 string temp = MyConvertUtil.CharAt(input, i);
@@ -1313,7 +1337,7 @@ namespace HelloCSharp.UI
                 temp = tempValue.ToString("X");
                 if (temp.Length < 2)
                     temp = "0" + temp;
-                Print("遂字转换（Hex）：" + temp);
+                Print("设置工号，遂字转换（Hex）：" + temp);
                 _hexWorkId += temp;
             }
             string[] strArray = MyConvertUtil.StrSplitInterval(_hexWorkId, 2);
@@ -1359,13 +1383,16 @@ namespace HelloCSharp.UI
             if (!"".Equals(_hexName))
                 cmdStr = "68" + _hexName + "00680606";
             string str = "";
+            //表箱号+33
             for (int i = 0; i < input.Length; i++)
             {
                 string temp = MyConvertUtil.CharAt(input, i);
                 temp = MyConvertUtil.StrToHexStr(temp);
+                int tempValue = Convert.ToInt32(temp, 16) + 51;
+                temp = tempValue.ToString("X");
                 if (temp.Length < 2)
                     temp = "0" + temp;
-                Print("遂字转换（Hex）：" + temp);
+                Print("设置表箱号，遂字转换（Hex）：" + temp);
                 str += temp;
             }
             string[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
