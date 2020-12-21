@@ -884,33 +884,46 @@ namespace HelloCSharp.UI
             _receivedStr += str;
             Print("累计收到字节（Hex）：" + _receivedStr);
             //不能仅凭指令的开头和结尾来判断是否为一包完整数据，还需要验证校验码
-            if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
+            if (_receivedStr.Contains("68") && _receivedStr.Contains("16"))
             {
-                //计算收到的数据的校验码的时候不包含最后现个字节
-                string tempReceivedStr = _receivedStr.Substring(0, _receivedStr.Length - 4);
-                Print("参与计算校验码的数据（Hex）：" + tempReceivedStr);
-                //计算出的校验码
-                string crcStr1 = MyConvertUtil.CalcZM301CRC(tempReceivedStr);
-                Print("计算出的校验码（Hex）：" + crcStr1);
-                string[] strArray = MyConvertUtil.StrSplitInterval(_receivedStr, 2);
-                //收到的数据里的校验码
-                string crcStr2 = strArray[strArray.Length - 2];
-                Print("数据内容包含的校验码（Hex）：" + crcStr2);
-                //比较校验码
-                bool flag = crcStr1.Equals(crcStr2);
-                Print("校验码是否正确：" + flag);
-                if (flag)
+                //有干扰数据
+                if (!_receivedStr.StartsWith("68") || !_receivedStr.EndsWith("16"))
                 {
-                    int len = _receivedStr.Length;
-                    Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
-                    _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
-                    //显示收到的数据
-                    LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n", Color.Black);
-                    //解析数据
-                    Parse(_receivedStr);
-                    //清空缓存
-                    _receivedStr = "";
+                    string beginStr = "68";
+                    string endStr = "16";
+                    int beginIndex = _receivedStr.IndexOf(beginStr);
+                    int endIndex = _receivedStr.LastIndexOf(endStr);
+                    _receivedStr = _receivedStr.Substring(beginIndex, endIndex);
                 }
+                //开头+结尾+校验码=完整数据
+                if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
+                {
+                    //计算收到的数据的校验码的时候不包含最后现个字节
+                    string tempReceivedStr = _receivedStr.Substring(0, _receivedStr.Length - 4);
+                    Print("参与计算校验码的数据（Hex）：" + tempReceivedStr);
+                    //计算出的校验码
+                    string crcStr1 = MyConvertUtil.CalcZM301CRC(tempReceivedStr);
+                    Print("计算出的校验码（Hex）：" + crcStr1);
+                    string[] strArray = MyConvertUtil.StrSplitInterval(_receivedStr, 2);
+                    //收到的数据里的校验码
+                    string crcStr2 = strArray[strArray.Length - 2];
+                    Print("数据内容包含的校验码（Hex）：" + crcStr2);
+                    //比较校验码
+                    bool flag = crcStr1.Equals(crcStr2);
+                    Print("校验码是否正确：" + flag);
+                    if (flag)
+                    {
+                        int len = _receivedStr.Length;
+                        Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
+                        _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
+                        //显示收到的数据
+                        LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n", Color.Black);
+                        //解析数据
+                        Parse(_receivedStr);
+                    }
+                }
+                //清空缓存
+                _receivedStr = "";
             }
         }
 
