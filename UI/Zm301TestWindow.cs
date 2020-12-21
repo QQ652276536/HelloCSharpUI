@@ -148,12 +148,11 @@ namespace HelloCSharp.UI
         private DateTime _nowTime = DateTime.Now;
         //串口
         private SerialPort _serialPort;
-        //查询事件总数的线程、查询开锁事件的线程、查询关锁事件的线程、查询开门事件的线程、查询关门事件的线程、查询窃电事件的线程、查询振动事件的线程、监听读取超时线程
-        private Thread _eventAllThread, _openLockThread, _closeLockThread, _openDoorThread, _closeDoorThread, _stealThread, _vibrateThread, _timeOutThread;
+        //查询事件总数的线程、读取超时线程
+        private Thread _eventAllThread, _timeOutThread;
         //查询事件总数的线程的运行标识、判断是否读取超时的线程的运行标识
         private bool _eventAllThreadFlag = true, _timeOutThreadFlag = true;
-        //以下标识只能手动置为0（停止循环测试），什么时候置为1（开始循环测试）由硬件返回参数决定：
-        //是否查询开锁事件、是否查询关锁事件、是否查询开门事件、是否查询关门事件、是否查询窃电事件、是否查询振动事件
+        //这些标识只能手动置为0（停止循环测试），什么时候置为1（开始循环测试）由硬件返回参数决定：是否查询开锁事件、是否查询关锁事件、是否查询开门事件、是否查询关门事件、是否查询窃电事件、是否查询振动事件
         private int _openLock = 0, _closeLock = 0, _openDoor = 0, _closeDoor = 0, _steal = 0, _vibrate = 0;
         //本机串口
         private string[] _portNameArray;
@@ -173,7 +172,7 @@ namespace HelloCSharp.UI
         private string _hexName = "";
         //工号，如果设置了每次循环测试都要发送一次“设置工号”
         private string _hexWorkId = "";
-        //循环测试时当前执行到的步骤：0表示对时、1表示设置工号、2表示查询事件总数、
+        //循环测试时当前执行到的步骤：0对时、1设置工号、2查询事件总数、3开锁事件、4关锁事件、5开门事件、6关门事件、7窃电事件、8振动事件
         private int _cycleTestStep = 0;
 
         public Zm301TestWidnow()
@@ -365,7 +364,7 @@ namespace HelloCSharp.UI
                             byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                             _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
+                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（" + _nowTime.Year + "年" + _nowTime.Month + "月" + _nowTime.Day + "日" + _nowTime.Hour + "时" + _nowTime.Minute + "分" + _nowTime.Second + "秒）\r\n", Color.Black);
                         }
                         else
                         {
@@ -375,9 +374,8 @@ namespace HelloCSharp.UI
                             byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
                             _serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "\r\n", Color.Black);
+                            LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（" + _nowTime.Year + "年" + _nowTime.Month + "月" + _nowTime.Day + "日" + _nowTime.Hour + "时" + _nowTime.Minute + "分" + _nowTime.Second + "秒）\r\n", Color.Black);
                         }
-                        _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                         Thread.Sleep(1 * 1000);
                         _cycleTestStep = 1;
                         break;
@@ -385,7 +383,9 @@ namespace HelloCSharp.UI
                     case 1:
                         if (!"".Equals(_hexWorkId))
                         {
+                            _operation = "设置工号";
                             btn_work_write.PerformClick();
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 2;
@@ -397,42 +397,79 @@ namespace HelloCSharp.UI
                         _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                         LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
                         Thread.Sleep(1 * 1000);
-                        //开启循环测试开锁事件查询
-                        if (_openLock == 1 && null == _openLockThread)
+                        _cycleTestStep = 3;
+                        break;
+                    //开锁事件
+                    case 3:
+                        if (_openLock == 1)
                         {
-                            _openLockThread = new Thread(CycleTest_OpenLock);
-                            _openLockThread.Start();
+                            _operation = "循环测试_开锁事件";
+                            _serialPort.Write(READ_EVENT_ALL_OPENLOCK_BYTE, 0, READ_EVENT_ALL_OPENLOCK_BYTE.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送查询开锁事件指令：" + READ_EVENT_ALL_OPENLOCK + "\r\n", Color.Black);
+                            Thread.Sleep(500);
                         }
-                        //开启循环测试关锁事件查询
-                        if (_closeLock == 1 && null == _closeLockThread)
+                        _cycleTestStep = 4;
+                        break;
+                    //关锁事件
+                    case 4:
+                        if (_closeLock == 1)
                         {
-                            _closeLockThread = new Thread(CycleTest_CloseLock);
-                            _closeLockThread.Start();
+                            _operation = "循环测试_关锁事件";
+                            _serialPort.Write(READ_EVENT_ALL_CLOSELOCK_BYTE, 0, READ_EVENT_ALL_CLOSELOCK_BYTE.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送查询关锁事件指令：" + READ_EVENT_ALL_CLOSELOCK + "\r\n", Color.Black);
+                            Thread.Sleep(500);
                         }
-                        //开启循环测试开门事件查询
-                        if (_openDoor == 1 && null == _openDoorThread)
+                        _cycleTestStep = 5;
+                        break;
+                    //开门事件
+                    case 5:
+                        if (_openDoor == 1)
                         {
-                            _openDoorThread = new Thread(CycleTest_OpenDoor);
-                            _openDoorThread.Start();
+                            _operation = "循环测试_开门事件";
+                            _serialPort.Write(READ_EVENT_ALL_OPENDOOR_BYTE, 0, READ_EVENT_ALL_OPENDOOR_BYTE.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送查询开门事件指令：" + READ_EVENT_ALL_OPENDOOR + "\r\n", Color.Black);
+                            Thread.Sleep(500);
                         }
-                        //开启循环测试关门事件查询
-                        if (_closeDoor == 1 && null == _closeDoorThread)
+                        _cycleTestStep = 6;
+                        break;
+                    //关门事件
+                    case 6:
+                        if (_closeDoor == 1)
                         {
-                            _closeDoorThread = new Thread(CycleTest_CloseDoor);
-                            _closeDoorThread.Start();
+                            _operation = "循环测试_关门事件";
+                            _serialPort.Write(READ_EVENT_ALL_CLOSEDOOR_BYTE, 0, READ_EVENT_ALL_CLOSEDOOR_BYTE.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送查询关门事件指令：" + READ_EVENT_ALL_CLOSEDOOR + "\r\n", Color.Black);
+                            Thread.Sleep(500);
                         }
-                        //开启循环测试窃电事件查询
-                        if (_steal == 1 && null == _stealThread)
+                        _cycleTestStep = 7;
+                        break;
+                    //窃电事件
+                    case 7:
+                        if (_steal == 1)
                         {
-                            _stealThread = new Thread(CycleTest_Steal);
-                            _stealThread.Start();
+                            _operation = "循环测试_窃电事件";
+                            _serialPort.Write(READ_EVENT_ALL_STEAL_BYTE, 0, READ_EVENT_ALL_STEAL_BYTE.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送查询窃电事件指令：" + READ_EVENT_ALL_STEAL + "\r\n", Color.Black);
+                            Thread.Sleep(500);
                         }
-                        //开启循环测试振动事件查询
-                        if (_vibrate == 1 && null == _vibrateThread)
+                        _cycleTestStep = 8;
+                        break;
+                    //振动事件
+                    case 8:
+                        if (_vibrate == 1)
                         {
-                            _vibrateThread = new Thread(CycleTest_Vibrate);
-                            _vibrateThread.Start();
+                            _operation = "循环测试_振动事件";
+                            _serialPort.Write(READ_EVENT_ALL_VIBRATE_BYTE, 0, READ_EVENT_ALL_VIBRATE_BYTE.Length);
+                            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                            LogTxtChangedByDele("发送查询振动事件指令：" + READ_EVENT_ALL_VIBRATE + "\r\n", Color.Black);
+                            Thread.Sleep(500);
                         }
+                        _cycleTestStep = 2;
                         break;
                 }
             }
@@ -654,9 +691,59 @@ namespace HelloCSharp.UI
             {
                 string[] strArray = str.Split(' ');
                 string type = strArray[8];
+                //循环测试里的事件数据域
+                string cycleEventHexIndex1 = "";
+                string cycleEventHexIndex2 = "";
+                string cycleEventIndex = cycleEventHexIndex1 + cycleEventHexIndex2;
+                int eventIndex = 0;
+                string eventHex_yy = "";
+                string eventHex_MM = "";
+                string eventHex_DD = "";
+                string eventHex_HH = "";
+                string eventHex_mm = "";
+                string eventHex_ss = "";
+                string eventHexTime = "";
+                if ("81".Equals(type) || "82".Equals(type) || "83".Equals(type) || "84".Equals(type) || "85".Equals(type) || "89".Equals(type))
+                {
+                    cycleEventHexIndex1 = (Convert.ToInt32(strArray[11], 16) - 51).ToString("X");
+                    cycleEventHexIndex2 = (Convert.ToInt32(strArray[10], 16) - 51).ToString("X");
+                    cycleEventIndex = cycleEventHexIndex1 + cycleEventHexIndex2;
+                    eventIndex = Convert.ToInt32(cycleEventIndex, 16);
+                    eventHex_yy = (Convert.ToInt32(strArray[17], 16) - 51).ToString("X");
+                    eventHex_MM = (Convert.ToInt32(strArray[16], 16) - 51).ToString("X");
+                    eventHex_DD = (Convert.ToInt32(strArray[15], 16) - 51).ToString("X");
+                    eventHex_HH = (Convert.ToInt32(strArray[14], 16) - 51).ToString("X");
+                    eventHex_mm = (Convert.ToInt32(strArray[13], 16) - 51).ToString("X");
+                    eventHex_ss = (Convert.ToInt32(strArray[12], 16) - 51).ToString("X");
+                    eventHexTime = "20" + eventHex_yy + "年" + eventHex_MM + "月" + eventHex_DD + "日" + eventHex_HH + "时" + eventHex_mm + "分" + eventHex_ss + "秒";
+                }
                 int len = MyConvertUtil.HexStrToInt(strArray[9]);
                 switch (type)
                 {
+                    //开锁事件
+                    case "81":
+                        LogTxtChangedByDele("开锁事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
+                        break;
+                    //关锁事件
+                    case "82":
+                        LogTxtChangedByDele("关锁事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
+                        break;
+                    //开门事件
+                    case "83":
+                        LogTxtChangedByDele("开门事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
+                        break;
+                    //关门事件
+                    case "84":
+                        LogTxtChangedByDele("关门事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
+                        break;
+                    //窃电事件
+                    case "85":
+                        LogTxtChangedByDele("窃电事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
+                        break;
+                    //振动事件
+                    case "89":
+                        LogTxtChangedByDele("振动事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
+                        break;
                     //对时
                     case "87":
                         //设置对时返回的是版本号
@@ -875,25 +962,29 @@ namespace HelloCSharp.UI
         {
             if (null == _serialPort || !_serialPort.IsOpen)
                 return;
-            //待读字节长度
-            int byteLen = _serialPort.BytesToRead;
-            byte[] byteArray = new byte[byteLen];
-            _serialPort.Read(byteArray, 0, byteArray.Length);
-            string str = MyConvertUtil.BytesToStr(byteArray);
-            Print("本次读取字节：" + str + "，长度：" + byteLen);
-            _receivedStr += str;
-            Print("累计收到字节（Hex）：" + _receivedStr);
-            //不能仅凭指令的开头和结尾来判断是否为一包完整数据，还需要验证校验码
-            if (_receivedStr.Contains("68") && _receivedStr.Contains("16"))
+            try
             {
-                //有干扰数据
-                if (!_receivedStr.StartsWith("68") || !_receivedStr.EndsWith("16"))
+                //待读字节长度
+                int byteLen = _serialPort.BytesToRead;
+                byte[] byteArray = new byte[byteLen];
+                _serialPort.Read(byteArray, 0, byteArray.Length);
+                string str = MyConvertUtil.BytesToStr(byteArray);
+                Print("本次读取字节：" + str + "，长度：" + byteLen);
+                //过滤掉开头的干扰数据（缓存为空则说明收到的是第一个字节，收到的完整数据必须是以68开头）
+                if ("".Equals(_receivedStr) && !str.StartsWith("68"))
                 {
-                    string beginStr = "68";
-                    string endStr = "16";
-                    int beginIndex = _receivedStr.IndexOf(beginStr);
-                    int endIndex = _receivedStr.LastIndexOf(endStr);
-                    _receivedStr = _receivedStr.Substring(beginIndex, endIndex);
+                    Print("继续读取，收到的完整数据必须是以68开头（Hex）：" + _receivedStr);
+                    return;
+                }
+                _receivedStr += str;
+                Print("累计收到字节（Hex）：" + _receivedStr);
+                //过滤掉结尾的干扰数据（收到的完整数据必须是以16结尾）
+                int endStrIndex = _receivedStr.LastIndexOf("16");
+                //目前最短的数据是12个字节
+                if (endStrIndex < 11)
+                {
+                    Print("继续读取，收到的完整数据必须是以16结尾（Hex）：" + _receivedStr);
+                    return;
                 }
                 //开头+结尾+校验码=完整数据
                 if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
@@ -924,6 +1015,12 @@ namespace HelloCSharp.UI
                 }
                 //清空缓存
                 _receivedStr = "";
+            }
+            catch (Exception ex)
+            {
+                //清空缓存
+                _receivedStr = "";
+                LogTxtChangedByDele(ex.ToString() + "\r\n", Color.Red);
             }
         }
 
@@ -1152,24 +1249,6 @@ namespace HelloCSharp.UI
                 _closeDoor = 0;
                 _steal = 0;
                 _vibrate = 0;
-                if (null != _openLockThread)
-                    _openLockThread.Abort();
-                _openLockThread = null;
-                if (null != _closeLockThread)
-                    _closeLockThread.Abort();
-                _closeLockThread = null;
-                if (null != _openDoorThread)
-                    _openDoorThread.Abort();
-                _openDoorThread = null;
-                if (null != _closeDoorThread)
-                    _closeDoorThread.Abort();
-                _closeDoorThread = null;
-                if (null != _stealThread)
-                    _stealThread.Abort();
-                _stealThread = null;
-                if (null != _vibrateThread)
-                    _vibrateThread.Abort();
-                _vibrateThread = null;
                 if (null != _eventAllThread)
                     _eventAllThread.Abort();
                 _eventAllThread = null;
@@ -1204,7 +1283,7 @@ namespace HelloCSharp.UI
                     LogTxtChangedByDele("已打开：" + _portName + "\r\n", Color.Black);
                     EnableBtn(true);
                     btn_open.Text = "关闭串口";
-                    //开启监听读取超时的线程，里面对串口有作判断，必须放在串口操作之后
+                    //开启读取超时的线程，里面对串口有作判断，必须放在串口操作之后
                     if (null == _timeOutThread)
                     {
                         _timeOutThreadFlag = true;
@@ -1223,7 +1302,7 @@ namespace HelloCSharp.UI
                 }
                 else
                 {
-                    //关闭监听读取超时的线程
+                    //关闭读取超时的线程
                     _timeOutThreadFlag = false;
                     if (null != _timeOutThread)
                         _timeOutThread.Abort();
