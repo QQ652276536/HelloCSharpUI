@@ -173,7 +173,7 @@ namespace HelloCSharp.UI
         private string _hexName = "";
         //工号，如果设置了每次循环测试都要发送一次“设置工号”
         private string _hexWorkId = "";
-        //循环测试时当前执行到的步骤：0表示对时、1表示设置工号、2表示查询事件总数
+        //循环测试时当前执行到的步骤：0表示对时、1表示设置工号、2表示查询事件总数、
         private int _cycleTestStep = 0;
 
         public Zm301TestWidnow()
@@ -650,9 +650,6 @@ namespace HelloCSharp.UI
         /// <param name="str"></param>
         private void Parse(string str)
         {
-            //重置记录的状态
-            _currentMillis = 0;
-            _operation = "";
             try
             {
                 string[] strArray = str.Split(' ');
@@ -746,8 +743,23 @@ namespace HelloCSharp.UI
                     //工号
                     case "8B":
                         {
-                            string hexWorkId = strArray[10] + strArray[11] + strArray[12] + strArray[13] + strArray[14] + strArray[15] + strArray[16] + strArray[17];
-                            string workId = MyConvertUtil.HexStrToStr(hexWorkId);
+                            int workId1 = Convert.ToInt32(strArray[10], 16) - 51;
+                            int workId2 = Convert.ToInt32(strArray[11], 16) - 51;
+                            int workId3 = Convert.ToInt32(strArray[12], 16) - 51;
+                            int workId4 = Convert.ToInt32(strArray[13], 16) - 51;
+                            int workId5 = Convert.ToInt32(strArray[14], 16) - 51;
+                            int workId6 = Convert.ToInt32(strArray[15], 16) - 51;
+                            int workId7 = Convert.ToInt32(strArray[16], 16) - 51;
+                            int workId8 = Convert.ToInt32(strArray[17], 16) - 51;
+                            string hexWorkId1 = workId1.ToString("X");
+                            string hexWorkId2 = workId2.ToString("X");
+                            string hexWorkId3 = workId3.ToString("X");
+                            string hexWorkId4 = workId4.ToString("X");
+                            string hexWorkId5 = workId5.ToString("X");
+                            string hexWorkId6 = workId6.ToString("X");
+                            string hexWorkId7 = workId7.ToString("X");
+                            string hexWorkId8 = workId8.ToString("X");
+                            string workId = hexWorkId1 + hexWorkId2 + hexWorkId3 + hexWorkId4 + hexWorkId5 + hexWorkId6 + hexWorkId7 + hexWorkId8;
                             switch (_operation)
                             {
                                 case "读取工号":
@@ -830,6 +842,9 @@ namespace HelloCSharp.UI
                         }
                         break;
                 }
+                //重置记录的状态
+                _currentMillis = 0;
+                _operation = "";
             }
             catch (Exception e)
             {
@@ -854,10 +869,10 @@ namespace HelloCSharp.UI
             string str = MyConvertUtil.BytesToStr(byteArray);
             Print("本次读取字节：" + str + "，长度：" + byteLen);
             _receivedStr += str;
+            Print("累计收到字节（Hex）：" + _receivedStr);
             //不能仅凭指令的开头和结尾来判断是否为一包完整数据，还需要验证校验码
             if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
             {
-                Print("累计收到字节（Hex）：" + _receivedStr);
                 //计算收到的数据的校验码的时候不包含最后现个字节
                 string tempReceivedStr = _receivedStr.Substring(0, _receivedStr.Length - 4);
                 Print("参与计算校验码的数据（Hex）：" + tempReceivedStr);
@@ -1073,6 +1088,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_cycle_start_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             if ("开始".Equals(btn_cycle_start.Text))
             {
                 if (null == _eventAllThread)
@@ -1205,6 +1222,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock1_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "开锁一";
             _serialPort.Write(OPEN_DOOR1_BYTE, 0, OPEN_DOOR1_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
@@ -1218,6 +1237,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock2_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "开锁二";
             _serialPort.Write(OPEN_DOOR2_BYTE, 0, OPEN_DOOR2_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
@@ -1231,6 +1252,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock3_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "开锁三";
             _serialPort.Write(OPEN_DOOR3_BYTE, 0, OPEN_DOOR3_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
@@ -1244,6 +1267,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_lock_all_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "开锁全部";
             _serialPort.Write(OPEN_DOOR_ALL_BYTE, 0, OPEN_DOOR_ALL_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
@@ -1257,6 +1282,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_work_read_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "读取工号";
             _serialPort.Write(READ_WORK_BYTE, 0, READ_WORK_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
@@ -1270,6 +1297,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_work_write_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             string input = txt_work_id.Text;
             string cmdStr = "68222301563400680B08";
             //有设置蓝牙名称
@@ -1280,6 +1309,8 @@ namespace HelloCSharp.UI
             {
                 string temp = MyConvertUtil.CharAt(input, i);
                 temp = MyConvertUtil.StrToHexStr(temp);
+                int tempValue = Convert.ToInt32(temp, 16) + 51;
+                temp = tempValue.ToString("X");
                 if (temp.Length < 2)
                     temp = "0" + temp;
                 Print("遂字转换（Hex）：" + temp);
@@ -1289,7 +1320,7 @@ namespace HelloCSharp.UI
             cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6] + strArray[7];
             string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
             Print("计算出的校验码（Hex）：" + crcStr);
-            cmdStr += crcStr + " 16";
+            cmdStr += crcStr + "16";
             cmdStr = "FEFEFEFE" + cmdStr;
             byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
             _operation = "设置工号";
@@ -1305,6 +1336,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_box_read_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "读取表箱号";
             _serialPort.Write(READ_BOX_BYTE, 0, READ_BOX_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
@@ -1318,6 +1351,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_box_write_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             string input = txt_box_id.Text;
             string cmdStr = "68222301563400680606";
             //有设置蓝牙名称
@@ -1353,6 +1388,8 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_gps_Click(object sender, EventArgs e)
         {
+            //清空缓存
+            _receivedStr = "";
             _operation = "查询GPS位置";
             _serialPort.Write(READ_GPS_BYTE, 0, READ_GPS_BYTE.Length);
             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
