@@ -116,7 +116,7 @@
             this.groupBox9.Size = new System.Drawing.Size(273, 53);
             this.groupBox9.TabIndex = 5;
             this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "蓝牙名称（5位）";
+            this.groupBox9.Text = "蓝牙名称（5Hex）";
             // 
             // btn_name_write
             // 

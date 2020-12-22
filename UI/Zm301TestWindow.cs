@@ -313,7 +313,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_OPENLOCK_BYTE, 0, READ_EVENT_ALL_OPENLOCK_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询开锁事件指令：" + READ_EVENT_ALL_OPENLOCK + "\r\n", Color.Black);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 4;
                         break;
@@ -325,7 +325,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_CLOSELOCK_BYTE, 0, READ_EVENT_ALL_CLOSELOCK_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询关锁事件指令：" + READ_EVENT_ALL_CLOSELOCK + "\r\n", Color.Black);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 5;
                         break;
@@ -337,7 +337,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_OPENDOOR_BYTE, 0, READ_EVENT_ALL_OPENDOOR_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询开门事件指令：" + READ_EVENT_ALL_OPENDOOR + "\r\n", Color.Black);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 6;
                         break;
@@ -349,7 +349,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_CLOSEDOOR_BYTE, 0, READ_EVENT_ALL_CLOSEDOOR_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询关门事件指令：" + READ_EVENT_ALL_CLOSEDOOR + "\r\n", Color.Black);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 7;
                         break;
@@ -361,7 +361,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_STEAL_BYTE, 0, READ_EVENT_ALL_STEAL_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询窃电事件指令：" + READ_EVENT_ALL_STEAL + "\r\n", Color.Black);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 8;
                         break;
@@ -373,7 +373,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_VIBRATE_BYTE, 0, READ_EVENT_ALL_VIBRATE_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询振动事件指令：" + READ_EVENT_ALL_VIBRATE + "\r\n", Color.Black);
-                            Thread.Sleep(500);
+                            Thread.Sleep(1 * 1000);
                         }
                         _cycleTestStep = 2;
                         break;
