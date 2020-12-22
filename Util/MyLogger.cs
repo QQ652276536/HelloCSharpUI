@@ -18,68 +18,51 @@ namespace HelloCSharp.Log
     public class MyLogger
     {
         #region Instance
-        private static object logLock;
+        private static object _logLock;
 
-        private static MyLogger logger;
+        private static MyLogger _logger;
 
-        private static string logFileName;
         private MyLogger()
         {
         }
 
-        /// <summary>
-        /// MyLogger instance
-        /// </summary>
         public static MyLogger Instance
         {
             get
             {
-                if (logger == null)
+                if (null == _logger)
                 {
-                    logger = new MyLogger();
-                    logLock = new object();
-                    logFileName = Guid.NewGuid() + ".log";
+                    _logger = new MyLogger();
+                    _logLock = new object();
                 }
-                return logger;
+                return _logger;
             }
         }
         #endregion
 
         /// <summary>
-        /// Write log to log file
+        /// 生成Log日志
         /// </summary>
-        /// <param name="logContent">Log content</param>
-        /// <param name="logType">Log type</param>
-        public void WriteLog(string logContent, LogType logType = LogType.Information, string fileName = null)
+        /// <param name="logContent"></param>
+        /// <param name="logType"></param>
+        public void WriteLog(string logContent, LogType logType = LogType.Information)
         {
             try
             {
+                Console.WriteLine(logContent);
+                //当前exe文件执行的路径
                 string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                basePath = @"E:\MyLogs";
-                if (!Directory.Exists(basePath + "\\Log"))
+                //重定位到E盘目录下，上线时注释掉这句
+                basePath = @"E:\MyLogs\HelloCSharp";
+                string fileName = DateTime.Now.ToString("yyyy_MM_dd") + ".log";
+                //创建目录
+                if (!Directory.Exists(basePath))
+                    Directory.CreateDirectory(basePath);
+                //日志格式
+                string[] logText = new string[] { DateTime.Now.ToString("hh:mm:ss") + ":" + logType.ToString() + ":" + logContent };
+                lock (_logLock)
                 {
-                    Directory.CreateDirectory(basePath + "\\Log");
-                }
-
-                string dataString = DateTime.Now.ToString("yyyy-MM-dd");
-                if (!Directory.Exists(basePath + "\\Log\\" + dataString))
-                {
-                    Directory.CreateDirectory(basePath + "\\Log\\" + dataString);
-                }
-
-                string[] logText = new string[] { DateTime.Now.ToString("hh:mm:ss") + ": " + logType.ToString() + ": " + logContent };
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    fileName = fileName + "_" + logFileName;
-                }
-                else
-                {
-                    fileName = logFileName;
-                }
-
-                lock (logLock)
-                {
-                    File.AppendAllLines(basePath + "\\Log\\" + dataString + "\\" + fileName, logText);
+                    File.AppendAllLines(basePath + "\\" + fileName, logText);
                 }
             }
             catch (Exception)
@@ -88,9 +71,10 @@ namespace HelloCSharp.Log
         }
 
         /// <summary>
-        /// Write exception to log file
+        /// 异常日志
         /// </summary>
-        /// <param name="exception">Exception</param>
+        /// <param name="exception">异常</param>
+        /// <param name="specialText">特别说明</param>
         public void WriteException(Exception exception, string specialText = null)
         {
             if (exception != null)
@@ -109,5 +93,6 @@ namespace HelloCSharp.Log
                 WriteLog(text, LogType.Error);
             }
         }
+
     }
 }
