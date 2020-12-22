@@ -290,7 +290,7 @@ namespace HelloCSharp.UI
                         if (!"".Equals(_hexWorkId))
                         {
                             _operation = "设置工号";
-                            btn_work_write.PerformClick();
+                            btn_work_write_Click(null, null);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             Thread.Sleep(1 * 1000);
                         }
@@ -755,7 +755,8 @@ namespace HelloCSharp.UI
                                     string hexWorkId6 = workId6.ToString("X");
                                     string hexWorkId7 = workId7.ToString("X");
                                     string hexWorkId8 = workId8.ToString("X");
-                                    string workId = MyConvertUtil.HexStrToStr(hexWorkId1 + hexWorkId2 + hexWorkId3 + hexWorkId4 + hexWorkId5 + hexWorkId6 + hexWorkId7 + hexWorkId8);
+                                    _hexWorkId = hexWorkId1 + hexWorkId2 + hexWorkId3 + hexWorkId4 + hexWorkId5 + hexWorkId6 + hexWorkId7 + hexWorkId8;
+                                    string workId = MyConvertUtil.HexStrToStr(_hexWorkId);
                                     WorkIdTxtChangedByDele(workId);
                                     LogTxtChangedByDele("读取工号成功：" + workId + "\r\n", Color.Green);
                                     break;
@@ -922,10 +923,10 @@ namespace HelloCSharp.UI
                         LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n", Color.Black);
                         //解析数据
                         Parse(_receivedStr);
+                        //已收到完整数据，清空缓存
+                        _receivedStr = "";
                     }
                 }
-                //清空缓存
-                _receivedStr = "";
             }
             catch (Exception ex)
             {
