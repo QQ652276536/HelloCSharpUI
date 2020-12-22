@@ -882,28 +882,30 @@ namespace HelloCSharp.UI
                         break;
                     //表箱号
                     case "86":
-                        //int boxId1 = Convert.ToInt32(strArray[], 16) - 51;
-                        //int boxId2 = Convert.ToInt32(strArray[], 16) - 51;
-                        //int boxId3 = Convert.ToInt32(strArray[], 16) - 51;
-                        //int boxId4 = Convert.ToInt32(strArray[], 16) - 51;
-                        //int boxId5 = Convert.ToInt32(strArray[], 16) - 51;
-                        //int boxId6 = Convert.ToInt32(strArray[], 16) - 51;
-                        //string hexBoxId1 = boxId1.ToString("X");
-                        //string hexBoxId2 = boxId2.ToString("X");
-                        //string hexBoxId3 = boxId3.ToString("X");
-                        //string hexBoxId4 = boxId4.ToString("X");
-                        //string hexBoxId5 = boxId5.ToString("X");
-                        //string hexBoxId6 = boxId6.ToString("X");
-                        //string boxId = hexBoxId1 + hexBoxId2 + hexBoxId3 + hexBoxId4 + hexBoxId5 + hexBoxId6;
-                        string boxId = "";
                         switch (_operation)
                         {
                             case "读取表箱号":
+                                int boxId1 = Convert.ToInt32(strArray[10], 16) - 51;
+                                int boxId2 = Convert.ToInt32(strArray[11], 16) - 51;
+                                int boxId3 = Convert.ToInt32(strArray[12], 16) - 51;
+                                int boxId4 = Convert.ToInt32(strArray[13], 16) - 51;
+                                int boxId5 = Convert.ToInt32(strArray[14], 16) - 51;
+                                int boxId6 = Convert.ToInt32(strArray[15], 16) - 51;
+                                string hexBoxId1 = boxId1.ToString("X");
+                                string hexBoxId2 = boxId2.ToString("X");
+                                string hexBoxId3 = boxId3.ToString("X");
+                                string hexBoxId4 = boxId4.ToString("X");
+                                string hexBoxId5 = boxId5.ToString("X");
+                                string hexBoxId6 = boxId6.ToString("X");
+                                string boxId = MyConvertUtil.HexStrToStr(hexBoxId1 + hexBoxId2 + hexBoxId3 + hexBoxId4 + hexBoxId5 + hexBoxId6);
                                 BoxIdTxtChangedByDele(boxId);
                                 LogTxtChangedByDele("读取表箱号成功：" + boxId + "\r\n", Color.Green);
                                 break;
                             case "设置表箱号":
-                                LogTxtChangedByDele("设置表箱号成功：" + boxId + "\r\n", Color.Green);
+                                if ("00".Equals(strArray[9]))
+                                    LogTxtChangedByDele("设置表箱号成功，状态码：" + strArray[9] + "\r\n", Color.Green);
+                                else
+                                    LogTxtChangedByDele("设置表箱号失败，状态码：" + strArray[9] + "\r\n", Color.Red);
                                 break;
                         }
                         break;
