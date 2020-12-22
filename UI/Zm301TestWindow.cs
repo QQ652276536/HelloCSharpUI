@@ -969,9 +969,10 @@ namespace HelloCSharp.UI
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             _tabSelectedIndex = tabControl.SelectedIndex;
-            //切换至单项测试时停止循环测试
+            //切换至界面时停止循环测试
             _eventAllThreadFlag = false;
             _eventAllThread = null;
+            btn_cycle_start.Text = "开始";
         }
 
         /// <summary>
