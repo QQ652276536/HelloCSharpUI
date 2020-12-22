@@ -154,6 +154,8 @@ namespace HelloCSharp.UI
         private bool _eventAllThreadFlag = true, _timeOutThreadFlag = true;
         //这些标识只能手动置为0（停止循环测试），什么时候置为1（开始循环测试）由硬件返回参数决定：是否查询开锁事件、是否查询关锁事件、是否查询开门事件、是否查询关门事件、是否查询窃电事件、是否查询振动事件
         private int _openLock = 0, _closeLock = 0, _openDoor = 0, _closeDoor = 0, _steal = 0, _vibrate = 0;
+        //开锁事件次数、关锁事件次数、开门事件次数、关门事件次数、窃电事件次数、振动事件次数
+        private int _openLockCount = 0, _closeLockCount = 0, _openDoorCount = 0, _closeDoorCount = 0, _stealCount = 0, _vibrateCount = 0;
         //本机串口
         private string[] _portNameArray;
         private string _receivedStr = "";
@@ -223,114 +225,6 @@ namespace HelloCSharp.UI
                     _currentMillis = 0;
                     _operation = "";
                 }
-            }
-        }
-
-        /// <summary>
-        /// 循环测试_振动事件查询
-        /// </summary>
-        private void CycleTest_Vibrate()
-        {
-            while (_vibrate == 1 && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
-            {
-                //等待判断超时的线程重置记录再进行下一次测试
-                if (_currentMillis > 0)
-                    continue;
-                _operation = "循环测试_振动事件";
-                _serialPort.Write(READ_EVENT_ALL_VIBRATE_BYTE, 0, READ_EVENT_ALL_VIBRATE_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询振动事件指令：" + READ_EVENT_ALL_VIBRATE + "\r\n", Color.Black);
-                Thread.Sleep(500);
-            }
-        }
-
-        /// <summary>
-        /// 循环测试_窃电事件查询
-        /// </summary>
-        private void CycleTest_Steal()
-        {
-            while (_steal == 1 && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
-            {
-                //等待判断超时的线程重置记录再进行下一次测试
-                if (_currentMillis > 0)
-                    continue;
-                _operation = "循环测试_窃电事件";
-                _serialPort.Write(READ_EVENT_ALL_STEAL_BYTE, 0, READ_EVENT_ALL_STEAL_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询窃电事件指令：" + READ_EVENT_ALL_STEAL + "\r\n", Color.Black);
-                Thread.Sleep(500);
-            }
-        }
-
-        /// <summary>
-        /// 循环测试_关门事件查询
-        /// </summary>
-        private void CycleTest_CloseDoor()
-        {
-            while (_closeDoor == 1 && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
-            {
-                //等待判断超时的线程重置记录再进行下一次测试
-                if (_currentMillis > 0)
-                    continue;
-                _operation = "循环测试_关门事件";
-                _serialPort.Write(READ_EVENT_ALL_CLOSEDOOR_BYTE, 0, READ_EVENT_ALL_CLOSEDOOR_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询关门事件指令：" + READ_EVENT_ALL_CLOSEDOOR + "\r\n", Color.Black);
-                Thread.Sleep(500);
-            }
-        }
-
-        /// <summary>
-        /// 循环测试_开门事件查询
-        /// </summary>
-        private void CycleTest_OpenDoor()
-        {
-            while (_openDoor == 1 && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
-            {
-                //等待判断超时的线程重置记录再进行下一次测试
-                if (_currentMillis > 0)
-                    continue;
-                _operation = "循环测试_开门事件";
-                _serialPort.Write(READ_EVENT_ALL_OPENDOOR_BYTE, 0, READ_EVENT_ALL_OPENDOOR_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询开门事件指令：" + READ_EVENT_ALL_OPENDOOR + "\r\n", Color.Black);
-                Thread.Sleep(500);
-            }
-        }
-
-        /// <summary>
-        /// 循环测试_关锁事件查询
-        /// </summary>
-        private void CycleTest_CloseLock()
-        {
-            while (_closeLock == 1 && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
-            {
-                //等待判断超时的线程重置记录再进行下一次测试
-                if (_currentMillis > 0)
-                    continue;
-                _operation = "循环测试_关锁事件";
-                _serialPort.Write(READ_EVENT_ALL_CLOSELOCK_BYTE, 0, READ_EVENT_ALL_CLOSELOCK_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询关锁事件指令：" + READ_EVENT_ALL_CLOSELOCK + "\r\n", Color.Black);
-                Thread.Sleep(500);
-            }
-        }
-
-        /// <summary>
-        /// 循环测试_开锁事件查询
-        /// </summary>
-        private void CycleTest_OpenLock()
-        {
-            while (_openLock == 1 && _eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
-            {
-                //等待判断超时的线程重置记录再进行下一次测试
-                if (_currentMillis > 0)
-                    continue;
-                _operation = "循环测试_开锁事件";
-                _serialPort.Write(READ_EVENT_ALL_OPENLOCK_BYTE, 0, READ_EVENT_ALL_OPENLOCK_BYTE.Length);
-                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                LogTxtChangedByDele("发送查询开锁事件指令：" + READ_EVENT_ALL_OPENLOCK + "\r\n", Color.Black);
-                Thread.Sleep(500);
             }
         }
 
@@ -756,12 +650,6 @@ namespace HelloCSharp.UI
                     case "89":
                         LogTxtChangedByDele("振动事件[" + eventIndex + "]触发，时间：" + eventHexTime + "\r\n", Color.Green);
                         break;
-                    //对时失败
-                    case "D4":
-                    case "C6":
-                    case "C7":
-                        LogTxtChangedByDele("对时失败\r\n", Color.Red);
-                        break;
                     //对时成功
                     case "87":
                         //设置对时返回的是版本号
@@ -782,33 +670,33 @@ namespace HelloCSharp.UI
                             //开锁事件
                             _openLock = Convert.ToInt32(strArray[10], 16) - 51;
                             //开锁事件次数
-                            int openLockCount = (Convert.ToInt32(strArray[12], 16) - 51) + (Convert.ToInt32(strArray[11], 16) - 51);
+                            _openLockCount = (Convert.ToInt32(strArray[12], 16) - 51) + (Convert.ToInt32(strArray[11], 16) - 51);
                             //关锁事件
                             _closeLock = Convert.ToInt32(strArray[13], 16) - 51;
                             //关锁事件次数
-                            int closeLockCount = (Convert.ToInt32(strArray[15], 16) - 51) + (Convert.ToInt32(strArray[14], 16) - 51);
+                            _closeLockCount = (Convert.ToInt32(strArray[15], 16) - 51) + (Convert.ToInt32(strArray[14], 16) - 51);
                             //开门事件
                             _openDoor = Convert.ToInt32(strArray[16], 16) - 51;
                             //开门事件次数
-                            int openDoorCount = (Convert.ToInt32(strArray[18], 16) - 51) + (Convert.ToInt32(strArray[17], 16) - 51);
+                            _openDoorCount = (Convert.ToInt32(strArray[18], 16) - 51) + (Convert.ToInt32(strArray[17], 16) - 51);
                             //关门事件
                             _closeDoor = Convert.ToInt32(strArray[19], 16) - 51;
                             //关门事件次数
-                            int closeDoorCount = (Convert.ToInt32(strArray[21], 16) - 51) + (Convert.ToInt32(strArray[20], 16) - 51);
+                            _closeDoorCount = (Convert.ToInt32(strArray[21], 16) - 51) + (Convert.ToInt32(strArray[20], 16) - 51);
                             //窃电事件
                             _steal = Convert.ToInt32(strArray[22], 16) - 51;
                             //窃电事件次数
-                            int stealCount = (Convert.ToInt32(strArray[24], 16) - 51) + (Convert.ToInt32(strArray[23], 16) - 51);
+                            _stealCount = (Convert.ToInt32(strArray[24], 16) - 51) + (Convert.ToInt32(strArray[23], 16) - 51);
                             //振动事件
                             _vibrate = Convert.ToInt32(strArray[25], 16) - 51;
                             //振动事件次数
-                            int vibrateCount = (Convert.ToInt32(strArray[27], 16) - 51) + (Convert.ToInt32(strArray[26], 16) - 51);
-                            LogTxtChangedByDele("事件总数，开锁事件：" + _openLock + "，次数：" + openLockCount + (_openLock > 0 ? "（开始循环查询开锁事件）" : "") +
-                                 "\r\n事件总数，关锁事件：" + _closeLock + "，次数：" + closeLockCount + (_closeLock > 0 ? "（开始循环查询关锁事件）" : "") +
-                                 "\r\n事件总数，开门事件：" + _openDoor + "，次数：" + openDoorCount + (_openDoor > 0 ? "（开始循环查询开门事件）" : "") +
-                                 "\r\n事件总数，关门事件：" + _closeDoor + "，次数：" + closeDoorCount + (_closeDoor > 0 ? "（开始循环查询关门事件）" : "") +
-                                 "\r\n事件总数，窃电事件：" + _steal + "，次数：" + stealCount + (_steal > 0 ? "（开始循环查询窃电事件）" : "") +
-                                 "\r\n事件总数，振动事件：" + _vibrate + "，次数：" + vibrateCount + (_vibrate > 0 ? "（开始循环查询振动事件）" : "") +
+                            _vibrateCount = (Convert.ToInt32(strArray[27], 16) - 51) + (Convert.ToInt32(strArray[26], 16) - 51);
+                            LogTxtChangedByDele("事件总数，开锁事件：" + _openLock + "，次数：" + _openLockCount + (_openLock > 0 ? "（开始循环查询开锁事件）" : "") +
+                                 "\r\n事件总数，关锁事件：" + _closeLock + "，次数：" + _closeLockCount + (_closeLock > 0 ? "（开始循环查询关锁事件）" : "") +
+                                 "\r\n事件总数，开门事件：" + _openDoor + "，次数：" + _openDoorCount + (_openDoor > 0 ? "（开始循环查询开门事件）" : "") +
+                                 "\r\n事件总数，关门事件：" + _closeDoor + "，次数：" + _closeDoorCount + (_closeDoor > 0 ? "（开始循环查询关门事件）" : "") +
+                                 "\r\n事件总数，窃电事件：" + _steal + "，次数：" + _stealCount + (_steal > 0 ? "（开始循环查询窃电事件）" : "") +
+                                 "\r\n事件总数，振动事件：" + _vibrate + "，次数：" + _vibrateCount + (_vibrate > 0 ? "（开始循环查询振动事件）" : "") +
                                  "\r\n", Color.Green);
                         }
                         break;
