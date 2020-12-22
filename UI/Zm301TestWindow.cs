@@ -355,21 +355,18 @@ namespace HelloCSharp.UI
                         int HH = DateTime.Now.Hour;
                         int mm = DateTime.Now.Minute;
                         int ss = DateTime.Now.Second;
-
                         int yy2 = Convert.ToInt32(yy + "", 16) + 51;
                         int MM2 = Convert.ToInt32(MM + "", 16) + 51;
                         int DD2 = Convert.ToInt32(DD + "", 16) + 51;
                         int HH2 = Convert.ToInt32(HH + "", 16) + 51;
                         int mm2 = Convert.ToInt32(mm + "", 16) + 51;
                         int ss2 = Convert.ToInt32(ss + "", 16) + 51;
-
                         string hex_yy = yy2.ToString("X");
                         string hex_MM = MM2.ToString("X");
                         string hex_DD = DD2.ToString("X");
                         string hex_HH = HH2.ToString("X");
                         string hex_mm = mm2.ToString("X");
                         string hex_ss = ss2.ToString("X");
-
                         _operation = "对时";
                         if (!"".Equals(_hexName))
                         {
@@ -383,7 +380,7 @@ namespace HelloCSharp.UI
                         }
                         else
                         {
-                            string timeCmd = "68" + _hexName + "00680706" + hex_ss + hex_mm + hex_HH + hex_DD + hex_MM + hex_yy;
+                            string timeCmd = "68222301563400680706" + hex_ss + hex_mm + hex_HH + hex_DD + hex_MM + hex_yy;
                             string timeCrc = MyConvertUtil.CalcZM301CRC(timeCmd);
                             timeCmd = "FEFEFEFE" + timeCmd + timeCrc + "16";
                             byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(timeCmd);
@@ -851,31 +848,34 @@ namespace HelloCSharp.UI
                     //工号
                     case "8B":
                         {
-                            int workId1 = Convert.ToInt32(strArray[10], 16) - 51;
-                            int workId2 = Convert.ToInt32(strArray[11], 16) - 51;
-                            int workId3 = Convert.ToInt32(strArray[12], 16) - 51;
-                            int workId4 = Convert.ToInt32(strArray[13], 16) - 51;
-                            int workId5 = Convert.ToInt32(strArray[14], 16) - 51;
-                            int workId6 = Convert.ToInt32(strArray[15], 16) - 51;
-                            int workId7 = Convert.ToInt32(strArray[16], 16) - 51;
-                            int workId8 = Convert.ToInt32(strArray[17], 16) - 51;
-                            string hexWorkId1 = workId1.ToString("X");
-                            string hexWorkId2 = workId2.ToString("X");
-                            string hexWorkId3 = workId3.ToString("X");
-                            string hexWorkId4 = workId4.ToString("X");
-                            string hexWorkId5 = workId5.ToString("X");
-                            string hexWorkId6 = workId6.ToString("X");
-                            string hexWorkId7 = workId7.ToString("X");
-                            string hexWorkId8 = workId8.ToString("X");
-                            string workId = hexWorkId1 + hexWorkId2 + hexWorkId3 + hexWorkId4 + hexWorkId5 + hexWorkId6 + hexWorkId7 + hexWorkId8;
                             switch (_operation)
                             {
                                 case "读取工号":
+                                    int workId1 = Convert.ToInt32(strArray[10], 16) - 51;
+                                    int workId2 = Convert.ToInt32(strArray[11], 16) - 51;
+                                    int workId3 = Convert.ToInt32(strArray[12], 16) - 51;
+                                    int workId4 = Convert.ToInt32(strArray[13], 16) - 51;
+                                    int workId5 = Convert.ToInt32(strArray[14], 16) - 51;
+                                    int workId6 = Convert.ToInt32(strArray[15], 16) - 51;
+                                    int workId7 = Convert.ToInt32(strArray[16], 16) - 51;
+                                    int workId8 = Convert.ToInt32(strArray[17], 16) - 51;
+                                    string hexWorkId1 = workId1.ToString("X");
+                                    string hexWorkId2 = workId2.ToString("X");
+                                    string hexWorkId3 = workId3.ToString("X");
+                                    string hexWorkId4 = workId4.ToString("X");
+                                    string hexWorkId5 = workId5.ToString("X");
+                                    string hexWorkId6 = workId6.ToString("X");
+                                    string hexWorkId7 = workId7.ToString("X");
+                                    string hexWorkId8 = workId8.ToString("X");
+                                    string workId = MyConvertUtil.HexStrToStr(hexWorkId1 + hexWorkId2 + hexWorkId3 + hexWorkId4 + hexWorkId5 + hexWorkId6 + hexWorkId7 + hexWorkId8);
                                     WorkIdTxtChangedByDele(workId);
                                     LogTxtChangedByDele("读取工号成功：" + workId + "\r\n", Color.Green);
                                     break;
                                 case "设置工号":
-                                    LogTxtChangedByDele("设置工号成功：" + workId + "\r\n", Color.Green);
+                                    if ("00".Equals(strArray[9]))
+                                        LogTxtChangedByDele("设置工号成功，状态码：" + strArray[9] + "\r\n", Color.Green);
+                                    else
+                                        LogTxtChangedByDele("设置工号失败，状态码：" + strArray[9] + "\r\n", Color.Red);
                                     break;
                             }
                         }
