@@ -2,7 +2,7 @@
 
 namespace HelloCSharp.UI
 {
-    partial class LoginAndRegisterWindow
+    partial class LoginAndRegister
     {
         /// <summary> 
         /// 必需的设计器变量。
@@ -30,7 +30,7 @@ namespace HelloCSharp.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginAndRegisterWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginAndRegister));
             this.panel1 = new System.Windows.Forms.Panel();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.panel2 = new System.Windows.Forms.Panel();

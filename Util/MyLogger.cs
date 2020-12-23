@@ -59,7 +59,7 @@ namespace HelloCSharp.Log
                 if (!Directory.Exists(basePath))
                     Directory.CreateDirectory(basePath);
                 //日志格式
-                string[] logText = new string[] { DateTime.Now.ToString("hh:mm:ss") + ":" + logType.ToString() + ":" + logContent };
+                string[] logText = new string[] { DateTime.Now.ToString("HH:mm:ss") + ":" + logType.ToString() + ":" + logContent };
                 lock (_logLock)
                 {
                     File.AppendAllLines(basePath + "\\" + fileName, logText);
@@ -93,6 +93,5 @@ namespace HelloCSharp.Log
                 WriteLog(text, LogType.Error);
             }
         }
-
     }
 }

@@ -6,13 +6,13 @@ using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
-    public partial class LoginAndRegisterWindow : Form
+    public partial class LoginAndRegister : Form
     {
         public int _nowPage = 0;
         public ControlRegister _registerControl = null;
         public ControlLogin _loginControl = null;
 
-        public LoginAndRegisterWindow()
+        public LoginAndRegister()
         {
             InitializeComponent();
             _loginControl = new ControlLogin();

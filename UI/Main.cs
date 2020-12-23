@@ -2,9 +2,9 @@
 using System.Windows.Forms;
 namespace HelloCSharp.UI
 {
-    public partial class MainWindow : Form
+    public partial class Main : Form
     {
-        public MainWindow()
+        public Main()
         {
             InitializeComponent();
         }
@@ -12,7 +12,7 @@ namespace HelloCSharp.UI
         private void button1_Click(object sender, EventArgs e)
         {
             this.StartPosition = FormStartPosition.CenterParent;
-            new Zm301TestWidnow().ShowDialog();
+            new Zm301Test().ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace HelloCSharp.UI
         private void button4_Click(object sender, EventArgs e)
         {
             this.StartPosition = FormStartPosition.CenterParent;
-            new LoginAndRegisterWindow().ShowDialog();
+            new LoginAndRegister().ShowDialog();
         }
     }
 }

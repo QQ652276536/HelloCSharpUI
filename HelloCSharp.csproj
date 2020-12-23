@@ -118,11 +118,11 @@
     <Compile Include="UI\ControlLogin.Designer.cs">
       <DependentUpon>ControlLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MainWindow.cs">
+    <Compile Include="UI\Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\MainWindow.Designer.cs">
-      <DependentUpon>MainWindow.cs</DependentUpon>
+    <Compile Include="UI\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MH1902.cs">
       <SubType>Form</SubType>
@@ -136,11 +136,11 @@
     <Compile Include="UI\ControlRegister.Designer.cs">
       <DependentUpon>ControlRegister.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\LoginAndRegisterWindow.cs">
+    <Compile Include="UI\LoginAndRegister.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\LoginAndRegisterWindow.Designer.cs">
-      <DependentUpon>LoginAndRegisterWindow.cs</DependentUpon>
+    <Compile Include="UI\LoginAndRegister.Designer.cs">
+      <DependentUpon>LoginAndRegister.cs</DependentUpon>
     </Compile>
     <Compile Include="MainFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -160,8 +160,8 @@
     <EmbeddedResource Include="UI\ControlLogin.resx">
       <DependentUpon>ControlLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\MainWindow.resx">
-      <DependentUpon>MainWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MH1902.resx">
       <DependentUpon>MH1902.cs</DependentUpon>
@@ -169,8 +169,8 @@
     <EmbeddedResource Include="UI\ControlRegister.resx">
       <DependentUpon>ControlRegister.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\LoginAndRegisterWindow.resx">
-      <DependentUpon>LoginAndRegisterWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\LoginAndRegister.resx">
+      <DependentUpon>LoginAndRegister.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

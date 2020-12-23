@@ -1,6 +1,6 @@
 ﻿namespace HelloCSharp.UI
 {
-    partial class Zm301TestWidnow
+    partial class Zm301Test
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Zm301Test));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
@@ -496,7 +497,7 @@
             this.cbx_port.TabIndex = 6;
             this.cbx_port.SelectedIndexChanged += new System.EventHandler(this.cbx_port_SelectedIndexChanged);
             // 
-            // Zm301TestWidnow
+            // Zm301Test
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -504,8 +505,9 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "Zm301TestWidnow";
+            this.Name = "Zm301Test";
             this.Text = "ZM301研发压力测试工具";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

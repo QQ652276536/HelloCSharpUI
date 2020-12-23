@@ -13,23 +13,11 @@ namespace HelloCSharp.UI
     {
 
         /// <summary>
-        /// 日志文本框委托
+        /// 所有Label委托
         /// </summary>
         /// <param name="str"></param>
         /// <param name="color"></param>
-        private delegate void TxtDele(string str, Color color);
-
-        /// <summary>
-        /// 传感器标签委托
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="color"></param>
-        private delegate void LabVersionDele(string str, Color color);
-        private delegate void LabSensorDele(string str, Color color);
-        private delegate void LabDoorDele(string str, Color color);
-        private delegate void LabLockDele(string str, Color color);
-        private delegate void LabGpsDele(string str, Color color);
-        private delegate void LabElecDele(string str, Color color);
+        private delegate void LabDele(Label lab, string str, Color color);
 
         /// <summary>
         /// 查询命令，校验码已提前算好
@@ -141,28 +129,27 @@ namespace HelloCSharp.UI
             int len = MyConvertUtil.HexStrToInt(strArray[9]);
             switch (type)
             {
-                //68 53 18 02 01 01 00 68 B1 0A 35 34 34 33 43 47 8A 63 63 64 08 16
                 case "B1":
                     int sensor = Convert.ToInt32(strArray[10], 16) - 51;
                     if (sensor > 0)
-                        LabSensorChangedByDele("成功", Color.Green);
+                        LabChangedByDele(lab_sensor, "成功", Color.Green);
                     else
-                        LabSensorChangedByDele("失败", Color.Red);
+                        LabChangedByDele(lab_sensor, "失败", Color.Red);
                     int doorState = Convert.ToInt32(strArray[11], 16) - 51;
                     if (doorState == 1)
-                        LabDoorChangedByDele("开", Color.Green);
+                        LabChangedByDele(lab_door, "开", Color.Green);
                     else
-                        LabDoorChangedByDele("关", Color.Red);
+                        LabChangedByDele(lab_door, "关", Color.Red);
                     int openLock = Convert.ToInt32(strArray[12], 16) - 51;
                     if (openLock == 1)
-                        LabLockChangedByDele("成功", Color.Green);
+                        LabChangedByDele(lab_lock, "成功", Color.Green);
                     else
-                        LabLockChangedByDele("失败", Color.Red);
+                        LabChangedByDele(lab_lock, "失败", Color.Red);
                     int gpsState = Convert.ToInt32(strArray[13], 16) - 51;
                     if (gpsState == 1)
-                        LabGpsChangedByDele("定位", Color.Green);
+                        LabChangedByDele(lab_gps, "定位", Color.Green);
                     else
-                        LabGpsChangedByDele("未定位", Color.Red);
+                        LabChangedByDele(lab_gps, "未定位", Color.Red);
                     int elec1 = (Convert.ToInt32(strArray[14], 16) - 51);
                     int elec2 = (Convert.ToInt32(strArray[15], 16) - 51);
                     //判断负数
@@ -171,13 +158,13 @@ namespace HelloCSharp.UI
                     if (elec >= 3 && elec <= 4.2)
                     {
                         if (elec <= 3.3)
-                            LabElecChangedByDele(elec + "V（低电压）", Color.Green);
+                            LabChangedByDele(lab_elec, elec + "V（低电压）", Color.Green);
                         else
-                            LabElecChangedByDele(elec + "V", Color.Green);
+                            LabChangedByDele(lab_elec, elec + "V", Color.Green);
                     }
                     else
                     {
-                        LabElecChangedByDele(elec + "V", Color.Red);
+                        LabChangedByDele(lab_elec, elec + "V", Color.Red);
                     }
                     int ver1 = Convert.ToInt32(strArray[16], 16) - 51;
                     string hexVer1 = MyConvertUtil.HexStrToStr(ver1.ToString("X"));
@@ -187,7 +174,7 @@ namespace HelloCSharp.UI
                     string hexVer3 = MyConvertUtil.HexStrToStr(ver3.ToString("X"));
                     int ver4 = Convert.ToInt32(strArray[19], 16) - 51;
                     string hexVer4 = MyConvertUtil.HexStrToStr(ver4.ToString("X"));
-                    LabVersionChangedByDele(hexVer1 + hexVer2 + hexVer3 + hexVer4, Color.Green);
+                    LabChangedByDele(lab_ver, hexVer1 + hexVer2 + hexVer3 + hexVer4, Color.Green);
                     break;
             }
         }
@@ -251,6 +238,7 @@ namespace HelloCSharp.UI
             {
                 //清空缓存
                 _receivedStr = "";
+                _logger.WriteException(ex);
             }
         }
 
@@ -268,122 +256,24 @@ namespace HelloCSharp.UI
         }
 
         /// <summary>
-        /// 修改版本号标签的内容
+        /// 修改所有Label标签的内容
         /// </summary>
+        /// <param name="lab"></param>
         /// <param name="str"></param>
         /// <param name="color"></param>
-        private void LabVersionChangedByDele(string str, Color color)
+        private void LabChangedByDele(Label lab, string str, Color color)
         {
 
             //非UI线程访问控件时
-            if (lab_ver.InvokeRequired)
+            if (lab.InvokeRequired)
             {
-                lab_ver.Invoke(new LabVersionDele(LabVersionChangedByDele), str, color);
+                lab.Invoke(new LabDele(LabChangedByDele), lab, str, color);
             }
             else
             {
-                lab_ver.Text = str;
-                lab_ver.ForeColor = color;
-            }
-        }
-
-        /// <summary>
-        /// 修改传感器标签的内容
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="color"></param>
-        private void LabSensorChangedByDele(string str, Color color)
-        {
-
-            //非UI线程访问控件时
-            if (lab_sensor.InvokeRequired)
-            {
-                lab_sensor.Invoke(new LabSensorDele(LabSensorChangedByDele), str, color);
-            }
-            else
-            {
-                lab_sensor.Text = str;
-                lab_sensor.ForeColor = color;
-            }
-        }
-
-        /// <summary>
-        /// 修改门状态标签的内容
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="color"></param>
-        private void LabDoorChangedByDele(string str, Color color)
-        {
-
-            //非UI线程访问控件时
-            if (lab_door.InvokeRequired)
-            {
-                lab_door.Invoke(new LabDoorDele(LabDoorChangedByDele), str, color);
-            }
-            else
-            {
-                lab_door.Text = str;
-                lab_door.ForeColor = color;
-            }
-        }
-
-        /// <summary>
-        /// 修改锁状态标签的内容
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="color"></param>
-        private void LabLockChangedByDele(string str, Color color)
-        {
-
-            //非UI线程访问控件时
-            if (lab_lock.InvokeRequired)
-            {
-                lab_lock.Invoke(new LabLockDele(LabLockChangedByDele), str, color);
-            }
-            else
-            {
-                lab_lock.Text = str;
-                lab_lock.ForeColor = color;
-            }
-        }
-
-        /// <summary>
-        /// 修改GPS状态标签的内容
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="color"></param>
-        private void LabGpsChangedByDele(string str, Color color)
-        {
-
-            //非UI线程访问控件时
-            if (lab_gps.InvokeRequired)
-            {
-                lab_gps.Invoke(new LabGpsDele(LabGpsChangedByDele), str, color);
-            }
-            else
-            {
-                lab_gps.Text = str;
-                lab_gps.ForeColor = color;
-            }
-        }
-
-        /// <summary>
-        /// 修改电池电压标签的内容
-        /// </summary>
-        /// <param name="str"></param>
-        /// <param name="color"></param>
-        private void LabElecChangedByDele(string str, Color color)
-        {
-
-            //非UI线程访问控件时
-            if (lab_elec.InvokeRequired)
-            {
-                lab_elec.Invoke(new LabElecDele(LabElecChangedByDele), str, color);
-            }
-            else
-            {
-                lab_elec.Text = str;
-                lab_elec.ForeColor = color;
+                _logger.WriteLog(str);
+                lab.Text = str;
+                lab.ForeColor = color;
             }
         }
 
@@ -441,6 +331,7 @@ namespace HelloCSharp.UI
             }
             catch (Exception ex)
             {
+                _logger.WriteException(ex);
             }
         }
 

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace HelloCSharp.UI
 {
-    partial class MainWindow
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@ namespace HelloCSharp.UI
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.group = new System.Windows.Forms.GroupBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -59,7 +59,7 @@ namespace HelloCSharp.UI
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(245, 25);
+            this.button3.Location = new System.Drawing.Point(123, 56);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 25);
             this.button3.TabIndex = 2;
@@ -69,7 +69,7 @@ namespace HelloCSharp.UI
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(125, 25);
+            this.button2.Location = new System.Drawing.Point(5, 56);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 25);
             this.button2.TabIndex = 1;
@@ -82,7 +82,7 @@ namespace HelloCSharp.UI
             this.button1.BackColor = System.Drawing.Color.Transparent;
             this.button1.Location = new System.Drawing.Point(5, 25);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 25);
+            this.button1.Size = new System.Drawing.Size(218, 25);
             this.button1.TabIndex = 0;
             this.button1.Text = "ZM301压力测试";
             this.button1.UseVisualStyleBackColor = false;

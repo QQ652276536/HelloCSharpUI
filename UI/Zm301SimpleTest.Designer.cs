@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Zm301SimpleTest));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chk_cycle = new System.Windows.Forms.CheckBox();
             this.cbx_parity = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cbx_data = new System.Windows.Forms.ComboBox();
@@ -52,7 +53,6 @@
             this.lab_lock = new System.Windows.Forms.Label();
             this.lab_door = new System.Windows.Forms.Label();
             this.lab_ver = new System.Windows.Forms.Label();
-            this.chk_cycle = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -76,6 +76,17 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "串口配置";
+            // 
+            // chk_cycle
+            // 
+            this.chk_cycle.AutoSize = true;
+            this.chk_cycle.Location = new System.Drawing.Point(392, 67);
+            this.chk_cycle.Name = "chk_cycle";
+            this.chk_cycle.Size = new System.Drawing.Size(91, 20);
+            this.chk_cycle.TabIndex = 9;
+            this.chk_cycle.Text = "循环测试";
+            this.chk_cycle.UseVisualStyleBackColor = true;
+            this.chk_cycle.CheckedChanged += new System.EventHandler(this.chk_cycle_CheckedChanged);
             // 
             // cbx_parity
             // 
@@ -293,17 +304,6 @@
             this.lab_ver.TabIndex = 4;
             this.lab_ver.Text = "null";
             // 
-            // chk_cycle
-            // 
-            this.chk_cycle.AutoSize = true;
-            this.chk_cycle.Location = new System.Drawing.Point(392, 67);
-            this.chk_cycle.Name = "chk_cycle";
-            this.chk_cycle.Size = new System.Drawing.Size(91, 20);
-            this.chk_cycle.TabIndex = 9;
-            this.chk_cycle.Text = "循环测试";
-            this.chk_cycle.UseVisualStyleBackColor = true;
-            this.chk_cycle.CheckedChanged += new System.EventHandler(this.chk_cycle_CheckedChanged);
-            // 
             // Zm301SimpleTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -315,7 +315,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Zm301SimpleTest";
-            this.Text = "Zm301SimpleTest";
+            this.Text = "ZM301简易测试工具";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
