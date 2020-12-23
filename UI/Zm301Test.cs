@@ -917,10 +917,10 @@ namespace HelloCSharp.UI
                     if (flag)
                     {
                         int len = _receivedStr.Length;
-                        Print("收到完整的指令（Hex）：" + _receivedStr + "，数据长度：" + len);
+                        Print("收到完整的指令（Hex）：" + _receivedStr + "，长度：" + len);
                         _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
                         //显示收到的数据
-                        LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，数据长度：" + len + "\r\n", Color.Black);
+                        LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "，长度：" + len + "\r\n", Color.Black);
                         //解析数据
                         Parse(_receivedStr);
                         //已收到完整数据，清空缓存

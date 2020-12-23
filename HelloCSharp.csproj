@@ -97,11 +97,17 @@
     <Compile Include="Application\LoginAndRegister\VerifyCode.cs" />
     <Compile Include="Application\LoginAndRegister\Register.cs" />
     <Compile Include="SQLServer\SQLServerConnectionTool.cs" />
-    <Compile Include="UI\Zm301TestWindow.cs">
+    <Compile Include="UI\Zm301SimpleTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Zm301TestWindow.Designer.cs">
-      <DependentUpon>Zm301TestWindow.cs</DependentUpon>
+    <Compile Include="UI\Zm301SimpleTest.Designer.cs">
+      <DependentUpon>Zm301SimpleTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Zm301Test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Zm301Test.Designer.cs">
+      <DependentUpon>Zm301Test.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\MyConvertUtil.cs" />
     <Compile Include="Util\MyLogger.cs" />
@@ -182,8 +188,11 @@
     <EmbeddedResource Include="UI\WriteSN.resx">
       <DependentUpon>WriteSN.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Zm301TestWindow.resx">
-      <DependentUpon>Zm301TestWindow.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Zm301SimpleTest.resx">
+      <DependentUpon>Zm301SimpleTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Zm301Test.resx">
+      <DependentUpon>Zm301Test.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
