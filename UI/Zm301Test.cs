@@ -139,7 +139,7 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 读取超时时间
         /// </summary>
-        private readonly int TIME_OUT = 2 * 1000;
+        private readonly int TIME_OUT = 3 * 1000;
 
         private MyLogger _logger = MyLogger.Instance;
         //用于获取当前毫秒，Ticks为纳秒，转换为毫秒需要除以10000，转换为秒需要除以10000000
@@ -828,9 +828,9 @@ namespace HelloCSharp.UI
                             string speedStr = speed1 + speed2;
                             int speed = Convert.ToInt32(speedStr, 16);
                             LogTxtChangedByDele("GPS位置，速度：" + speed + "km/h\r\n", Color.Green);
-                            //方向
-                            string dir1 = (Convert.ToInt32(strArray[30], 16) - 51).ToString("X");
-                            string dir2 = (Convert.ToInt32(strArray[29], 16) - 51).ToString("X");
+                            //方向，因为需要转换成10进制，所以要判断负数情况
+                            string dir1 = (Convert.ToInt32(strArray[30], 16) - 51).ToString("X").Replace("FF", "");
+                            string dir2 = (Convert.ToInt32(strArray[29], 16) - 51).ToString("X").Replace("FF", "");
                             string dirStr = dir1 + dir2;
                             int dir = Convert.ToInt32(dirStr, 16);
                             LogTxtChangedByDele("GPS位置，方向：" + dir + "\r\n", Color.Green);
@@ -871,24 +871,43 @@ namespace HelloCSharp.UI
                 byte[] byteArray = new byte[byteLen];
                 _serialPort.Read(byteArray, 0, byteArray.Length);
                 string str = MyConvertUtil.BytesToStr(byteArray);
-                _logger.WriteLog("本次读取：" + str + "，长度：" + str.Length);
+                _logger.WriteLog("读取：" + str + "，长度：" + str.Length);
                 _receivedStr += str;
                 _logger.WriteLog("累计读取：" + _receivedStr + "，长度：" + _receivedStr.Length);
-                //保证数据是以68开头
+                //目前最短的数据内容的长度是12个字节
+                if (_receivedStr.Length < 23)
+                    return;
+                //C#串口偶尔会莫名其妙的发3F下来，网上说和校验位有关，但是改了校验位就和硬件无法通信，所以暂时这样处理
+                _receivedStr = _receivedStr.Replace("3F3F", "");
+
                 int beginIndex = _receivedStr.IndexOf("68");
                 if (beginIndex > 0)
                     _receivedStr = _receivedStr.Substring(beginIndex);
-                //目前最短的数据内容的长度是12
-                if (_receivedStr.Length < 24)
-                    return;
-                //保证数据是以16结尾
                 int endIndex = _receivedStr.LastIndexOf("16");
-                //if (endIndex > 0)
-                //_receivedStr = _receivedStr.Substring(0, endIndex + 2);
-                _logger.WriteLog("过滤掉干扰数据后：" + _receivedStr + "，长度：" + _receivedStr.Length);
-                //对读取GPS特殊处理：GPS完整数据长度为62位
-                if (16 == _receivedStr.IndexOf("8A") && _receivedStr.Length < 63)
+                //开锁、设置表箱号、设置工号、查询开关锁事件、查询开关门事件、查询窃电事件
+                if (endIndex == 22 && _receivedStr.Length >= 24)
+                    _receivedStr = _receivedStr.Substring(0, 24);
+                //对时
+                else if (endIndex == 30 && _receivedStr.Length >= 32)
+                    _receivedStr = _receivedStr.Substring(0, 32);
+                //读取表箱号
+                else if (endIndex == 34 && _receivedStr.Length >= 36)
+                    _receivedStr = _receivedStr.Substring(0, 36);
+                //读取工号
+                else if (endIndex == 38 && _receivedStr.Length >= 40)
+                    _receivedStr = _receivedStr.Substring(0, 40);
+                //查询振动事件
+                else if (endIndex == 52 && _receivedStr.Length >= 54)
+                    _receivedStr = _receivedStr.Substring(0, 54);
+                //查询事件总数
+                else if (endIndex == 58 && _receivedStr.Length >= 60)
+                    _receivedStr = _receivedStr.Substring(0, 60);
+                //查询GPS
+                else if (endIndex == 66 && _receivedStr.Length >= 68)
+                    _receivedStr = _receivedStr.Substring(0, 68);
+                else
                     return;
+
                 //计算收到的数据的校验码的时候不包含最后现个字节
                 string tempReceivedStr = _receivedStr.Substring(0, _receivedStr.Length - 4);
                 _logger.WriteLog("参与计算校验码的数据（Hex）：" + tempReceivedStr);
@@ -917,6 +936,9 @@ namespace HelloCSharp.UI
                 else
                 {
                     _logger.WriteLog("校验码不正确，继续读取...");
+                    if (_receivedStr.Length > 68)
+                        //收到的数据错误，清空缓存
+                        _receivedStr = "";
                 }
             }
             catch (Exception ex)
