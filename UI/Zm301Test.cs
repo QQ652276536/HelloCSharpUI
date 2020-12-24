@@ -191,15 +191,14 @@ namespace HelloCSharp.UI
         {
             while (_timeOutThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
-                long tempCurrentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                //发送指令后再判断是否读取超时
+                //没有操作时等待
                 if (_currentMillis == 0)
                     continue;
+                long tempCurrentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                 bool timeOutFlag = tempCurrentMillis - _currentMillis > TIME_OUT;
                 //一、操作类型不为空、记录当前毫秒值不为零，则说明有发送指令的动作
-                //二、接收数据的缓存为空则说明未收到任何数据
-                //三、当前毫秒值与记录的毫秒值之差大于指定时间则表示超时
-                if (!"".Equals(_operation) && "".Equals(_receivedStr) && _currentMillis > 0 && timeOutFlag)
+                //二、当前毫秒值与记录的毫秒值之差大于指定时间则表示超时
+                if (!"".Equals(_operation) && _currentMillis > 0 && timeOutFlag)
                 {
                     switch (_operation)
                     {
@@ -282,7 +281,7 @@ namespace HelloCSharp.UI
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送对时指令：" + MyConvertUtil.StrAddChar(timeCmd, 2, " ") + "（20" + yy + "年" + MM + "月" + DD + "日" + HH + "时" + mm + "分" + ss + "秒）\r\n", Color.Black);
                         }
-                        Thread.Sleep(1 * 1000);
+                        Thread.Sleep(3 * 1000);
                         _cycleTestStep = 1;
                         break;
                     //设置工号，调用设置工号的按钮事件即可
@@ -292,7 +291,7 @@ namespace HelloCSharp.UI
                             _operation = "设置工号";
                             btn_work_write_Click(null, null);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 2;
                         break;
@@ -302,7 +301,7 @@ namespace HelloCSharp.UI
                         _serialPort.Write(READ_EVENT_ALL_BYTE, 0, READ_EVENT_ALL_BYTE.Length);
                         _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                         LogTxtChangedByDele("发送查询事件总数指令：" + READ_EVENT_ALL + "\r\n", Color.Black);
-                        Thread.Sleep(1 * 1000);
+                        Thread.Sleep(3 * 1000);
                         _cycleTestStep = 3;
                         break;
                     //开锁事件
@@ -313,7 +312,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_OPENLOCK_BYTE, 0, READ_EVENT_ALL_OPENLOCK_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询开锁事件指令：" + READ_EVENT_ALL_OPENLOCK + "\r\n", Color.Black);
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 4;
                         break;
@@ -325,7 +324,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_CLOSELOCK_BYTE, 0, READ_EVENT_ALL_CLOSELOCK_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询关锁事件指令：" + READ_EVENT_ALL_CLOSELOCK + "\r\n", Color.Black);
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 5;
                         break;
@@ -337,7 +336,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_OPENDOOR_BYTE, 0, READ_EVENT_ALL_OPENDOOR_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询开门事件指令：" + READ_EVENT_ALL_OPENDOOR + "\r\n", Color.Black);
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 6;
                         break;
@@ -349,7 +348,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_CLOSEDOOR_BYTE, 0, READ_EVENT_ALL_CLOSEDOOR_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询关门事件指令：" + READ_EVENT_ALL_CLOSEDOOR + "\r\n", Color.Black);
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 7;
                         break;
@@ -361,7 +360,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_STEAL_BYTE, 0, READ_EVENT_ALL_STEAL_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询窃电事件指令：" + READ_EVENT_ALL_STEAL + "\r\n", Color.Black);
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 8;
                         break;
@@ -373,7 +372,7 @@ namespace HelloCSharp.UI
                             _serialPort.Write(READ_EVENT_ALL_VIBRATE_BYTE, 0, READ_EVENT_ALL_VIBRATE_BYTE.Length);
                             _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
                             LogTxtChangedByDele("发送查询振动事件指令：" + READ_EVENT_ALL_VIBRATE + "\r\n", Color.Black);
-                            Thread.Sleep(1 * 1000);
+                            Thread.Sleep(3 * 1000);
                         }
                         _cycleTestStep = 2;
                         break;
@@ -844,14 +843,17 @@ namespace HelloCSharp.UI
                         }
                         break;
                 }
-                //重置记录的状态
-                _currentMillis = 0;
-                _operation = "";
             }
             catch (Exception ex)
             {
                 _logger.WriteException(ex);
                 LogTxtChangedByDele(ex.ToString() + "\r\n", Color.Red);
+            }
+            finally
+            {
+                //重置记录的状态
+                _currentMillis = 0;
+                _operation = "";
             }
         }
 
@@ -1265,6 +1267,7 @@ namespace HelloCSharp.UI
                     LogTxtChangedByDele("已关闭：" + _portName + "\r\n", Color.Black);
                     EnableBtn(false);
                     btn_open.Text = "打开串口";
+                    btn_cycle_start.Text = "开始";
                 }
                 //重置记录的状态
                 _currentMillis = 0;
