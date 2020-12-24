@@ -35,7 +35,7 @@
             this.btn_name_write = new System.Windows.Forms.Button();
             this.txt_name = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.txt_log = new System.Windows.Forms.RichTextBox();
+            this.txt_log1 = new System.Windows.Forms.RichTextBox();
             this.btn_clear = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btn_gps = new System.Windows.Forms.Button();
@@ -117,7 +117,7 @@
             this.groupBox9.Size = new System.Drawing.Size(273, 53);
             this.groupBox9.TabIndex = 5;
             this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "蓝牙名称（5Hex）";
+            this.groupBox9.Text = "蓝牙名称（10位,1-9/A-F）";
             // 
             // btn_name_write
             // 
@@ -132,7 +132,7 @@
             // txt_name
             // 
             this.txt_name.Location = new System.Drawing.Point(6, 20);
-            this.txt_name.MaxLength = 5;
+            this.txt_name.MaxLength = 10;
             this.txt_name.Name = "txt_name";
             this.txt_name.Size = new System.Drawing.Size(100, 26);
             this.txt_name.TabIndex = 2;
@@ -140,7 +140,7 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Controls.Add(this.txt_log);
+            this.groupBox6.Controls.Add(this.txt_log1);
             this.groupBox6.Controls.Add(this.btn_clear);
             this.groupBox6.Location = new System.Drawing.Point(8, 322);
             this.groupBox6.Name = "groupBox6";
@@ -149,16 +149,16 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "日志";
             // 
-            // txt_log
+            // txt_log1
             // 
-            this.txt_log.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.txt_log.Location = new System.Drawing.Point(4, 21);
-            this.txt_log.Name = "txt_log";
-            this.txt_log.ReadOnly = true;
-            this.txt_log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txt_log.Size = new System.Drawing.Size(736, 293);
-            this.txt_log.TabIndex = 1;
-            this.txt_log.Text = "";
+            this.txt_log1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txt_log1.Location = new System.Drawing.Point(4, 21);
+            this.txt_log1.Name = "txt_log1";
+            this.txt_log1.ReadOnly = true;
+            this.txt_log1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.txt_log1.Size = new System.Drawing.Size(736, 293);
+            this.txt_log1.TabIndex = 1;
+            this.txt_log1.Text = "";
             // 
             // btn_clear
             // 
@@ -509,6 +509,7 @@
             this.MaximizeBox = false;
             this.Name = "Zm301Test";
             this.Text = "ZM301研发压力测试工具";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Zm301Test_FormClosing);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
@@ -568,7 +569,7 @@
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button btn_name_write;
         private System.Windows.Forms.TextBox txt_name;
-        private System.Windows.Forms.RichTextBox txt_log;
+        private System.Windows.Forms.RichTextBox txt_log1;
         private System.Windows.Forms.RichTextBox txt_log2;
     }
 }

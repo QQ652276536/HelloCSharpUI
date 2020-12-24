@@ -431,18 +431,18 @@ namespace HelloCSharp.UI
             {
                 case 0:
                     //非UI线程访问控件时
-                    if (txt_log.InvokeRequired)
+                    if (txt_log1.InvokeRequired)
                     {
-                        txt_log.Invoke(new LogTxtDele(LogTxtChangedByDele), str, color);
+                        txt_log1.Invoke(new LogTxtDele(LogTxtChangedByDele), str, color);
                     }
                     else
                     {
-                        txt_log.SelectionColor = color;
-                        txt_log.AppendText(str);
+                        txt_log1.SelectionColor = color;
+                        txt_log1.AppendText(str);
                         //设置光标的位置到文本尾
-                        txt_log.Select(txt_log.TextLength, 0);
+                        txt_log1.Select(txt_log1.TextLength, 0);
                         //滚动到控件光标处  
-                        txt_log.ScrollToCaret();
+                        txt_log1.ScrollToCaret();
                     }
                     break;
                 case 1:
@@ -540,6 +540,7 @@ namespace HelloCSharp.UI
                 cbx_parity.DataSource = dataParity;
                 cbx_parity.ValueMember = "value";
             }
+            cbx_parity.SelectedIndex = 2;
         }
 
         /// <summary>
@@ -736,14 +737,14 @@ namespace HelloCSharp.UI
                                     int workId6 = Convert.ToInt32(strArray[15], 16) - 51;
                                     int workId7 = Convert.ToInt32(strArray[16], 16) - 51;
                                     int workId8 = Convert.ToInt32(strArray[17], 16) - 51;
-                                    string hexWorkId1 = workId1.ToString("X");
-                                    string hexWorkId2 = workId2.ToString("X");
-                                    string hexWorkId3 = workId3.ToString("X");
-                                    string hexWorkId4 = workId4.ToString("X");
-                                    string hexWorkId5 = workId5.ToString("X");
-                                    string hexWorkId6 = workId6.ToString("X");
-                                    string hexWorkId7 = workId7.ToString("X");
-                                    string hexWorkId8 = workId8.ToString("X");
+                                    string hexWorkId1 = workId1.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId2 = workId2.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId3 = workId3.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId4 = workId4.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId5 = workId5.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId6 = workId6.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId7 = workId7.ToString("X").PadLeft(2, '0');
+                                    string hexWorkId8 = workId8.ToString("X").PadLeft(2, '0');
                                     _hexWorkId = hexWorkId1 + hexWorkId2 + hexWorkId3 + hexWorkId4 + hexWorkId5 + hexWorkId6 + hexWorkId7 + hexWorkId8;
                                     string workId = MyConvertUtil.HexStrToStr(_hexWorkId);
                                     WorkIdTxtChangedByDele(workId);
@@ -769,12 +770,12 @@ namespace HelloCSharp.UI
                                 int boxId4 = Convert.ToInt32(strArray[13], 16) - 51;
                                 int boxId5 = Convert.ToInt32(strArray[14], 16) - 51;
                                 int boxId6 = Convert.ToInt32(strArray[15], 16) - 51;
-                                string hexBoxId1 = boxId1.ToString("X");
-                                string hexBoxId2 = boxId2.ToString("X");
-                                string hexBoxId3 = boxId3.ToString("X");
-                                string hexBoxId4 = boxId4.ToString("X");
-                                string hexBoxId5 = boxId5.ToString("X");
-                                string hexBoxId6 = boxId6.ToString("X");
+                                string hexBoxId1 = boxId1.ToString("X").PadLeft(2, '0');
+                                string hexBoxId2 = boxId2.ToString("X").PadLeft(2, '0');
+                                string hexBoxId3 = boxId3.ToString("X").PadLeft(2, '0');
+                                string hexBoxId4 = boxId4.ToString("X").PadLeft(2, '0');
+                                string hexBoxId5 = boxId5.ToString("X").PadLeft(2, '0');
+                                string hexBoxId6 = boxId6.ToString("X").PadLeft(2, '0');
                                 string boxId = MyConvertUtil.HexStrToStr(hexBoxId1 + hexBoxId2 + hexBoxId3 + hexBoxId4 + hexBoxId5 + hexBoxId6);
                                 BoxIdTxtChangedByDele(boxId);
                                 LogTxtChangedByDele("读取表箱号成功：" + boxId + "\r\n", Color.Green);
@@ -953,7 +954,7 @@ namespace HelloCSharp.UI
         private void txt_name_TextChanged(object sender, EventArgs e)
         {
             string input = txt_name.Text.ToString();
-            bool flag = Regex.IsMatch(input, @"[A-Z a-z 0-9]{5}");
+            bool flag = Regex.IsMatch(input, @"[A-F a-f 0-9]{10}");
             if (flag)
                 btn_name_write.Enabled = true;
             else
@@ -980,6 +981,33 @@ namespace HelloCSharp.UI
                 btn_box_write.Enabled = false;
         }
 
+        /// <summary>
+        /// 关闭窗体
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Zm301Test_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _openLock = 0;
+            _closeLock = 0;
+            _openDoor = 0;
+            _closeDoor = 0;
+            _steal = 0;
+            _vibrate = 0;
+            _currentMillis = 0;
+            _operation = "";
+            _cycleTestStep = 0;
+            _timeOutThreadFlag = false;
+            _timeOutThread = null;
+            _eventAllThreadFlag = false;
+            _eventAllThread = null;
+        }
+
+        /// <summary>
+        /// TabControl切换
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             _tabSelectedIndex = tabControl.SelectedIndex;
@@ -998,145 +1026,146 @@ namespace HelloCSharp.UI
         private void btn_name_write_Click(object sender, EventArgs e)
         {
             string input = txt_name.Text.ToString();
-            _hexName = "";
             //蓝牙名称
-            for (int i = 0; i < input.Length; i++)
+            _hexName = "";
+            //for (int i = 0; i < input.Length; i += 2)
+            //{
+            //    string temp = MyConvertUtil.CharAt(input, i) + MyConvertUtil.CharAt(input, i + 1);
+            //    temp = MyConvertUtil.StrToHexStr(temp);
+            //    _logger.WriteLog("设置蓝牙名称，遂字转换（Hex）：" + temp);
+            //    _hexName += temp;
+            //}
+            _hexName = input;
+            if (!"".Equals(_hexName))
             {
-                string temp = MyConvertUtil.CharAt(input, i);
-                temp = MyConvertUtil.StrToHexStr(temp);
-                if (temp.Length < 2)
-                    temp = "0" + temp;
-                _logger.WriteLog("设置蓝牙名称，遂字转换（Hex）：" + temp);
-                _hexName += temp;
+                //重新生成查询开锁事件指令并计算校验码
+                //READ_EVENT_ALL_OPENLOCK = "FE FE FE FE 68 22 23 01 56 34 00 68 01 00 A1 16";
+                string readEventOpenLockCmd = "68" + _hexName + "00680100";
+                string readEventOpenLockCrc = MyConvertUtil.CalcZM301CRC(readEventOpenLockCmd);
+                READ_EVENT_ALL_OPENLOCK = "FEFEFEFE" + readEventOpenLockCmd + readEventOpenLockCrc + "16";
+                //添加空格
+                READ_EVENT_ALL_OPENLOCK = MyConvertUtil.StrAddChar(READ_EVENT_ALL_OPENLOCK, 2, " ");
+                READ_EVENT_ALL_OPENLOCK_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_OPENLOCK);
+
+                //重新生成查询关锁事件指令并计算校验码
+                //READ_EVENT_ALL_CLOSELOCK = "FE FE FE FE 68 22 23 01 56 34 00 68 02 00 A2 16";
+                string readEventCloseLockCmd = "68" + _hexName + "00680200";
+                string readEventCloseLockCrc = MyConvertUtil.CalcZM301CRC(readEventCloseLockCmd);
+                READ_EVENT_ALL_CLOSELOCK = "FEFEFEFE" + readEventCloseLockCmd + readEventCloseLockCrc + "16";
+                //添加空格
+                READ_EVENT_ALL_CLOSELOCK = MyConvertUtil.StrAddChar(READ_EVENT_ALL_CLOSELOCK, 2, " ");
+                READ_EVENT_ALL_CLOSELOCK_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_CLOSELOCK);
+
+                //重新生成查询开门事件指令并计算校验码
+                //READ_EVENT_ALL_OPENDOOR = "FE FE FE FE 68 22 23 01 56 34 00 68 03 00 A3 16";
+                string readEventOpenDoorCmd = "68" + _hexName + "00680300";
+                string readEventOpenDoorCrc = MyConvertUtil.CalcZM301CRC(readEventOpenDoorCmd);
+                READ_EVENT_ALL_OPENDOOR = "FEFEFEFE" + readEventOpenDoorCmd + readEventOpenDoorCrc + "16";
+                //添加空格
+                READ_EVENT_ALL_OPENDOOR = MyConvertUtil.StrAddChar(READ_EVENT_ALL_OPENDOOR, 2, " ");
+                READ_EVENT_ALL_OPENDOOR_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_OPENDOOR);
+
+                //重新生成查询关门事件指令并计算校验码
+                //READ_EVENT_ALL_CLOSEDOOR = "FE FE FE FE 68 22 23 01 56 34 00 68 04 00 A4 16";
+                string readEventCloseDoorCmd = "68" + _hexName + "00680400";
+                string readEventCloseDoorCrc = MyConvertUtil.CalcZM301CRC(readEventCloseDoorCmd);
+                READ_EVENT_ALL_CLOSEDOOR = "FEFEFEFE" + readEventCloseDoorCmd + readEventCloseDoorCrc + "16";
+                //添加空格
+                READ_EVENT_ALL_CLOSEDOOR = MyConvertUtil.StrAddChar(READ_EVENT_ALL_CLOSEDOOR, 2, " ");
+                READ_EVENT_ALL_CLOSEDOOR_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_CLOSEDOOR);
+
+                //重新生成查询窃电事件指令并计算校验码
+                //READ_EVENT_ALL_STEAL = "FE FE FE FE 68 22 23 01 56 34 00 68 05 00 A5 16";
+                string readEventStealCmd = "68" + _hexName + "00680500";
+                string readEventStealCrc = MyConvertUtil.CalcZM301CRC(readEventStealCmd);
+                READ_EVENT_ALL_STEAL = "FEFEFEFE" + readEventStealCmd + readEventStealCrc + "16";
+                //添加空格
+                READ_EVENT_ALL_STEAL = MyConvertUtil.StrAddChar(READ_EVENT_ALL_STEAL, 2, " ");
+                READ_EVENT_ALL_STEAL_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_STEAL);
+
+                //重新生成查询振动事件指令并计算校验码
+                //READ_EVENT_ALL_VIBRATE = "FE FE FE FE 68 22 23 01 56 34 00 68 09 00 A9 16";
+                string readEventVibrateCmd = "68" + _hexName + "00680900";
+                string readEventVibrateCrc = MyConvertUtil.CalcZM301CRC(readEventVibrateCmd);
+                READ_EVENT_ALL_VIBRATE = "FEFEFEFE" + readEventVibrateCmd + readEventVibrateCrc + "16";
+                //添加空格
+                READ_EVENT_ALL_VIBRATE = MyConvertUtil.StrAddChar(READ_EVENT_ALL_VIBRATE, 2, " ");
+                READ_EVENT_ALL_VIBRATE_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_VIBRATE);
+
+                //重新生成查询事件总数指令并计算校验码
+                //READ_EVENT_ALL = "FE FE FE FE 68 22 23 01 56 34 00 68 00 00 A0 16";
+                string readEventAllCmd = "68" + _hexName + "00680000";
+                string readEventAllCrc = MyConvertUtil.CalcZM301CRC(readEventAllCmd);
+                READ_EVENT_ALL = "FEFEFEFE" + readEventAllCmd + readEventAllCrc + "16";
+                //添加空格
+                READ_EVENT_ALL = MyConvertUtil.StrAddChar(READ_EVENT_ALL, 2, " ");
+                READ_EVENT_ALL_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL);
+
+                //重新生成开锁一指令并计算校验码
+                //OPEN_DOOR1 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 34 E5 16";
+                string openLock1Cmd = "68" + _hexName + "0068100134";
+                string openLock1Crc = MyConvertUtil.CalcZM301CRC(openLock1Cmd);
+                OPEN_DOOR1 = "FEFEFEFE" + openLock1Cmd + openLock1Crc + "16";
+                //添加空格
+                OPEN_DOOR1 = MyConvertUtil.StrAddChar(OPEN_DOOR1, 2, " ");
+                OPEN_DOOR1_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR1);
+
+                //重新生成开锁二指令并计算校验码
+                //OPEN_DOOR2 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 35 E6 16";
+                string openLock2Cmd = "68" + _hexName + "0068100135";
+                string openLock2Crc = MyConvertUtil.CalcZM301CRC(openLock2Cmd);
+                OPEN_DOOR2 = "FEFEFEFE" + openLock2Cmd + openLock2Crc + "16";
+                //添加空格
+                OPEN_DOOR2 = MyConvertUtil.StrAddChar(OPEN_DOOR2, 2, " ");
+                OPEN_DOOR2_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR2);
+
+                //重新生成开锁三指令并计算校验码
+                //OPEN_DOOR3 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 36 E7 16";
+                string openLock3Cmd = "68" + _hexName + "0068100136";
+                string openLock3Crc = MyConvertUtil.CalcZM301CRC(openLock3Cmd);
+                OPEN_DOOR3 = "FEFEFEFE" + openLock3Cmd + openLock3Crc + "16";
+                //添加空格
+                OPEN_DOOR3 = MyConvertUtil.StrAddChar(OPEN_DOOR3, 2, " ");
+                OPEN_DOOR3_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR3);
+
+                //重新生成开全部锁指令并计算校验码
+                //OPEN_DOOR_ALL = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 3A EB 16";
+                string openLockAllCmd = "68" + _hexName + "006810013A";
+                string openLockAllCrc = MyConvertUtil.CalcZM301CRC(openLockAllCmd);
+                OPEN_DOOR_ALL = "FEFEFEFE" + openLockAllCmd + openLockAllCrc + "16";
+                //添加空格
+                OPEN_DOOR_ALL = MyConvertUtil.StrAddChar(OPEN_DOOR_ALL, 2, " ");
+                OPEN_DOOR_ALL_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR_ALL);
+
+                //重新生成读取工号指令并计算校验码
+                //READ_WORK = "FE FE FE FE 68 22 23 01 56 34 00 68 0B 00 AB 16";
+                string readWorkCmd = "68" + _hexName + "00680B00";
+                string readWorkCrc = MyConvertUtil.CalcZM301CRC(readWorkCmd);
+                READ_WORK = "FEFEFEFE" + readWorkCmd + readWorkCrc + "16";
+                //添加空格
+                READ_WORK = MyConvertUtil.StrAddChar(READ_WORK, 2, " ");
+                READ_WORK_BYTE = MyConvertUtil.HexStrToBytes(READ_WORK);
+
+                //重新生成读取表箱号指令并计算校验码
+                //READ_BOX = "FE FE FE FE 68 22 23 01 56 34 00 68 06 00 A6 16";
+                string readBoxCmd = "68" + _hexName + "00680600";
+                string readBoxCrc = MyConvertUtil.CalcZM301CRC(readBoxCmd);
+                READ_BOX = "FEFEFEFE" + readBoxCmd + readBoxCrc + "16";
+                //添加空格
+                READ_BOX = MyConvertUtil.StrAddChar(READ_BOX, 2, " ");
+                READ_BOX_BYTE = MyConvertUtil.HexStrToBytes(READ_BOX);
+
+                //需要重新生成读取GPS位置指令并计算校验码
+                //READ_GPS = "FE FE FE FE 68 22 23 01 56 34 00 68 0A 00 AA 16";
+                string readGpsCmd = "68" + _hexName + "00680A00";
+                string readGpsCrc = MyConvertUtil.CalcZM301CRC(readGpsCmd);
+                READ_GPS = "FEFEFEFE" + readGpsCmd + readGpsCrc + "16";
+                //添加空格
+                READ_GPS = MyConvertUtil.StrAddChar(READ_GPS, 2, " ");
+                READ_GPS_BYTE = MyConvertUtil.HexStrToBytes(READ_GPS);
+
+                LogTxtChangedByDele("蓝牙名称即将设置为" + input + "，发送任意指令即生效\r\n", Color.Blue);
             }
-
-            //重新生成查询开锁事件指令并计算校验码
-            //READ_EVENT_ALL_OPENLOCK = "FE FE FE FE 68 22 23 01 56 34 00 68 01 00 A1 16";
-            string readEventOpenLockCmd = "68" + _hexName + "00680100";
-            string readEventOpenLockCrc = MyConvertUtil.CalcZM301CRC(readEventOpenLockCmd);
-            READ_EVENT_ALL_OPENLOCK = "FEFEFEFE" + readEventOpenLockCmd + readEventOpenLockCrc + "16";
-            //添加空格
-            READ_EVENT_ALL_OPENLOCK = MyConvertUtil.StrAddChar(READ_EVENT_ALL_OPENLOCK, 2, " ");
-            READ_EVENT_ALL_OPENLOCK_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_OPENLOCK);
-
-            //重新生成查询关锁事件指令并计算校验码
-            //READ_EVENT_ALL_CLOSELOCK = "FE FE FE FE 68 22 23 01 56 34 00 68 02 00 A2 16";
-            string readEventCloseLockCmd = "68" + _hexName + "00680200";
-            string readEventCloseLockCrc = MyConvertUtil.CalcZM301CRC(readEventCloseLockCmd);
-            READ_EVENT_ALL_CLOSELOCK = "FEFEFEFE" + readEventCloseLockCmd + readEventCloseLockCrc + "16";
-            //添加空格
-            READ_EVENT_ALL_CLOSELOCK = MyConvertUtil.StrAddChar(READ_EVENT_ALL_CLOSELOCK, 2, " ");
-            READ_EVENT_ALL_CLOSELOCK_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_CLOSELOCK);
-
-            //重新生成查询开门事件指令并计算校验码
-            //READ_EVENT_ALL_OPENDOOR = "FE FE FE FE 68 22 23 01 56 34 00 68 03 00 A3 16";
-            string readEventOpenDoorCmd = "68" + _hexName + "00680300";
-            string readEventOpenDoorCrc = MyConvertUtil.CalcZM301CRC(readEventOpenDoorCmd);
-            READ_EVENT_ALL_OPENDOOR = "FEFEFEFE" + readEventOpenDoorCmd + readEventOpenDoorCrc + "16";
-            //添加空格
-            READ_EVENT_ALL_OPENDOOR = MyConvertUtil.StrAddChar(READ_EVENT_ALL_OPENDOOR, 2, " ");
-            READ_EVENT_ALL_OPENDOOR_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_OPENDOOR);
-
-            //重新生成查询关门事件指令并计算校验码
-            //READ_EVENT_ALL_CLOSEDOOR = "FE FE FE FE 68 22 23 01 56 34 00 68 04 00 A4 16";
-            string readEventCloseDoorCmd = "68" + _hexName + "00680400";
-            string readEventCloseDoorCrc = MyConvertUtil.CalcZM301CRC(readEventCloseDoorCmd);
-            READ_EVENT_ALL_CLOSEDOOR = "FEFEFEFE" + readEventCloseDoorCmd + readEventCloseDoorCrc + "16";
-            //添加空格
-            READ_EVENT_ALL_CLOSEDOOR = MyConvertUtil.StrAddChar(READ_EVENT_ALL_CLOSEDOOR, 2, " ");
-            READ_EVENT_ALL_CLOSEDOOR_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_CLOSEDOOR);
-
-            //重新生成查询窃电事件指令并计算校验码
-            //READ_EVENT_ALL_STEAL = "FE FE FE FE 68 22 23 01 56 34 00 68 05 00 A5 16";
-            string readEventStealCmd = "68" + _hexName + "00680500";
-            string readEventStealCrc = MyConvertUtil.CalcZM301CRC(readEventStealCmd);
-            READ_EVENT_ALL_STEAL = "FEFEFEFE" + readEventStealCmd + readEventStealCrc + "16";
-            //添加空格
-            READ_EVENT_ALL_STEAL = MyConvertUtil.StrAddChar(READ_EVENT_ALL_STEAL, 2, " ");
-            READ_EVENT_ALL_STEAL_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_STEAL);
-
-            //重新生成查询振动事件指令并计算校验码
-            //READ_EVENT_ALL_VIBRATE = "FE FE FE FE 68 22 23 01 56 34 00 68 09 00 A9 16";
-            string readEventVibrateCmd = "68" + _hexName + "00680900";
-            string readEventVibrateCrc = MyConvertUtil.CalcZM301CRC(readEventVibrateCmd);
-            READ_EVENT_ALL_VIBRATE = "FEFEFEFE" + readEventVibrateCmd + readEventVibrateCrc + "16";
-            //添加空格
-            READ_EVENT_ALL_VIBRATE = MyConvertUtil.StrAddChar(READ_EVENT_ALL_VIBRATE, 2, " ");
-            READ_EVENT_ALL_VIBRATE_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL_VIBRATE);
-
-            //重新生成查询事件总数指令并计算校验码
-            //READ_EVENT_ALL = "FE FE FE FE 68 22 23 01 56 34 00 68 00 00 A0 16";
-            string readEventAllCmd = "68" + _hexName + "00680000";
-            string readEventAllCrc = MyConvertUtil.CalcZM301CRC(readEventAllCmd);
-            READ_EVENT_ALL = "FEFEFEFE" + readEventAllCmd + readEventAllCrc + "16";
-            //添加空格
-            READ_EVENT_ALL = MyConvertUtil.StrAddChar(READ_EVENT_ALL, 2, " ");
-            READ_EVENT_ALL_BYTE = MyConvertUtil.HexStrToBytes(READ_EVENT_ALL);
-
-            //重新生成开锁一指令并计算校验码
-            //OPEN_DOOR1 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 34 E5 16";
-            string openLock1Cmd = "68" + _hexName + "0068100134";
-            string openLock1Crc = MyConvertUtil.CalcZM301CRC(openLock1Cmd);
-            OPEN_DOOR1 = "FEFEFEFE" + openLock1Cmd + openLock1Crc + "16";
-            //添加空格
-            OPEN_DOOR1 = MyConvertUtil.StrAddChar(OPEN_DOOR1, 2, " ");
-            OPEN_DOOR1_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR1);
-
-            //重新生成开锁二指令并计算校验码
-            //OPEN_DOOR2 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 35 E6 16";
-            string openLock2Cmd = "68" + _hexName + "0068100135";
-            string openLock2Crc = MyConvertUtil.CalcZM301CRC(openLock2Cmd);
-            OPEN_DOOR2 = "FEFEFEFE" + openLock2Cmd + openLock2Crc + "16";
-            //添加空格
-            OPEN_DOOR2 = MyConvertUtil.StrAddChar(OPEN_DOOR2, 2, " ");
-            OPEN_DOOR2_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR2);
-
-            //重新生成开锁三指令并计算校验码
-            //OPEN_DOOR3 = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 36 E7 16";
-            string openLock3Cmd = "68" + _hexName + "0068100136";
-            string openLock3Crc = MyConvertUtil.CalcZM301CRC(openLock3Cmd);
-            OPEN_DOOR3 = "FEFEFEFE" + openLock3Cmd + openLock3Crc + "16";
-            //添加空格
-            OPEN_DOOR3 = MyConvertUtil.StrAddChar(OPEN_DOOR3, 2, " ");
-            OPEN_DOOR3_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR3);
-
-            //重新生成开全部锁指令并计算校验码
-            //OPEN_DOOR_ALL = "FE FE FE FE 68 22 23 01 56 34 00 68 10 01 3A EB 16";
-            string openLockAllCmd = "68" + _hexName + "006810013A";
-            string openLockAllCrc = MyConvertUtil.CalcZM301CRC(openLockAllCmd);
-            OPEN_DOOR_ALL = "FEFEFEFE" + openLockAllCmd + openLockAllCrc + "16";
-            //添加空格
-            OPEN_DOOR_ALL = MyConvertUtil.StrAddChar(OPEN_DOOR_ALL, 2, " ");
-            OPEN_DOOR_ALL_BYTE = MyConvertUtil.HexStrToBytes(OPEN_DOOR_ALL);
-
-            //重新生成读取工号指令并计算校验码
-            //READ_WORK = "FE FE FE FE 68 22 23 01 56 34 00 68 0B 00 AB 16";
-            string readWorkCmd = "68" + _hexName + "00680B00";
-            string readWorkCrc = MyConvertUtil.CalcZM301CRC(readWorkCmd);
-            READ_WORK = "FEFEFEFE" + readWorkCmd + readWorkCrc + "16";
-            //添加空格
-            READ_WORK = MyConvertUtil.StrAddChar(READ_WORK, 2, " ");
-            READ_WORK_BYTE = MyConvertUtil.HexStrToBytes(READ_WORK);
-
-            //重新生成读取表箱号指令并计算校验码
-            //READ_BOX = "FE FE FE FE 68 22 23 01 56 34 00 68 06 00 A6 16";
-            string readBoxCmd = "68" + _hexName + "00680600";
-            string readBoxCrc = MyConvertUtil.CalcZM301CRC(readBoxCmd);
-            READ_BOX = "FEFEFEFE" + readBoxCmd + readBoxCrc + "16";
-            //添加空格
-            READ_BOX = MyConvertUtil.StrAddChar(READ_BOX, 2, " ");
-            READ_BOX_BYTE = MyConvertUtil.HexStrToBytes(READ_BOX);
-
-            //需要重新生成读取GPS位置指令并计算校验码
-            //READ_GPS = "FE FE FE FE 68 22 23 01 56 34 00 68 0A 00 AA 16";
-            string readGpsCmd = "68" + _hexName + "00680A00";
-            string readGpsCrc = MyConvertUtil.CalcZM301CRC(readGpsCmd);
-            READ_GPS = "FEFEFEFE" + readGpsCmd + readGpsCrc + "16";
-            //添加空格
-            READ_GPS = MyConvertUtil.StrAddChar(READ_GPS, 2, " ");
-            READ_GPS_BYTE = MyConvertUtil.HexStrToBytes(READ_GPS);
-
-            LogTxtChangedByDele("蓝牙名称即将设置为" + input + "，发送任意指令即生效\r\n", Color.Blue);
         }
 
         /// <summary>
@@ -1351,17 +1380,20 @@ namespace HelloCSharp.UI
                 _logger.WriteLog("设置工号，遂字转换（Hex）：" + temp);
                 _hexWorkId += temp;
             }
-            string[] strArray = MyConvertUtil.StrSplitInterval(_hexWorkId, 2);
-            cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6] + strArray[7];
-            string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
-            _logger.WriteLog("计算出的校验码（Hex）：" + crcStr);
-            cmdStr += crcStr + "16";
-            cmdStr = "FEFEFEFE" + cmdStr;
-            byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
-            _operation = "设置工号";
-            _serialPort.Write(comByte, 0, comByte.Length);
-            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-            LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
+            if (!"".Equals(_hexWorkId))
+            {
+                string[] strArray = MyConvertUtil.StrSplitInterval(_hexWorkId, 2);
+                cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5] + strArray[6] + strArray[7];
+                string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
+                _logger.WriteLog("计算出的校验码（Hex）：" + crcStr);
+                cmdStr += crcStr + "16";
+                cmdStr = "FEFEFEFE" + cmdStr;
+                byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
+                _operation = "设置工号";
+                _serialPort.Write(comByte, 0, comByte.Length);
+                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                LogTxtChangedByDele("发送设置工号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
+            }
         }
 
         /// <summary>
@@ -1406,17 +1438,20 @@ namespace HelloCSharp.UI
                 _logger.WriteLog("设置表箱号，遂字转换（Hex）：" + temp);
                 str += temp;
             }
-            string[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
-            cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5];
-            string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
-            _logger.WriteLog("计算出的校验码（Hex）：" + crcStr);
-            cmdStr += crcStr + "16";
-            cmdStr = "FEFEFEFE" + cmdStr;
-            byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
-            _operation = "设置表箱号";
-            _serialPort.Write(comByte, 0, comByte.Length);
-            _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
-            LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
+            if (!"".Equals(str))
+            {
+                string[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
+                cmdStr += strArray[0] + strArray[1] + strArray[2] + strArray[3] + strArray[4] + strArray[5];
+                string crcStr = MyConvertUtil.CalcZM301CRC(cmdStr);
+                _logger.WriteLog("计算出的校验码（Hex）：" + crcStr);
+                cmdStr += crcStr + "16";
+                cmdStr = "FEFEFEFE" + cmdStr;
+                byte[] comByte = MyConvertUtil.HexStrToBytes(cmdStr);
+                _operation = "设置表箱号";
+                _serialPort.Write(comByte, 0, comByte.Length);
+                _currentMillis = (DateTime.Now.Ticks - DATETIME.Ticks) / 10000;
+                LogTxtChangedByDele("发送设置表箱号指令：" + MyConvertUtil.StrAddChar(cmdStr, 2, " ") + "\r\n", Color.Black);
+            }
         }
 
         /// <summary>
@@ -1451,7 +1486,7 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_clear_Click(object sender, EventArgs e)
         {
-            txt_log.Clear();
+            txt_log1.Clear();
         }
 
         private void cbx_port_SelectedIndexChanged(object sender, EventArgs e)
