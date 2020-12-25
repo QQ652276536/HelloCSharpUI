@@ -805,14 +805,14 @@ namespace HelloCSharp.UI
                             string hex_ss = (Convert.ToInt32(strArray[11], 16) - 51).ToString("X");
                             string hexTime = "20" + hex_yy + "年" + hex_MM + "月" + hex_DD + "日" + hex_HH + "时" + hex_mm + "分" + hex_ss + "秒";
                             LogTxtChangedByDele("GPS位置，时间：" + hexTime + "\r\n", Color.Green);
-                            //经度，因为需要转换成10进制，所以要判断负数情况
+                            //经度，因为需要转回10进制，所以要判断负数情况
                             string hexLat1 = (Convert.ToInt32(strArray[20], 16) - 51).ToString("X").Replace("FF", "");
                             string hexLat2 = (Convert.ToInt32(strArray[19], 16) - 51).ToString("X").Replace("FF", "");
                             string hexLat3 = (Convert.ToInt32(strArray[18], 16) - 51).ToString("X").Replace("FF", "");
                             string hexLat4 = (Convert.ToInt32(strArray[17], 16) - 51).ToString("X").Replace("FF", "");
                             double latNum = Convert.ToDouble(Convert.ToInt32(hexLat1 + hexLat2 + hexLat3 + hexLat4, 16)) / 1000000;
                             LogTxtChangedByDele("GPS位置，经度：" + latNum + "\r\n", Color.Green);
-                            //纬度，因为需要转换成10进制，所以要判断负数情况
+                            //纬度，因为需要转回10进制，所以要判断负数情况
                             string hexLot1 = (Convert.ToInt32(strArray[24], 16) - 51).ToString("X").Replace("FF", "");
                             string hexLot2 = (Convert.ToInt32(strArray[23], 16) - 51).ToString("X").Replace("FF", "");
                             string hexLot3 = (Convert.ToInt32(strArray[22], 16) - 51).ToString("X").Replace("FF", "");
@@ -831,14 +831,14 @@ namespace HelloCSharp.UI
                             string speedStr = speed1 + speed2;
                             int speed = Convert.ToInt32(speedStr, 16);
                             LogTxtChangedByDele("GPS位置，速度：" + speed + "km/h\r\n", Color.Green);
-                            //方向，因为需要转换成10进制，所以要判断负数情况
+                            //方向，因为需要转回10进制，所以要判断负数情况
                             string dir1 = (Convert.ToInt32(strArray[30], 16) - 51).ToString("X").Replace("FF", "");
                             string dir2 = (Convert.ToInt32(strArray[29], 16) - 51).ToString("X").Replace("FF", "");
                             string dirStr = dir1 + dir2;
                             int dir = Convert.ToInt32(dirStr, 16);
                             LogTxtChangedByDele("GPS位置，方向：" + dir + "\r\n", Color.Green);
-                            //温度
-                            string temperature = (Convert.ToInt32(strArray[31], 16) - 51).ToString("X");
+                            //温度，因为需要转回10进制，所以要判断负数情况
+                            string temperature = (Convert.ToInt32(strArray[31], 16) - 51).ToString("X").Replace("FF", "");
                             LogTxtChangedByDele("GPS位置，温度：" + temperature + "℃\r\n", Color.Green);
                             string parseStr = hexTime + "，经度：" + latNum + "，纬度：" + lotNum + "，海拔：" + height + "米，速度" + speed + "km/h，方向：" + dir + "，温度：" + temperature + "℃";
                             GpsTxtChangedByDele(parseStr);
