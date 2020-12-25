@@ -155,16 +155,13 @@ namespace HelloCSharp.UI
                     //判断负数
                     string hexElec = elec1.ToString("X").Replace("FF", "") + elec2.ToString("X").Replace("FF", ""); ;
                     double elec = Convert.ToUInt32(hexElec, 16) / 1000.00;
-                    if (elec >= 3 && elec <= 4.2)
+                    if (elec >= 3.3 && elec <= 4.2)
                     {
-                        if (elec <= 3.3)
-                            LabChangedByDele(lab_elec, elec + "V（低电压）", Color.Green);
-                        else
-                            LabChangedByDele(lab_elec, elec + "V", Color.Green);
+                        LabChangedByDele(lab_elec, elec + "V", Color.Green);
                     }
                     else
                     {
-                        LabChangedByDele(lab_elec, elec + "V", Color.Red);
+                        LabChangedByDele(lab_elec, elec + "V（低电压）", Color.Red);
                     }
                     int ver1 = Convert.ToInt32(strArray[16], 16) - 51;
                     string hexVer1 = MyConvertUtil.HexStrToStr(ver1.ToString("X"));
@@ -196,6 +193,10 @@ namespace HelloCSharp.UI
                 byte[] byteArray = new byte[byteLen];
                 _serialPort.Read(byteArray, 0, byteArray.Length);
                 string str = MyConvertUtil.BytesToStr(byteArray);
+
+                //C#串口偶尔会莫名其妙的发3F下来，网上说和校验位有关，但是改了校验位就和硬件无法通信，所以暂时这样处理
+                str = str.Replace("3F3F", "");
+
                 _logger.WriteLog("本次读取字节：" + str + "，长度：" + byteLen);
                 _receivedStr += str;
                 _logger.WriteLog("累计收到字节（Hex）：" + _receivedStr);
@@ -203,7 +204,7 @@ namespace HelloCSharp.UI
                 if (beginIndex > 0)
                     _receivedStr = _receivedStr.Substring(beginIndex);
                 int endIndex = _receivedStr.LastIndexOf("16");
-                if (_receivedStr.Length >= 44 && endIndex > 0)
+                if (endIndex > 0 && _receivedStr.Length >= 44)
                     _receivedStr = _receivedStr.Substring(0, endIndex + 2);
                 //开头+结尾+校验码=完整数据
                 if (_receivedStr.StartsWith("68") && _receivedStr.EndsWith("16"))
@@ -228,10 +229,17 @@ namespace HelloCSharp.UI
                         _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
                         //解析数据
                         Parse(_receivedStr);
-                        _logger.WriteLog(_receivedStr);
+                        //已收到完整数据，清空缓存
+                        _receivedStr = "";
+                        _logger.WriteLog("已收到完整数据，清空缓存！");
                     }
-                    //已收到完整数据，清空缓存
-                    _receivedStr = "";
+                    else
+                    {
+                        _logger.WriteLog("校验码不正确，继续读取...");
+                        //收到的数据错误，清空缓存
+                        if (_receivedStr.Length > 68)
+                            _receivedStr = "";
+                    }
                 }
             }
             catch (Exception ex)
@@ -290,6 +298,18 @@ namespace HelloCSharp.UI
             {
                 if ("打开串口".Equals(btn_open.Text.ToString()))
                 {
+                    lab_ver.Text = "null";
+                    lab_sensor.Text = "null";
+                    lab_door.Text = "null";
+                    lab_lock.Text = "null";
+                    lab_gps.Text = "null";
+                    lab_elec.Text = "null";
+                    lab_ver.ForeColor = Color.Black;
+                    lab_sensor.ForeColor = Color.Black;
+                    lab_door.ForeColor = Color.Black;
+                    lab_lock.ForeColor = Color.Black;
+                    lab_gps.ForeColor = Color.Black;
+                    lab_elec.ForeColor = Color.Black;
                     //打开串口
                     if (null == _serialPort)
                     {

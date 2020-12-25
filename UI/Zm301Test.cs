@@ -600,17 +600,20 @@ namespace HelloCSharp.UI
                 string eventHexTime = "";
                 if ("81".Equals(type) || "82".Equals(type) || "83".Equals(type) || "84".Equals(type) || "85".Equals(type) || "89".Equals(type))
                 {
-                    cycleEventHexIndex1 = (Convert.ToInt32(strArray[11], 16) - 51).ToString("X");
-                    cycleEventHexIndex2 = (Convert.ToInt32(strArray[10], 16) - 51).ToString("X");
-                    cycleEventIndex = cycleEventHexIndex1 + cycleEventHexIndex2;
-                    eventIndex = Convert.ToInt32(cycleEventIndex, 16);
-                    eventHex_yy = (Convert.ToInt32(strArray[17], 16) - 51).ToString("X");
-                    eventHex_MM = (Convert.ToInt32(strArray[16], 16) - 51).ToString("X");
-                    eventHex_DD = (Convert.ToInt32(strArray[15], 16) - 51).ToString("X");
-                    eventHex_HH = (Convert.ToInt32(strArray[14], 16) - 51).ToString("X");
-                    eventHex_mm = (Convert.ToInt32(strArray[13], 16) - 51).ToString("X");
-                    eventHex_ss = (Convert.ToInt32(strArray[12], 16) - 51).ToString("X");
-                    eventHexTime = "20" + eventHex_yy + "年" + eventHex_MM + "月" + eventHex_DD + "日" + eventHex_HH + "时" + eventHex_mm + "分" + eventHex_ss + "秒";
+                    if (strArray.Length > 17)
+                    {
+                        cycleEventHexIndex1 = (Convert.ToInt32(strArray[11], 16) - 51).ToString("X");
+                        cycleEventHexIndex2 = (Convert.ToInt32(strArray[10], 16) - 51).ToString("X");
+                        cycleEventIndex = cycleEventHexIndex1 + cycleEventHexIndex2;
+                        eventIndex = Convert.ToInt32(cycleEventIndex, 16);
+                        eventHex_yy = (Convert.ToInt32(strArray[17], 16) - 51).ToString("X");
+                        eventHex_MM = (Convert.ToInt32(strArray[16], 16) - 51).ToString("X");
+                        eventHex_DD = (Convert.ToInt32(strArray[15], 16) - 51).ToString("X");
+                        eventHex_HH = (Convert.ToInt32(strArray[14], 16) - 51).ToString("X");
+                        eventHex_mm = (Convert.ToInt32(strArray[13], 16) - 51).ToString("X");
+                        eventHex_ss = (Convert.ToInt32(strArray[12], 16) - 51).ToString("X");
+                        eventHexTime = "20" + eventHex_yy + "年" + eventHex_MM + "月" + eventHex_DD + "日" + eventHex_HH + "时" + eventHex_mm + "分" + eventHex_ss + "秒";
+                    }
                 }
                 int len = MyConvertUtil.HexStrToInt(strArray[9]);
                 switch (type)
@@ -881,6 +884,7 @@ namespace HelloCSharp.UI
                 //目前最短的数据内容的长度是12个字节
                 if (_receivedStr.Length < 23)
                     return;
+
                 //C#串口偶尔会莫名其妙的发3F下来，网上说和校验位有关，但是改了校验位就和硬件无法通信，所以暂时这样处理
                 _receivedStr = _receivedStr.Replace("3F3F", "");
 
@@ -888,30 +892,59 @@ namespace HelloCSharp.UI
                 if (beginIndex > 0)
                     _receivedStr = _receivedStr.Substring(beginIndex);
                 int endIndex = _receivedStr.LastIndexOf("16");
-                //开锁、设置表箱号、设置工号、查询开关锁事件、查询开关门事件、查询窃电事件
+                //开锁、设置表箱号、设置工号、查询开关锁事件、查询开关门事件
                 if (endIndex == 22 && _receivedStr.Length >= 24)
+                {
                     _receivedStr = _receivedStr.Substring(0, 24);
+                    _logger.WriteLog("数据类型：开锁/设置表箱号/设置工号/查询开关锁事件/查询开关门事件");
+                }
                 //对时
                 else if (endIndex == 30 && _receivedStr.Length >= 32)
+                {
                     _receivedStr = _receivedStr.Substring(0, 32);
+                    _logger.WriteLog("对时");
+                }
                 //读取表箱号
                 else if (endIndex == 34 && _receivedStr.Length >= 36)
+                {
                     _receivedStr = _receivedStr.Substring(0, 36);
-                //读取工号
+                    _logger.WriteLog("读取表箱号");
+                }
+                //读取工号/查询窃电事件
                 else if (endIndex == 38 && _receivedStr.Length >= 40)
+                {
                     _receivedStr = _receivedStr.Substring(0, 40);
+                    _logger.WriteLog("读取工号/查询窃电事件");
+                }
                 //查询振动事件
                 else if (endIndex == 52 && _receivedStr.Length >= 54)
+                {
                     _receivedStr = _receivedStr.Substring(0, 54);
+                    _logger.WriteLog("查询振动事件");
+                }
                 //查询事件总数
                 else if (endIndex == 58 && _receivedStr.Length >= 60)
+                {
                     _receivedStr = _receivedStr.Substring(0, 60);
+                    _logger.WriteLog("查询事件总数");
+                }
                 //查询GPS
                 else if (endIndex == 66 && _receivedStr.Length >= 68)
+                {
                     _receivedStr = _receivedStr.Substring(0, 68);
-                else
+                    _logger.WriteLog("查询GPS");
+                }
+                //收到的数据错误，清空缓存
+                else if (_receivedStr.Length > 68)
+                {
+                    _receivedStr = "";
+                    _logger.WriteLog("收到的数据错误，清空缓存");
                     return;
-
+                }
+                else
+                {
+                    return;
+                }
                 //计算收到的数据的校验码的时候不包含最后现个字节
                 string tempReceivedStr = _receivedStr.Substring(0, _receivedStr.Length - 4);
                 _logger.WriteLog("参与计算校验码的数据（Hex）：" + tempReceivedStr);
