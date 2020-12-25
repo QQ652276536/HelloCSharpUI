@@ -854,6 +854,7 @@ namespace HelloCSharp.UI
                 //重置记录的状态
                 _currentMillis = 0;
                 _operation = "";
+                _receivedStr = "";
             }
         }
 
@@ -935,12 +936,13 @@ namespace HelloCSharp.UI
                     Parse(_receivedStr);
                     //已收到完整数据，清空缓存
                     _receivedStr = "";
+                    _logger.WriteLog("已收到完整数据，清空缓存！");
                 }
                 else
                 {
                     _logger.WriteLog("校验码不正确，继续读取...");
+                    //收到的数据错误，清空缓存
                     if (_receivedStr.Length > 68)
-                        //收到的数据错误，清空缓存
                         _receivedStr = "";
                 }
             }
