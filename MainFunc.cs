@@ -14,7 +14,7 @@ namespace HelloCSharp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Zm301Test());
+            Application.Run(new Main());
         }
     }
 }

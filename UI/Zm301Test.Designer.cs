@@ -508,7 +508,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Zm301Test";
-            this.Text = "ZM301研发压力测试工具";
+            this.Text = "ZM301研发压力测试";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Zm301Test_FormClosing);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
