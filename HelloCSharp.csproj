@@ -211,9 +211,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="ICO_Game_7.ico" />
     <Content Include="Image\GameBack1.png" />
@@ -262,6 +260,7 @@
     <Content Include="Image\桌面壁纸01.jpg" />
     <Content Include="Image\睁眼1.png" />
     <Content Include="Image\闭眼1.png" />
+    <None Include="Resources\%24this.BackgroundImage.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

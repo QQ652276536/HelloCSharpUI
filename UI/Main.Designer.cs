@@ -172,7 +172,7 @@ namespace HelloCSharp.UI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Main";
-            this.Text = "你是猪你吃粑粑";
+            this.Text = "工具箱";
             this.group.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
