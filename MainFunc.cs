@@ -1,5 +1,6 @@
 ﻿using HelloCSharp.UI;
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace HelloCSharp
@@ -12,6 +13,12 @@ namespace HelloCSharp
         [STAThread]
         static void Main()
         {
+            bool isRunning = false;
+            Mutex mutex = new Mutex(true, System.Diagnostics.Process.GetCurrentProcess().ProcessName, out isRunning);
+            if (!isRunning)
+            {
+                Environment.Exit(1);
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Main());
