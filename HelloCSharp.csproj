@@ -103,6 +103,12 @@
     <Compile Include="UI\Zm301SimpleTest.Designer.cs">
       <DependentUpon>Zm301SimpleTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ImageTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImageTest.Designer.cs">
+      <DependentUpon>ImageTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Zm301Test.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Zm301SimpleTest.resx">
       <DependentUpon>Zm301SimpleTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImageTest.resx">
+      <DependentUpon>ImageTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Zm301Test.resx">
       <DependentUpon>Zm301Test.cs</DependentUpon>

@@ -55,6 +55,42 @@ namespace HelloCSharp.Util
             return result;
         }
 
+        /// <summary>
+        /// 计算1位校验码（取最低位），仅用于ZM301研发压测工具
+        /// 然后按位叠加和并舍弃高位得到的结果就是校验码
+        /// </summary>
+        /// <param name="hexStr">带空格不带0x的16进制字符串,比如81 03 00</param>
+        /// <returns>不足2位前面补零</returns>
+        public static string CRC_Zistone_BLE(String hexStr)
+        {
+            if (!hexStr.Contains(" ") || hexStr.Contains("0x") || hexStr.Contains("0X"))
+            {
+                throw new Exception("参数必须为带空格不带0x的16进制字符串");
+            }
+            int binaryNum = 0;
+            String[] strArray = hexStr.Split(' ');
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                int tempHexNum = Convert.ToInt32(strArray[i], 16);
+                if (i == 0)
+                {
+                    binaryNum = tempHexNum;
+                }
+                else
+                {
+                    binaryNum += tempHexNum;
+                }
+            }
+            //舍弃高位
+            String result = IntToHexStr((binaryNum & 0xFF) + "");
+            //前面补零使成为偶数，方便截取
+            if (result.Length % 2 != 0)
+            {
+                result = "0" + result;
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// 计算1位校验码（取最低位），仅用于ZM301研发压测工具

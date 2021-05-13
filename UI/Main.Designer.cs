@@ -39,6 +39,7 @@ namespace HelloCSharp.UI
             this.btn_zm301_developer = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_login = new System.Windows.Forms.Button();
+            this.btn_img_test = new System.Windows.Forms.Button();
             this.group.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +47,7 @@ namespace HelloCSharp.UI
             // group
             // 
             this.group.BackColor = System.Drawing.Color.Transparent;
+            this.group.Controls.Add(this.btn_img_test);
             this.group.Controls.Add(this.btn_zm301_factory);
             this.group.Controls.Add(this.btn_sn);
             this.group.Controls.Add(this.btn_imei);
@@ -157,6 +159,23 @@ namespace HelloCSharp.UI
             this.btn_login.UseVisualStyleBackColor = false;
             this.btn_login.Click += new System.EventHandler(this.btn_login_Click);
             // 
+            // btn_img_test
+            // 
+            this.btn_img_test.BackColor = System.Drawing.Color.Transparent;
+            this.btn_img_test.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_img_test.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btn_img_test.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btn_img_test.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_img_test.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_img_test.ForeColor = System.Drawing.Color.White;
+            this.btn_img_test.Location = new System.Drawing.Point(272, 78);
+            this.btn_img_test.Name = "btn_img_test";
+            this.btn_img_test.Size = new System.Drawing.Size(159, 30);
+            this.btn_img_test.TabIndex = 4;
+            this.btn_img_test.Text = "串口数据解析图片";
+            this.btn_img_test.UseVisualStyleBackColor = false;
+            this.btn_img_test.Click += new System.EventHandler(this.btn_img_test_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -188,5 +207,6 @@ namespace HelloCSharp.UI
         private GroupBox groupBox1;
         private Button btn_login;
         private Button btn_zm301_factory;
+        private Button btn_img_test;
     }
 }

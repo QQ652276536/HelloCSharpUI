@@ -38,5 +38,11 @@ namespace HelloCSharp.UI
             this.StartPosition = FormStartPosition.CenterParent;
             new LoginAndRegister().ShowDialog();
         }
+
+        private void btn_img_test_Click(object sender, EventArgs e)
+        {
+            this.StartPosition = FormStartPosition.CenterParent;
+            new ImageTest().ShowDialog();
+        }
     }
 }
