@@ -23,6 +23,11 @@ namespace HelloCSharp.UI
         private delegate void LogTxtDele(string str, Color color);
 
         /// <summary>
+        /// 按钮委托
+        /// </summary>
+        private delegate void BtnDele();
+
+        /// <summary>
         /// 对时，为了方便测试，这里直接写死
         /// </summary>
         private string CMD_CHECK_TIME = "68 AA AA AA AA AA AA 68 07 06 00 84 3B 36 34 34 33 69 16";
@@ -211,6 +216,22 @@ namespace HelloCSharp.UI
                         }
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 修改按钮的状态
+        /// </summary>
+        private void BtnChangedByDele()
+        {
+            //非UI线程访问控件时
+            if (btn_start.InvokeRequired)
+            {
+                btn_start.Invoke(new BtnDele(BtnChangedByDele));
+            }
+            else
+            {
+                btn_start.Text = "开始";
             }
         }
 
@@ -443,9 +464,10 @@ namespace HelloCSharp.UI
                                 else
                                 {
                                     //修改标识，停止读取图片数据
-                                    _cycleTestStep = 4;
+                                    _cycleTestStep = -1;
+                                    _eventAllThreadFlag = false;
                                     _logger.WriteLog("完整的图片数据：" + _imgData);
-                                    LogTxtChangedByDele("所有包数据收完，开始解析...", Color.Green);
+                                    LogTxtChangedByDele("所有包数据收完，开始解析...\n", Color.Red);
                                     //每位都要减33（考虑有符号整数）
                                     string[] arrays = MyConvertUtil.StrAddChar(_imgData, 2, " ").Split(' ');
                                     for (int i = 0; i < arrays.Length; i++)
@@ -465,7 +487,9 @@ namespace HelloCSharp.UI
                                     MemoryStream stream = new MemoryStream(bytes);
                                     Image image = Bitmap.FromStream(stream, true);
                                     Bitmap bitmap = new Bitmap(image);
-                                    bitmap.Save("e:\\111.png");
+                                    bitmap.Save("e:\\ImageTest.png");
+                                    LogTxtChangedByDele("图片解析完毕！\n路径：E:\\ImageTest.png", Color.Green);
+                                    BtnChangedByDele();
                                 }
                             }
                             break;
