@@ -271,7 +271,6 @@ namespace HelloCSharp.UI
         /// <param name="color"></param>
         private void LabChangedByDele(Label lab, string str, Color color)
         {
-
             //非UI线程访问控件时
             if (lab.InvokeRequired)
             {
@@ -359,12 +358,7 @@ namespace HelloCSharp.UI
         {
             _portName = _portNameArray[cbx_port.SelectedIndex];
         }
-
-        private void btn_log_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void chk_cycle_CheckedChanged(object sender, EventArgs e)
         {
             _cycleTest = chk_cycle.Checked;

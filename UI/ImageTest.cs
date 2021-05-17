@@ -23,6 +23,12 @@ namespace HelloCSharp.UI
         private delegate void LogTxtDele(string str, Color color);
 
         /// <summary>
+        /// 对时，为了方便测试，这里直接写死
+        /// </summary>
+        private string CMD_CHECK_TIME = "68 AA AA AA AA AA AA 68 07 06 00 84 3B 36 34 34 33 69 16";
+        private byte[] CMD_CHECK_TIME_BYTE;
+
+        /// <summary>
         /// 查询所有事件，校验码已提前算好
         /// </summary>
         private string CMD_EVENTALL = "68 AA AA AA AA AA AA 68 00 00 00 CC 16";
@@ -37,25 +43,25 @@ namespace HelloCSharp.UI
         /// <summary>
         /// 查询事件二，校验码已提前算好
         /// </summary>
-        private string CMD_EVENT2 = "68 AA AA AA AA AA AA 68 01 00 00 CE 16";
+        private string CMD_EVENT2 = "68 AA AA AA AA AA AA 68 02 00 00 CE 16";
         private byte[] CMD_EVENT2_BYTE;
 
         /// <summary>
         /// 查询事件三，校验码已提前算好
         /// </summary>
-        private string CMD_EVENT3 = "68 AA AA AA AA AA AA 68 01 00 00 CF 16";
+        private string CMD_EVENT3 = "68 AA AA AA AA AA AA 68 03 00 00 CF 16";
         private byte[] CMD_EVENT3_BYTE;
 
         /// <summary>
         /// 查询事件四，校验码已提前算好
         /// </summary>
-        private string CMD_EVENT4 = "68 AA AA AA AA AA AA 68 01 00 00 D0 16";
+        private string CMD_EVENT4 = "68 AA AA AA AA AA AA 68 04 00 00 D0 16";
         private byte[] CMD_EVENT4_BYTE;
 
         /// <summary>
         /// 查询事件五，校验码已提前算好
         /// </summary>
-        private string CMD_EVENT5 = "68 AA AA AA AA AA AA 68 01 00 00 D1 16";
+        private string CMD_EVENT5 = "68 AA AA AA AA AA AA 68 05 00 00 D1 16";
         private byte[] CMD_EVENT5_BYTE;
 
         /// <summary>
@@ -90,13 +96,13 @@ namespace HelloCSharp.UI
         private DateTime _nowTime = DateTime.Now;
         //串口
         private SerialPort _serialPort;
+        private string _receivedStr = "";
         //查询事件总数的线程
         private Thread _eventAllThread;
         //查询事件总数的线程的运行标识
         private bool _eventAllThreadFlag = true;
         //本机串口
         private string[] _portNameArray;
-        private string _receivedStr = "";
         //串口名
         private string _portName = "";
         //波特率、数据位
@@ -105,14 +111,14 @@ namespace HelloCSharp.UI
         private Parity _parity = Parity.None;
         //循环测试时当前执行到的步骤：0所有事件、1事件一、2事件二、3事件三、4事件四、5事件五
         private int _cycleTestStep = 0;
-        private bool[] _eventFlag = { true, false, false, false, false };
         //校验位
         private string _crc = "";
         //总包数、当前包数、总长度、每包大小
         private int _totalPkg = 0, _currPkg = 1, _totalLen = 0, _everyPkgSize = 0;
-        private bool _isFileHead = true;
-        //图片数据
-        private string _pkgData = "";
+        //对时标识、文件头标识
+        private bool _isCheckTime = false, _isFileHead = true;
+        //图片数据（由包数据截取而来）
+        private string _imgData = "";
 
         public ImageTest()
         {
@@ -126,90 +132,81 @@ namespace HelloCSharp.UI
         /// </summary>
         private void CycleTest()
         {
-            //循环流程：先发一次对时，再发一次设置工号（如果有填写工号），然后循环查询事件总数，事件数大于零则一直循环查询对应的事件
+            //循环查询事件总数，事件数大于零则一直循环查询对应的事件
             while (_eventAllThreadFlag && null != _serialPort && _serialPort.IsOpen)
             {
                 //_logger.WriteLog("等待发送查询指令...");
                 switch (_cycleTestStep)
                 {
-                    //查询所有事件
+                    //查询所有事件（没有任何事件产生，则继续查询）
                     case 0:
-                        if (_eventFlag[0])
+                        _cycleTestStep = -1;
+                        //先对时
+                        if (!_isCheckTime)
                         {
-                            _cycleTestStep = -1;
+                            int yy = DateTime.Now.Year % 100;
+                            int MM = DateTime.Now.Month;
+                            int DD = DateTime.Now.Day;
+                            int HH = DateTime.Now.Hour;
+                            int mm = DateTime.Now.Minute;
+                            int ss = DateTime.Now.Second;
+                            int yy2 = Convert.ToInt32(yy + "", 16) + 51;
+                            int MM2 = Convert.ToInt32(MM + "", 16) + 51;
+                            int DD2 = Convert.ToInt32(DD + "", 16) + 51;
+                            int HH2 = Convert.ToInt32(HH + "", 16) + 51;
+                            int mm2 = Convert.ToInt32(mm + "", 16) + 51;
+                            int ss2 = Convert.ToInt32(ss + "", 16) + 51;
+                            string hex_yy = yy2.ToString("X");
+                            string hex_MM = MM2.ToString("X");
+                            string hex_DD = DD2.ToString("X");
+                            string hex_HH = HH2.ToString("X");
+                            string hex_mm = mm2.ToString("X");
+                            string hex_ss = ss2.ToString("X");
+                            string cmd = "68AAAAAAAAAA68070600" + hex_ss + hex_mm + hex_HH + hex_DD + hex_MM + hex_yy;
+                            string crc = MyConvertUtil.CRC_Zistone_BLE(MyConvertUtil.StrAddChar(cmd, 2, " "));
+                            cmd = MyConvertUtil.StrAddChar(cmd + crc + "16", 2, " ");
+                            //byte[] timeCmdByte = MyConvertUtil.HexStrToBytes(cmd);
+                            //_serialPort.Write(timeCmdByte, 0, timeCmdByte.Length);
+                            _serialPort.Write(CMD_CHECK_TIME_BYTE, 0, CMD_CHECK_TIME_BYTE.Length);
+                            //LogTxtChangedByDele("发送对时指令：" + cmd + "（20" + yy + "年" + MM + "月" + DD + "日" + HH + "时" + mm + "分" + ss + "秒）\n", Color.Black);
+                            LogTxtChangedByDele("发送对时指令：" + CMD_CHECK_TIME + "\n", Color.Black);
+                            Thread.Sleep(500);
+                        }
+                        //再查询
+                        else
+                        {
                             _serialPort.Write(CMD_EVENTALL_BYTE, 0, CMD_EVENTALL_BYTE.Length);
                             LogTxtChangedByDele("发送查询所有事件指令：" + CMD_EVENTALL + "\n", Color.Black);
                             Thread.Sleep(500);
                         }
                         break;
-                    //查询事件一
-                    case 1:
-                        if (_eventFlag[1])
-                        {
-                            _cycleTestStep = -1;
-                            _serialPort.Write(CMD_EVENT1_BYTE, 0, CMD_EVENT1_BYTE.Length);
-                            LogTxtChangedByDele("发送查询事件一指令：" + CMD_EVENT1 + "\n", Color.Black);
-                            Thread.Sleep(500);
-                        }
-                        break;
-                    //查询事件二
-                    case 2:
-                        if (_eventFlag[2])
-                        {
-                            _cycleTestStep = -1;
-                            _serialPort.Write(CMD_EVENT2_BYTE, 0, CMD_EVENT2_BYTE.Length);
-                            LogTxtChangedByDele("发送查询事件二指令：" + CMD_EVENT2 + "\n", Color.Black);
-                            Thread.Sleep(500);
-                        }
-                        break;
-                    //查询事件三
-                    case 3:
-                        if (_eventFlag[3])
-                        {
-                            _cycleTestStep = -1;
-                            _serialPort.Write(CMD_EVENT3_BYTE, 0, CMD_EVENT3_BYTE.Length);
-                            LogTxtChangedByDele("发送查询事件三指令：" + CMD_EVENT3 + "\n", Color.Black);
-                            Thread.Sleep(500);
-                        }
-                        break;
+
                     //查询事件四
                     case 4:
-                        if (_eventFlag[4])
+                        _cycleTestStep = -1;
+                        //请求文件头
+                        if (_isFileHead)
                         {
-                            _cycleTestStep = -1;
-                            //请求文件头
-                            if (_isFileHead)
-                            {
-                                _serialPort.Write(CMD_EVENT4_BYTE, 0, CMD_EVENT4_BYTE.Length);
-                                LogTxtChangedByDele("发送查询事件四指令：" + CMD_EVENT4 + "\n", Color.Black);
-                                Thread.Sleep(500);
-                            }
-                            //请求第n包数据
-                            else
-                            {
-                                string currPkg = MyConvertUtil.IntToHexStr(_currPkg + "");
-                                currPkg = MyConvertUtil.AddZero(currPkg, 4, true);
-                                //当前包数的高位放到后面并添加空格
-                                string[] tempCurrPkg = MyConvertUtil.StrSplitInterval(currPkg, 2);
-                                currPkg = MyConvertUtil.StrAddChar(tempCurrPkg[1] + currPkg[0], 2, " ");
-                                //计算校验码
-                                string crc = MyConvertUtil.CRC_Zistone_BLE(CMD_PKG_FIXED + " " + currPkg);
-                                //最终请求指令
-                                string cmd = CMD_PKG_FIXED + " " + currPkg + " " + crc + " 16";
-                                byte[] cmdBytes = MyConvertUtil.HexStrToBytes(cmd);
-                                _serialPort.Write(cmdBytes, 0, cmdBytes.Length);
-                                LogTxtChangedByDele("发送查询第" + _currPkg + "包指令：" + cmd + "\n", Color.Black);
-                                Thread.Sleep(500);
-                            }
+                            _serialPort.Write(CMD_EVENT4_BYTE, 0, CMD_EVENT4_BYTE.Length);
+                            LogTxtChangedByDele("发送查询事件四指令（请求文件头）：" + CMD_EVENT4 + "\n", Color.Black);
+                            Thread.Sleep(500);
                         }
-                        break;
-                    //查询事件五
-                    case 5:
-                        if (_eventFlag[5])
+                        //请求第n包数据
+                        else
                         {
-                            _cycleTestStep = -1;
-                            _serialPort.Write(CMD_EVENT5_BYTE, 0, CMD_EVENT5_BYTE.Length);
-                            LogTxtChangedByDele("发送查询事件五指令：" + CMD_EVENT5 + "\n", Color.Black);
+                            string hexCurrPkg = _currPkg.ToString().PadLeft(4, '0');
+                            //当前包数的高位放到后面并添加空格
+                            string[] tempCurrPkg = MyConvertUtil.StrSplitInterval(hexCurrPkg, 2);
+                            int tempPkg0 = Convert.ToInt32(tempCurrPkg[0]) + 51;
+                            int tempPkg1 = Convert.ToInt32(tempCurrPkg[1]) + 51;
+                            string currPkg = tempPkg1.ToString("X") + " " + tempPkg0.ToString("X");
+                            //计算校验码
+                            string crc = MyConvertUtil.CRC_Zistone_BLE(CMD_PKG_FIXED + " " + currPkg);
+                            //最终请求指令
+                            string cmd = CMD_PKG_FIXED + " " + currPkg + " " + crc + " 16";
+                            byte[] cmdBytes = MyConvertUtil.HexStrToBytes(cmd);
+                            _serialPort.Write(cmdBytes, 0, cmdBytes.Length);
+                            LogTxtChangedByDele("发送查询第" + _currPkg + "包指令：" + cmd + "\n", Color.Black);
                             Thread.Sleep(500);
                         }
                         break;
@@ -223,6 +220,7 @@ namespace HelloCSharp.UI
         /// <param name="str"></param>
         private void LogTxtChangedByDele(string str, Color color)
         {
+            _logger.WriteLog(str);
             //非UI线程访问控件时
             if (txt_log1.InvokeRequired)
             {
@@ -244,6 +242,7 @@ namespace HelloCSharp.UI
         /// </summary>
         private void InitData()
         {
+            CMD_CHECK_TIME_BYTE = MyConvertUtil.HexStrToBytes(CMD_CHECK_TIME);
             CMD_EVENTALL_BYTE = MyConvertUtil.HexStrToBytes(CMD_EVENTALL);
             CMD_EVENT1_BYTE = MyConvertUtil.HexStrToBytes(CMD_EVENT1);
             CMD_EVENT2_BYTE = MyConvertUtil.HexStrToBytes(CMD_EVENT2);
@@ -279,6 +278,7 @@ namespace HelloCSharp.UI
                 cbx_rate.DataSource = dataRate;
                 cbx_rate.ValueMember = "value";
             }
+            cbx_rate.SelectedIndex = 8;
             //数据位Combox赋值
             DataTable dataData = new DataTable();
             dataData.Columns.Add("value");
@@ -307,7 +307,7 @@ namespace HelloCSharp.UI
                 cbx_parity.DataSource = dataParity;
                 cbx_parity.ValueMember = "value";
             }
-            cbx_parity.SelectedIndex = 2;
+            cbx_parity.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -342,65 +342,22 @@ namespace HelloCSharp.UI
         {
             try
             {
-                //每次收到数据时都将事件重置
-                _eventFlag[0] = false;
-                _eventFlag[1] = false;
-                _eventFlag[2] = false;
-                _eventFlag[3] = false;
-                _eventFlag[4] = false;
-                string[] strArray = str.Split(' ');
+                string[] strArray = MyConvertUtil.StrSplitInterval(str, 2);
                 string type = strArray[8];
-                if ("80".Equals(type) || "81".Equals(type) || "82".Equals(type) || "83".Equals(type) || "84".Equals(type) || "85".Equals(type))
+                if ("80".Equals(type) || "81".Equals(type) || "82".Equals(type) || "83".Equals(type) || "84".Equals(type) || "85".Equals(type) || "87".Equals(type))
                 {
                     int len = MyConvertUtil.HexStrToInt(strArray[10] + strArray[9]);
                     switch (type)
                     {
+                        //对时响应
+                        case "87":
+                            _isCheckTime = true;
+                            _cycleTestStep = 0;
+                            LogTxtChangedByDele("收到对时响应\n", Color.Green);
+                            break;
                         //收到的所有事件
                         case "80":
-                            _eventFlag[0] = false;
                             LogTxtChangedByDele("收到所有事件\n", Color.Green);
-                            //产生了事件一
-                            if (len >= 3)
-                            {
-                                int event00 = Convert.ToInt32(strArray[13], 16) - 51;
-                                int event01 = Convert.ToInt32(strArray[12], 16) - 51;
-                                int event02 = Convert.ToInt32(strArray[11], 16) - 51;
-                                //有事件一产生
-                                if (event00 + event01 + event02 > 0)
-                                {
-                                    _cycleTestStep = 1;
-                                    _eventFlag[1] = true;
-                                    LogTxtChangedByDele("有事件一产生\n", Color.Green);
-                                }
-                            }
-                            //产生了事件二
-                            if (len >= 6)
-                            {
-                                int event10 = Convert.ToInt32(strArray[16], 16) - 51;
-                                int event11 = Convert.ToInt32(strArray[15], 16) - 51;
-                                int event12 = Convert.ToInt32(strArray[14], 16) - 51;
-                                //有事件二产生
-                                if (event10 + event11 + event12 > 0)
-                                {
-                                    _cycleTestStep = 2;
-                                    _eventFlag[2] = true;
-                                    LogTxtChangedByDele("有事件二产生\n", Color.Green);
-                                }
-                            }
-                            //产生了事件三
-                            if (len >= 9)
-                            {
-                                int event20 = Convert.ToInt32(strArray[19], 16) - 51;
-                                int event21 = Convert.ToInt32(strArray[18], 16) - 51;
-                                int event22 = Convert.ToInt32(strArray[17], 16) - 51;
-                                //有事件三产生
-                                if (event20 + event21 + event22 > 0)
-                                {
-                                    _cycleTestStep = 3;
-                                    _eventFlag[3] = true;
-                                    LogTxtChangedByDele("有事件三产生\n", Color.Green);
-                                }
-                            }
                             //产生了事件四
                             if (len >= 12)
                             {
@@ -411,101 +368,86 @@ namespace HelloCSharp.UI
                                 if (event30 + event31 + event32 > 0)
                                 {
                                     _cycleTestStep = 4;
-                                    _eventFlag[4] = true;
                                     LogTxtChangedByDele("有事件四产生\n", Color.Green);
                                 }
-                            }
-                            //产生了事件五
-                            if (len >= 15)
-                            {
-                                int event40 = Convert.ToInt32(strArray[25], 16) - 51;
-                                int event41 = Convert.ToInt32(strArray[24], 16) - 51;
-                                int event42 = Convert.ToInt32(strArray[23], 16) - 51;
-                                //有事件五产生
-                                if (event40 + event41 + event42 > 0)
+                                else
                                 {
-                                    _cycleTestStep = 5;
-                                    _eventFlag[5] = true;
-                                    LogTxtChangedByDele("有事件五产生\n", Color.Green);
+                                    _cycleTestStep = 0;
                                 }
                             }
-                            break;
-                        //收到的事件一
-                        case "81":
-                            _eventFlag[1] = false;
-                            LogTxtChangedByDele("收到事件一\r\n", Color.Green);
-                            break;
-                        //收到的事件二
-                        case "82":
-                            _eventFlag[2] = false;
-                            LogTxtChangedByDele("收到事件二\r\n", Color.Green);
-                            break;
-                        //收到的事件三
-                        case "83":
-                            _eventFlag[3] = false;
-                            LogTxtChangedByDele("收到事件三\r\n", Color.Green);
                             break;
                         //收到的事件四
                         case "84":
-                            _eventFlag[4] = false;
-                            LogTxtChangedByDele("收到事件四\r\n", Color.Green);
+                            LogTxtChangedByDele("收到事件四\n", Color.Green);
                             //第一包数据为文件头
                             if (_isFileHead)
                             {
+                                LogTxtChangedByDele("该包为文件头\n", Color.Green);
                                 _isFileHead = false;
                                 //总包数
                                 int totalPkg0 = Convert.ToInt32(strArray[22], 16) - 51;
                                 int totalPkg1 = Convert.ToInt32(strArray[21], 16) - 51;
                                 int totalPkg2 = Convert.ToInt32(strArray[20], 16) - 51;
                                 int totalPkg3 = Convert.ToInt32(strArray[19], 16) - 51;
-                                String totalPkgStr = MyConvertUtil.HexStrToStr(totalPkg0 + totalPkg1 + totalPkg2 + totalPkg3 + "");
-                                _totalPkg = Convert.ToInt32(totalPkgStr);
+                                string totalPkg0Str = totalPkg0.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                string totalPkg1Str = totalPkg1.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                string totalPkg2Str = totalPkg2.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                string totalPkg3Str = totalPkg3.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                _totalPkg = Convert.ToInt32(totalPkg0Str + totalPkg1Str + totalPkg2Str + totalPkg3Str, 16);
                                 //总长度
                                 int totalLen0 = Convert.ToInt32(strArray[26], 16) - 51;
                                 int totalLen1 = Convert.ToInt32(strArray[25], 16) - 51;
                                 int totalLen2 = Convert.ToInt32(strArray[24], 16) - 51;
                                 int totalLen3 = Convert.ToInt32(strArray[23], 16) - 51;
-                                String totalLenStr = MyConvertUtil.HexStrToStr(totalLen0 + totalLen1 + totalLen2 + totalLen3 + "");
-                                _totalLen = Convert.ToInt32(totalLenStr);
+                                string totalLen0Str = totalLen0.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                string totalLen1Str = totalLen1.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                string totalLen2Str = totalLen2.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                string totalLen3Str = totalLen3.ToString("X").PadLeft(2, '0').Replace("FFFFFF", "");
+                                _totalLen = Convert.ToInt32(totalLen0Str + totalLen1Str + totalLen2Str + totalLen3Str, 16);
                                 //校验位，所有数据累加和，最后做对比，如果对得上则说明正确
                                 _crc = strArray[30] + strArray[29] + strArray[28] + strArray[27];
                                 //每包大小
                                 int everyPkgSize0 = Convert.ToInt32(strArray[32], 16) - 51;
                                 int everyPkgSize1 = Convert.ToInt32(strArray[31], 16) - 51;
-                                String everyPkgSizeStr = MyConvertUtil.HexStrToStr(totalPkg0 + totalPkg1 + totalPkg2 + totalPkg3 + "");
-                                _everyPkgSize = Convert.ToInt32(everyPkgSizeStr);
-                                LogTxtChangedByDele("即将开始请求第一包\n", Color.Green);
+                                string everyPkgSize0Str = everyPkgSize0.ToString("X").PadLeft(2, '0');
+                                string everyPkgSize1Str = everyPkgSize1.ToString("X").PadLeft(2, '0');
+                                _everyPkgSize = Convert.ToInt32(everyPkgSize0Str + everyPkgSize1Str, 16);
+                                LogTxtChangedByDele("总包数：" + _totalPkg + "，总长度：" + _totalLen + "，校验位：" + _crc + "\n", Color.Green);
+                                LogTxtChangedByDele("即将开始请求第1包\n", Color.Green);
                                 if (_totalPkg > 0)
                                 {
                                     //修改标识，继续请求下一包
-                                    _eventFlag[4] = true;
+                                    _cycleTestStep = 4;
                                 }
                             }
                             //这里才是数据包
                             else
                             {
-                                if (_currPkg < _totalPkg)
+                                if (_currPkg <= _totalPkg)
                                 {
-                                    //修改标识，继续请求下一包
-                                    _eventFlag[4] = true;
                                     LogTxtChangedByDele("收到第" + _currPkg + "包数据\n", Color.Green);
+                                    //LogTxtChangedByDele("第" + _currPkg + "包数据：" + string.Join(" ", strArray) + "\n", Color.Black);
                                     //当前包
                                     int currPkg0 = Convert.ToInt32(strArray[22], 16) - 51;
                                     int currPkg1 = Convert.ToInt32(strArray[21], 16) - 51;
-                                    int currPkg = Convert.ToInt32(MyConvertUtil.HexStrToStr(currPkg0 + currPkg1 + ""));
-                                    _currPkg = currPkg;
+                                    string currPkg0Str = currPkg0.ToString("X").PadLeft(2, '0');
+                                    string currPkg1Str = currPkg1.ToString("X").PadLeft(2, '0');
+                                    _currPkg = Convert.ToInt32(currPkg0Str + currPkg1Str, 16) + 1;
                                     //去掉包数组前面的和最后的校验码、16
-                                    string[] pkgDataArray = strArray.Skip(2).Take(strArray.Length - 23 - 2).ToArray();
-                                    string pkgData = string.Join(" ", pkgDataArray);
-                                    _logger.WriteLog("包数据：" + pkgData);
-                                    _pkgData += pkgData;
+                                    string[] pkgDataArray = strArray.Skip(23).Take(strArray.Length - 25).ToArray();
+                                    _imgData += string.Join("", pkgDataArray);
+                                    _logger.WriteLog("该包的图片数据：" + _imgData);
+                                    //修改标识，继续请求下一包
+                                    _cycleTestStep = 4;
                                 }
                                 else
                                 {
-                                    //修改标识，停止请求下一包
-                                    _eventFlag[4] = false;
+                                    //修改标识，停止读取图片数据
+                                    _cycleTestStep = 4;
+                                    _logger.WriteLog("完整的图片数据：" + _imgData);
+                                    LogTxtChangedByDele("所有包数据收完，开始解析...", Color.Green);
                                     //每位都要减33（考虑有符号整数）
-                                    string[] arrays = _pkgData.Split(' ');
+                                    string[] arrays = MyConvertUtil.StrAddChar(_imgData, 2, " ").Split(' ');
                                     for (int i = 0; i < arrays.Length; i++)
                                     {
                                         int num = Convert.ToInt32(arrays[i], 16) - 51;
@@ -518,41 +460,24 @@ namespace HelloCSharp.UI
                                             arrays[i] = num.ToString("X").PadLeft(2, '0');
                                         }
                                     }
-                                    _pkgData = string.Join("", arrays);
-                                    //string转stream
-                                    MemoryStream stream = new MemoryStream();
-                                    StreamWriter writer = new StreamWriter(stream);
-                                    writer.Write(_pkgData);
-                                    writer.Flush();
-                                    stream.Position = 0;
-                                    Bitmap img = new Bitmap(stream);
-                                    img.Save("e:\\1111.jpg");
-                                    img.Dispose();
+                                    string strs = string.Join("", arrays);
+                                    byte[] bytes = MyConvertUtil.HexStrToBytes(strs);
+                                    MemoryStream stream = new MemoryStream(bytes);
+                                    Image image = Bitmap.FromStream(stream, true);
+                                    Bitmap bitmap = new Bitmap(image);
+                                    bitmap.Save("e:\\111.png");
                                 }
                             }
-                            break;
-                        //收到的事件五
-                        case "85":
-                            _eventFlag[5] = false;
-                            LogTxtChangedByDele("收到事件五\r\n", Color.Green);
                             break;
                     }
                 }
             }
             catch (Exception ex)
             {
+                _cycleTestStep = -1;
+                _receivedStr = "";
                 _logger.WriteException(ex);
                 LogTxtChangedByDele(ex.ToString() + "\r\n", Color.Red);
-            }
-            finally
-            {
-                _isFileHead = true;
-                _totalPkg = 0;
-                _currPkg = 1;
-                _totalLen = 0;
-                _everyPkgSize = 0;
-                _pkgData = "";
-                _receivedStr = "";
             }
         }
 
@@ -577,25 +502,21 @@ namespace HelloCSharp.UI
                 //C#串口偶尔会莫名其妙的发3F下来，网上说和校验位有关，但是改了校验位就和硬件无法通信，所以暂时这样处理
                 str = str.Replace("3F3F", "");
 
-                _logger.WriteLog("读取：" + str + "，长度：" + str.Length);
                 _receivedStr += str;
-                _logger.WriteLog("累计读取：" + _receivedStr + "，长度：" + _receivedStr.Length);
-                //目前最短的数据内容的长度是21个字节
-                //一条完整的命令至少包含两个68
-                if (_receivedStr.Length < 20 || !_receivedStr.Contains("68 AA AA AA AA AA AA 68") || !_receivedStr.Contains("16"))
+                //判断是否为一包完整的命令
+                if (_receivedStr.Length < 20 || !_receivedStr.StartsWith("68AAAAAAAAAAAA68") || !_receivedStr.EndsWith("16"))
                 {
                     _logger.WriteLog("继续读取...");
                     return;
                 }
-                _receivedStr = MyConvertUtil.StrAddChar(_receivedStr, 2, " ");
                 //显示收到的数据
-                LogTxtChangedByDele("收到（Hex）：" + _receivedStr + "\n", Color.Black);
+                LogTxtChangedByDele("收到（Hex）：" + MyConvertUtil.StrAddChar(_receivedStr, 2, " ") + "\n", Color.Black);
                 //解析数据
                 Parse(_receivedStr);
+                _receivedStr = "";
             }
             catch (Exception ex)
             {
-                //清空缓存
                 _receivedStr = "";
                 _logger.WriteException(ex);
                 LogTxtChangedByDele(ex.ToString() + "\r\n", Color.Red);
@@ -621,13 +542,12 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_start_click(object sender, EventArgs e)
         {
+            _receivedStr = "";
             _isFileHead = true;
             _totalPkg = 0;
             _currPkg = 1;
             _totalLen = 0;
             _everyPkgSize = 0;
-            _pkgData = "";
-            _receivedStr = "";
             if ("开始".Equals(btn_start.Text))
             {
                 _cycleTestStep = 0;
@@ -666,7 +586,6 @@ namespace HelloCSharp.UI
             _currPkg = 1;
             _totalLen = 0;
             _everyPkgSize = 0;
-            _pkgData = "";
             _receivedStr = "";
             try
             {
@@ -723,6 +642,7 @@ namespace HelloCSharp.UI
 
         private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _rate = RATE_ARRAY[cbx_rate.SelectedIndex];
             LogTxtChangedByDele("波特率：" + _rate + "\r\n", Color.Black);
         }
 

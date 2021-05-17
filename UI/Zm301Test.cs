@@ -1535,6 +1535,7 @@ namespace HelloCSharp.UI
 
         private void cbx_rate_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _rate = RATE_ARRAY[cbx_rate.SelectedIndex];
             LogTxtChangedByDele("波特率：" + _rate + "\r\n", Color.Black);
         }
 
