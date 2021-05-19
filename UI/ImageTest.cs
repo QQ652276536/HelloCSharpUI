@@ -125,6 +125,8 @@ namespace HelloCSharp.UI
         //图片数据（由包数据截取而来）
         private string _imgData = "";
 
+        private int _reSendCount = 0;
+
         public ImageTest()
         {
             InitializeComponent();
@@ -175,15 +177,14 @@ namespace HelloCSharp.UI
                             _serialPort.Write(CMD_CHECK_TIME_BYTE, 0, CMD_CHECK_TIME_BYTE.Length);
                             //LogTxtChangedByDele("发送对时指令：" + cmd + "（20" + yy + "年" + MM + "月" + DD + "日" + HH + "时" + mm + "分" + ss + "秒）\n", Color.Black);
                             LogTxtChangedByDele("发送对时指令：" + CMD_CHECK_TIME + "\n", Color.Black);
-                            Thread.Sleep(500);
                         }
                         //再查询
                         else
                         {
                             _serialPort.Write(CMD_EVENTALL_BYTE, 0, CMD_EVENTALL_BYTE.Length);
                             LogTxtChangedByDele("发送查询所有事件指令：" + CMD_EVENTALL + "\n", Color.Black);
-                            Thread.Sleep(500);
                         }
+                        Thread.Sleep(250);
                         break;
 
                     //查询事件四
@@ -194,17 +195,17 @@ namespace HelloCSharp.UI
                         {
                             _serialPort.Write(CMD_EVENT4_BYTE, 0, CMD_EVENT4_BYTE.Length);
                             LogTxtChangedByDele("发送查询事件四指令（请求文件头）：" + CMD_EVENT4 + "\n", Color.Black);
-                            Thread.Sleep(500);
                         }
                         //请求第n包数据
                         else
                         {
-                            string hexCurrPkg = _currPkg.ToString().PadLeft(4, '0');
+                            _reSendCount++;
+                            string currPkgHex = _currPkg.ToString("X").PadLeft(4, '0');
                             //当前包数的高位放到后面并添加空格
-                            string[] tempCurrPkg = MyConvertUtil.StrSplitInterval(hexCurrPkg, 2);
-                            int tempPkg0 = Convert.ToInt32(tempCurrPkg[0]) + 51;
-                            int tempPkg1 = Convert.ToInt32(tempCurrPkg[1]) + 51;
-                            string currPkg = tempPkg1.ToString("X") + " " + tempPkg0.ToString("X");
+                            string[] tempCurrPkg = MyConvertUtil.StrSplitInterval(currPkgHex, 2);
+                            int tempPkg0 = Convert.ToInt32(tempCurrPkg[0], 16) + 51;
+                            int tempPkg1 = Convert.ToInt32(tempCurrPkg[1], 16) + 51;
+                            string currPkg = tempPkg1.ToString("X").PadLeft(2, '0') + " " + tempPkg0.ToString("X").PadLeft(2, '0');
                             //计算校验码
                             string crc = MyConvertUtil.CRC_Zistone_BLE(CMD_PKG_FIXED + " " + currPkg);
                             //最终请求指令
@@ -212,8 +213,8 @@ namespace HelloCSharp.UI
                             byte[] cmdBytes = MyConvertUtil.HexStrToBytes(cmd);
                             _serialPort.Write(cmdBytes, 0, cmdBytes.Length);
                             LogTxtChangedByDele("发送查询第" + _currPkg + "包指令：" + cmd + "\n", Color.Black);
-                            Thread.Sleep(500);
                         }
+                        Thread.Sleep(250);
                         break;
                 }
             }
@@ -241,10 +242,10 @@ namespace HelloCSharp.UI
         /// <param name="str"></param>
         private void LogTxtChangedByDele(string str, Color color)
         {
-            _logger.WriteLog(str);
             //非UI线程访问控件时
             if (txt_log1.InvokeRequired)
             {
+                _logger.WriteLog(str);
                 txt_log1.Invoke(new LogTxtDele(LogTxtChangedByDele), str, color);
             }
             else
@@ -373,8 +374,8 @@ namespace HelloCSharp.UI
                         //对时响应
                         case "87":
                             _isCheckTime = true;
-                            _cycleTestStep = 0;
                             LogTxtChangedByDele("收到对时响应\n", Color.Green);
+                            _cycleTestStep = 0;
                             break;
                         //收到的所有事件
                         case "80":
@@ -385,12 +386,13 @@ namespace HelloCSharp.UI
                                 int event30 = Convert.ToInt32(strArray[22], 16) - 51;
                                 int event31 = Convert.ToInt32(strArray[21], 16) - 51;
                                 int event32 = Convert.ToInt32(strArray[20], 16) - 51;
-                                //有事件四产生
+                                //有事件四产生则开始循环查询图片数据
                                 if (event30 + event31 + event32 > 0)
                                 {
                                     _cycleTestStep = 4;
                                     LogTxtChangedByDele("有事件四产生\n", Color.Green);
                                 }
+                                //否则继续查询所有事件直到有事件四产生
                                 else
                                 {
                                     _cycleTestStep = 0;
@@ -399,7 +401,7 @@ namespace HelloCSharp.UI
                             break;
                         //收到的事件四
                         case "84":
-                            LogTxtChangedByDele("收到事件四\n", Color.Green);
+                            //LogTxtChangedByDele("收到事件四\n", Color.Green);
                             //第一包数据为文件头
                             if (_isFileHead)
                             {
@@ -437,14 +439,24 @@ namespace HelloCSharp.UI
                                 LogTxtChangedByDele("即将开始请求第1包\n", Color.Green);
                                 if (_totalPkg > 0)
                                 {
-                                    //修改标识，继续请求下一包
+                                    //修改标识，请求数据包
                                     _cycleTestStep = 4;
                                 }
                             }
                             //这里才是数据包
                             else
                             {
-                                if (_currPkg <= _totalPkg)
+                                _cycleTestStep = 4;
+                                if (_reSendCount < 2)
+                                {
+                                    LogTxtChangedByDele("收到第" + _currPkg + "包数据，不解析，等待下一次重发再解析！\n", Color.Red);
+                                    return;
+                                }
+                                else
+                                {
+                                    _reSendCount = 0;
+                                }
+                                if (_currPkg < _totalPkg)
                                 {
                                     LogTxtChangedByDele("收到第" + _currPkg + "包数据\n", Color.Green);
                                     //LogTxtChangedByDele("第" + _currPkg + "包数据：" + string.Join(" ", strArray) + "\n", Color.Black);
@@ -453,21 +465,23 @@ namespace HelloCSharp.UI
                                     int currPkg1 = Convert.ToInt32(strArray[21], 16) - 51;
                                     string currPkg0Str = currPkg0.ToString("X").PadLeft(2, '0');
                                     string currPkg1Str = currPkg1.ToString("X").PadLeft(2, '0');
-                                    _currPkg = Convert.ToInt32(currPkg0Str + currPkg1Str, 16) + 1;
+                                    int currPkg = Convert.ToInt32(currPkg0Str + currPkg1Str, 16);
+                                    _currPkg++;
                                     //去掉包数组前面的和最后的校验码、16
                                     string[] pkgDataArray = strArray.Skip(23).Take(strArray.Length - 25).ToArray();
-                                    _imgData += string.Join("", pkgDataArray);
-                                    _logger.WriteLog("该包的图片数据：" + _imgData);
+                                    string imgData = string.Join("", pkgDataArray);
+                                    //_logger.WriteLog("该包的图片数据：" + _imgData);
+                                    _imgData += imgData;
                                     //修改标识，继续请求下一包
                                     _cycleTestStep = 4;
                                 }
                                 else
                                 {
-                                    //修改标识，停止读取图片数据
+                                    //修改标识，停止读取
                                     _cycleTestStep = -1;
                                     _eventAllThreadFlag = false;
-                                    _logger.WriteLog("完整的图片数据：" + _imgData);
-                                    LogTxtChangedByDele("所有包数据收完，开始解析...\n", Color.Red);
+                                    _logger.WriteLog("完整的图片数据：" + _imgData + "\n");
+                                    LogTxtChangedByDele("收到第" + _currPkg + "包数据\n所有包数据收完，开始解析...\n", Color.Green);
                                     //每位都要减33（考虑有符号整数）
                                     string[] arrays = MyConvertUtil.StrAddChar(_imgData, 2, " ").Split(' ');
                                     for (int i = 0; i < arrays.Length; i++)
@@ -487,9 +501,10 @@ namespace HelloCSharp.UI
                                     MemoryStream stream = new MemoryStream(bytes);
                                     Image image = Bitmap.FromStream(stream, true);
                                     Bitmap bitmap = new Bitmap(image);
-                                    bitmap.Save("e:\\ImageTest.png");
-                                    LogTxtChangedByDele("图片解析完毕！\n路径：E:\\ImageTest.png", Color.Green);
+                                    bitmap.Save("e:\\ImgTest.png");
+                                    LogTxtChangedByDele("图片解析完毕！\n路径：E:\\ImgTest.png\n", Color.Green);
                                     BtnChangedByDele();
+                                    bitmap.Dispose();
                                 }
                             }
                             break;
@@ -502,6 +517,7 @@ namespace HelloCSharp.UI
                 _receivedStr = "";
                 _logger.WriteException(ex);
                 LogTxtChangedByDele(ex.ToString() + "\r\n", Color.Red);
+                BtnChangedByDele();
             }
         }
 
@@ -534,7 +550,7 @@ namespace HelloCSharp.UI
                     return;
                 }
                 //显示收到的数据
-                LogTxtChangedByDele("收到（Hex）：" + MyConvertUtil.StrAddChar(_receivedStr, 2, " ") + "\n", Color.Black);
+                //LogTxtChangedByDele("收到（Hex）：" + MyConvertUtil.StrAddChar(_receivedStr, 2, " ") + "\n", Color.Black);
                 //解析数据
                 Parse(_receivedStr);
                 _receivedStr = "";
@@ -566,7 +582,9 @@ namespace HelloCSharp.UI
         /// <param name="e"></param>
         private void btn_start_click(object sender, EventArgs e)
         {
+            _imgData = "";
             _receivedStr = "";
+            _isCheckTime = false;
             _isFileHead = true;
             _totalPkg = 0;
             _currPkg = 1;
